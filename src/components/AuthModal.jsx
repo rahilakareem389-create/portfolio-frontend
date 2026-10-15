@@ -630,8 +630,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-[420px] p-6 sm:p-7 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3]">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 flex items-center justify-center bg-black/75 backdrop-blur-sm animate-fade-in">
+      <div className="w-full max-w-[420px] my-auto p-6 sm:p-7 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] max-h-[calc(100vh-2rem)] overflow-y-auto">
         
         {/* Close Button */}
         <button

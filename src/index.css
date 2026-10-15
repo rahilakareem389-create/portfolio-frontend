@@ -1071,6 +1071,11 @@ p, span, a, input, select, textarea, button, li, small {
   color: #9c8a7e !important;
 }
 
+.dialog-modal-box .modal-box-card {
+  background-color: #221612 !important;
+  border: 1px solid #3e2c22 !important;
+}
+
 .dialog-modal-box .modal-cancel-btn {
   background-color: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
@@ -1112,6 +1117,11 @@ p, span, a, input, select, textarea, button, li, small {
 
 :root[data-theme="light"] .dialog-modal-box .modal-input::placeholder {
   color: #8b7768 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-box-card {
+  background-color: #fbf7f2 !important;
+  border: 1.5px solid #d8c7b4 !important;
 }
 
 :root[data-theme="light"] .dialog-modal-box .modal-cancel-btn {

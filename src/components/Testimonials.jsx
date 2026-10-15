@@ -876,11 +876,11 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       {/* ======================================================== */}
       {isWriteReviewModalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md overflow-y-auto p-3 sm:p-6 flex justify-center items-start sm:items-center animate-fadeIn"
           onClick={() => setIsWriteReviewModalOpen(false)}
         >
           <div
-            className="dialog-modal-box relative w-full max-w-xl rounded-[28px] p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[92vh]"
+            className="dialog-modal-box relative w-full max-w-xl my-auto rounded-[24px] sm:rounded-[28px] p-5 sm:p-7 shadow-2xl overflow-y-auto max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -891,12 +891,12 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-11 h-11 rounded-2xl bg-[#D57C63]/20 border border-[#D57C63]/40 flex items-center justify-center text-[#D57C63]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-2xl bg-[#D57C63]/20 border border-[#D57C63]/40 flex items-center justify-center text-[#D57C63] shrink-0">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="modal-title font-heading font-extrabold text-xl">Leave a Verified Review</h3>
+                <h3 className="modal-title font-heading font-extrabold text-lg sm:text-xl">Leave a Verified Review</h3>
                 <p className="modal-subtitle text-xs">Share your experience working with Rahila Kareem.</p>
               </div>
             </div>
@@ -910,8 +910,8 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmitReview} className="space-y-4">
-                <div className="p-3 rounded-xl bg-[#D57C63]/10 border border-[#D57C63]/25 text-xs text-[#e29f8c] flex items-start gap-2.5">
+              <form onSubmit={handleSubmitReview} className="space-y-3">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[#D57C63]/10 border border-[#D57C63]/25 text-xs text-[#e29f8c] flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[#D57C63]" />
                   <span>
                     <strong>Authenticity Policy:</strong> Reviews are moderated in the Admin Dashboard to prevent spam.
@@ -919,14 +919,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 </div>
 
                 {/* Photo / Avatar Upload */}
-                <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-neutral-50 dark:bg-[#221612] border border-neutral-200 dark:border-[#38261e]">
+                <div className="modal-box-card flex items-center gap-3.5 p-3 rounded-2xl">
                   <div className="relative shrink-0">
                     {reviewForm.avatar ? (
                       <div className="relative">
                         <img
                           src={reviewForm.avatar}
                           alt="Reviewer Avatar"
-                          className="w-13 h-13 rounded-full object-cover border-2 border-[#D57C63] shadow-md"
+                          className="w-12 h-12 rounded-full object-cover border-2 border-[#D57C63] shadow-md"
                         />
                         <button
                           type="button"
@@ -938,7 +938,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                         </button>
                       </div>
                     ) : (
-                      <div className="w-13 h-13 rounded-full bg-[#D57C63]/15 border-2 border-dashed border-[#D57C63]/50 flex items-center justify-center text-[#D57C63]">
+                      <div className="w-12 h-12 rounded-full bg-[#D57C63]/15 border-2 border-dashed border-[#D57C63]/50 flex items-center justify-center text-[#D57C63]">
                         <Camera className="w-5 h-5" />
                       </div>
                     )}
@@ -980,7 +980,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       placeholder="e.g. Jason Blake"
                       value={reviewForm.name}
                       onChange={(e) => setReviewForm({ ...reviewForm, name: e.target.value })}
-                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                     />
                   </div>
                   <div>
@@ -991,7 +991,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       placeholder="e.g. jason@business.com"
                       value={reviewForm.email}
                       onChange={(e) => setReviewForm({ ...reviewForm, email: e.target.value })}
-                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                     />
                   </div>
                 </div>
@@ -1004,7 +1004,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       placeholder="e.g. Director, SolarTech"
                       value={reviewForm.role}
                       onChange={(e) => setReviewForm({ ...reviewForm, role: e.target.value })}
-                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                     />
                   </div>
                   <div>
@@ -1012,7 +1012,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     <select
                       value={reviewForm.service}
                       onChange={(e) => setReviewForm({ ...reviewForm, service: e.target.value })}
-                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                     >
                       <option>Complete SEO Strategy</option>
                       <option>High DA Guest Posting &amp; GBOB</option>
@@ -1049,7 +1049,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="e.g. 100% Genuine Backlinks and Great Communication"
                     value={reviewForm.title}
                     onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                   />
                 </div>
 
@@ -1057,11 +1057,11 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <label className="modal-label text-xs font-bold block mb-1">Review Details *</label>
                   <textarea
                     required
-                    rows={4}
+                    rows={3}
                     placeholder="Describe your project, results achieved, and feedback..."
                     value={reviewForm.message}
                     onChange={(e) => setReviewForm({ ...reviewForm, message: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs resize-none"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs resize-none"
                   />
                 </div>
 
@@ -1091,11 +1091,11 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       {/* ======================================================== */}
       {isAskQuestionModalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md overflow-y-auto p-3 sm:p-6 flex justify-center items-start sm:items-center animate-fadeIn"
           onClick={() => setIsAskQuestionModalOpen(false)}
         >
           <div
-            className="dialog-modal-box relative w-full max-w-lg rounded-[28px] p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[92vh]"
+            className="dialog-modal-box relative w-full max-w-lg my-auto rounded-[24px] sm:rounded-[28px] p-5 sm:p-7 shadow-2xl overflow-y-auto max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -1106,12 +1106,12 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-11 h-11 rounded-2xl bg-[#D57C63]/20 border border-[#D57C63]/40 flex items-center justify-center text-[#D57C63]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-2xl bg-[#D57C63]/20 border border-[#D57C63]/40 flex items-center justify-center text-[#D57C63] shrink-0">
                 <HelpCircle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="modal-title font-heading font-extrabold text-xl">Ask Rahila Kareem</h3>
+                <h3 className="modal-title font-heading font-extrabold text-lg sm:text-xl">Ask Rahila Kareem</h3>
                 <p className="modal-subtitle text-xs">Your question will be answered and published to FAQs.</p>
               </div>
             </div>
@@ -1125,7 +1125,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmitQuestion} className="space-y-4">
+              <form onSubmit={handleSubmitQuestion} className="space-y-3">
                 <div>
                   <label className="modal-label text-xs font-bold block mb-1">Your Name *</label>
                   <input
@@ -1134,7 +1134,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="e.g. Sarah Jenkins"
                     value={questionForm.name}
                     onChange={(e) => setQuestionForm({ ...questionForm, name: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                   />
                 </div>
 
@@ -1146,7 +1146,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="e.g. sarah@elevatebrands.com"
                     value={questionForm.email}
                     onChange={(e) => setQuestionForm({ ...questionForm, email: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                   />
                 </div>
 
@@ -1155,7 +1155,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <select
                     value={questionForm.category}
                     onChange={(e) => setQuestionForm({ ...questionForm, category: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
                   >
                     <option>SEO &amp; Guest Posting</option>
                     <option>Full Stack Web Apps</option>
@@ -1169,11 +1169,11 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <label className="modal-label text-xs font-bold block mb-1">Your Question *</label>
                   <textarea
                     required
-                    rows={4}
+                    rows={3}
                     placeholder="Ask anything about SEO, backlinks, web development, or consultations..."
                     value={questionForm.question}
                     onChange={(e) => setQuestionForm({ ...questionForm, question: e.target.value })}
-                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs resize-none"
+                    className="modal-input w-full px-3 py-2 rounded-xl text-xs resize-none"
                   />
                 </div>
 
