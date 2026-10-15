@@ -18,8 +18,25 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup' }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
+    
+    try {
+      await fetch(`${API_BASE_URL}/api/user/auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          name: email.split('@')[0],
+          mode: mode,
+          role: 'Client'
+        }),
+      });
+    } catch (err) {
+      console.warn('Auth tracking sync note:', err);
+    }
+
     setStatus({
       success: true,
       message: mode === 'signin' 
@@ -29,7 +46,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup' }) => {
     setTimeout(() => {
       onClose();
       setStatus(null);
-    }, 1800);
+    }, 1600);
   };
 
   return (

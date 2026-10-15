@@ -4,6 +4,8 @@ import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
+
 const Contact = ({ setActiveTab, selectedPlan }) => {
   const { t } = useLanguage();
 
@@ -38,14 +40,17 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
     setStatus({ submitting: true, message: t('contact.btnSending') });
 
     try {
-      // 1. Backend /api/contact endpoint (ready for Render!)
-      const response = await fetch('/api/contact', {
+      // 1. Backend /api/contact endpoint (sends to Web3Forms + saves to MongoDB Atlas!)
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          message: `Phone: ${formData.phone}\nPlan Selected: ${formData.plan}\n\n${formData.message}`,
+          phone: formData.phone,
+          plan: formData.plan,
+          message: formData.message,
+          subject: `New Project Inquiry from ${formData.name} (${formData.plan})`,
         }),
       });
 

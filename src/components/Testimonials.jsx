@@ -332,6 +332,29 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       });
     } catch (e) {}
   };
+  const handleReplyReview = async (id, replyMessage) => {
+    const updated = reviews.map((r) =>
+      r.id === id
+        ? {
+            ...r,
+            status: 'approved',
+            adminReply: {
+              message: replyMessage,
+              repliedAt: new Date().toISOString(),
+              adminEmail: 'rahilakareem389@gmail.com'
+            }
+          }
+        : r
+    );
+    updateReviews(updated);
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/reviews/${id}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ replyMessage })
+      });
+    } catch (e) {}
+  };
 
   // FAQ Admin Handlers
   const handleAnswerFaq = async (id, answerText) => {
@@ -627,9 +650,22 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                           "{rev.title}"
                         </h5>
                       )}
-                      <p className="text-xs sm:text-[13.5px] text-[#d6c7bc] leading-relaxed mb-6">
+                      <p className="text-xs sm:text-[13.5px] text-[#d6c7bc] leading-relaxed mb-4">
                         {rev.message}
                       </p>
+
+                      {/* Official Admin Reply from Rahila Kareem */}
+                      {rev.adminReply && rev.adminReply.message && (
+                        <div className="mb-5 p-3 rounded-xl bg-[#281a14] border border-[#D57C63]/30 space-y-1">
+                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#e28c74]">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#e28c74]" />
+                            <span>Response from Rahila Kareem (Owner):</span>
+                          </div>
+                          <p className="text-xs text-[#eedfd5] leading-relaxed italic">
+                            "{rev.adminReply.message}"
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-4 border-t border-[#33271f] flex items-center justify-between text-xs text-[#a9988d]">
@@ -1016,6 +1052,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         onApproveReview={handleApproveReview}
         onRejectReview={handleRejectReview}
         onDeleteReview={handleDeleteReview}
+        onReplyReview={handleReplyReview}
         onAddManualReview={handleAddManualReview}
         faqs={faqs}
         onAnswerFaq={handleAnswerFaq}
