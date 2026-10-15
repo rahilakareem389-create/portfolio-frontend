@@ -421,7 +421,6 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
   const filteredReviews = publicApprovedReviews.filter((r) => {
     if (activeCategory === 'all') return true;
-    if (activeCategory === 'gmb') return r.sourceType === 'gmb' || r.source?.includes('Google');
     if (activeCategory === 'seo') return r.service?.toLowerCase().includes('seo') || r.service?.toLowerCase().includes('guest');
     if (activeCategory === 'fullstack') return r.service?.toLowerCase().includes('full stack') || r.service?.toLowerCase().includes('mern');
     if (activeCategory === 'wordpress') return r.service?.toLowerCase().includes('wordpress') || r.service?.toLowerCase().includes('woo');
@@ -446,7 +445,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
             Client Testimonials &amp; Community Q&amp;A
           </h2>
           <p className="text-[16px] sm:text-[18px] leading-relaxed seo-body">
-            Authentic feedback from verified Google My Business engagements, client deliverables, and community Q&amp;A answered directly by Rahila Kareem.
+            Authentic feedback from client deliverables, project engagements, and community Q&amp;A answered directly by Rahila Kareem.
           </p>
         </div>
 
@@ -543,7 +542,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               }`}
             >
               <Star className="w-4 h-4" />
-              <span>Client Reviews &amp; GMB ({publicApprovedReviews.length})</span>
+              <span>Client Reviews ({publicApprovedReviews.length})</span>
             </button>
 
             <button
@@ -570,7 +569,6 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               {[
                 { id: 'all', label: `All Reviews (${publicApprovedReviews.length})` },
-                { id: 'gmb', label: `Google Reviews (GMB)` },
                 { id: 'seo', label: `SEO & Link Building` },
                 { id: 'fullstack', label: `Full Stack Development` },
                 { id: 'wordpress', label: `WordPress & WooCommerce` }
@@ -627,8 +625,6 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {filteredReviews.map((rev, idx) => {
-                  const isGmb = rev.sourceType === 'gmb' || rev.source?.includes('Google');
-
                   return (
                     <div
                       key={rev.id}
@@ -653,21 +649,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
                             <div>
                               <h4 className="font-heading font-extrabold text-base text-white">{rev.name}</h4>
-                              <p className="text-xs text-[#a9988d]">{rev.role || 'Google Verified User'}</p>
+                              <p className="text-xs text-[#a9988d]">{rev.role || 'Verified Client'}</p>
                             </div>
                           </div>
 
-                          {isGmb ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300 text-[10.5px] font-bold shrink-0">
-                              <Globe className="w-3 h-3" />
-                              <span>Google Review</span>
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10.5px] font-bold shrink-0">
-                              <Check className="w-3 h-3" />
-                              <span>Verified Client</span>
-                            </span>
-                          )}
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10.5px] font-bold shrink-0">
+                            <Check className="w-3 h-3" />
+                            <span>Client Review</span>
+                          </span>
                         </div>
 
                         {/* Stars & Service */}
@@ -678,7 +667,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                             ))}
                           </div>
                           <span className="text-[11px] font-bold text-[#D57C63] bg-[#D57C63]/10 px-2.5 py-0.5 rounded-full">
-                            {rev.service || 'Google Review'}
+                            {rev.service || 'Client Project'}
                           </span>
                         </div>
 
