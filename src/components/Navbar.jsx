@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown, Check, Globe, DollarSign, Terminal, TrendingUp, Sparkles, ArrowRight, Layers } from 'lucide-react';
 import AuthModal from './AuthModal';
+import ClientDashboardModal from './ClientDashboardModal';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -29,6 +30,17 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     }
     return 'dark';
   });
+
+  // Authenticated User & Client Dashboard state
+  const [authUser, setAuthUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('rahila_auth_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch (_) {
+      return null;
+    }
+  });
+  const [dashboardModalOpen, setDashboardModalOpen] = useState(false);
 
   // Auth Modal state (single button opens modal with Sign up first)
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -275,15 +287,26 @@ const Navbar = ({ activeTab, setActiveTab }) => {
             {/* Right Action Controls */}
             <div className="flex items-center gap-1.5 sm:gap-2.5">
 
-              {/* Single Sign In Button (Opens Modal with Sign Up first) */}
-              <button
-                onClick={() => setAuthModalOpen(true)}
-                className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--ink)] bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--org)] transition-all cursor-pointer shadow-sm"
-                title="Client Portal Sign In"
-              >
-                <span>🔑</span>
-                <span>{t('nav.signin')}</span>
-              </button>
+              {/* Single Sign In Button or Verified Workspace Pill */}
+              {authUser ? (
+                <button
+                  onClick={() => setDashboardModalOpen(true)}
+                  className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-[#D57C63]/25 border border-[#D57C63]/50 hover:bg-[#D57C63]/35 transition-all cursor-pointer shadow-sm"
+                  title="Open Verified Client Workspace"
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{authUser.name?.split(' ')[0] || 'Client'}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setAuthModalOpen(true)}
+                  className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--ink)] bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--org)] transition-all cursor-pointer shadow-sm"
+                  title="Client Portal Sign In"
+                >
+                  <span>🔑</span>
+                  <span>{t('nav.signin')}</span>
+                </button>
+              )}
 
               {/* Human Spoken Languages Dropdown (English, Urdu, Arabic, Spanish, French, German, etc.) */}
               <div className="relative" ref={dropdownRef}>
@@ -445,15 +468,25 @@ const Navbar = ({ activeTab, setActiveTab }) => {
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
           <div className="xl:hidden bg-[var(--bg)] border-b border-[var(--line)] px-6 py-4 animate-fade-in shadow-2xl">
-            {/* Mobile Sign In */}
+            {/* Mobile Sign In or Workspace */}
             <div className="mb-3 pb-3 border-b border-[var(--line)]">
-              <button
-                onClick={() => { setAuthModalOpen(true); setMobileMenuOpen(false); }}
-                className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[var(--panel)] border border-[var(--line)] text-[var(--ink)] flex items-center justify-center gap-1.5"
-              >
-                <span>🔑</span>
-                <span>{t('nav.signin')}</span>
-              </button>
+              {authUser ? (
+                <button
+                  onClick={() => { setDashboardModalOpen(true); setMobileMenuOpen(false); }}
+                  className="w-full py-2 px-3 rounded-xl text-xs font-bold bg-[#D57C63]/25 border border-[#D57C63]/50 text-white flex items-center justify-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Workspace ({authUser.name?.split(' ')[0] || 'Client'})</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => { setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                  className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[var(--panel)] border border-[var(--line)] text-[var(--ink)] flex items-center justify-center gap-1.5"
+                >
+                  <span>🔑</span>
+                  <span>{t('nav.signin')}</span>
+                </button>
+              )}
             </div>
 
             {/* Mobile Language Switcher Strip */}
@@ -556,11 +589,29 @@ const Navbar = ({ activeTab, setActiveTab }) => {
         )}
       </header>
 
-      {/* Auth Modal (Opens on Sign up tab first, then Sign in) */}
+      {/* Auth Modal (Registration with Real OTP Verification & Login) */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         initialMode="signup"
+        onAuthSuccess={(u) => setAuthUser(u)}
+      />
+
+      {/* Client Protected Dashboard Modal */}
+      <ClientDashboardModal
+        isOpen={dashboardModalOpen}
+        onClose={() => setDashboardModalOpen(false)}
+        user={authUser}
+        onLogout={async () => {
+          try {
+            const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
+            await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+          } catch (_) {}
+          localStorage.removeItem('rahila_auth_token');
+          localStorage.removeItem('rahila_auth_user');
+          setAuthUser(null);
+          setDashboardModalOpen(false);
+        }}
       />
     </>
   );

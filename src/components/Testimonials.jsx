@@ -24,9 +24,9 @@ import {
 import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { defaultFaqs } from '../data/defaultFaqs';
-import AdminDashboardModal from './AdminDashboardModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
 export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   // Reviews state (real Google & verified client reviews only)
@@ -36,10 +36,13 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       if (stored) {
         const parsed = JSON.parse(stored);
         // Wipe legacy mock dummy entries
-        return parsed.filter(
+        const clean = (parsed || []).filter(
           (r) =>
             !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
         );
+        if (clean && clean.length > 0) {
+          return clean;
+        }
       }
     } catch (e) {
       console.warn('LocalStorage error:', e);
@@ -47,11 +50,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     return defaultReviews;
   });
 
-  // FAQs state
+  // FAQs state (real authentic FAQs)
   const [faqs, setFaqs] = useState(() => {
     try {
       const stored = localStorage.getItem('rahila_portfolio_faqs');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return parsed.filter(
+          (f) => !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Tariq Mehmood', 'Sarah Jenkins'].includes(f.askedBy)
+        );
+      }
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
@@ -82,7 +90,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   // Modals state
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isAskQuestionModalOpen, setIsAskQuestionModalOpen] = useState(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+
 
   // Review Form
   const [reviewForm, setReviewForm] = useState({
@@ -123,16 +131,24 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               (r) =>
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
             );
-            setReviews(cleanReviews);
-            localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(cleanReviews));
+            if (cleanReviews.length > 0) {
+              setReviews(cleanReviews);
+              localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(cleanReviews));
+            } else if (defaultReviews.length > 0) {
+              setReviews(defaultReviews);
+            }
           }
         }
 
         if (faqRes && faqRes.ok) {
           const fData = await faqRes.json();
           if (fData && fData.faqs && isMounted) {
-            setFaqs(fData.faqs);
-            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(fData.faqs));
+            const cleanFaqs = (fData.faqs || []).filter(
+              (f) =>
+                !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Tariq Mehmood', 'Sarah Jenkins'].includes(f.askedBy)
+            );
+            setFaqs(cleanFaqs);
+            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(cleanFaqs));
           }
         }
 
@@ -464,7 +480,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   Google Business Profile (GMB)
                 </h4>
                 <p className="text-xs sm:text-sm text-[#bcab9e]">
-                  Connected Account: <strong className="text-white font-mono">{personalInfo.email}</strong>
+                  Connected Account: <strong className="text-white font-mono">{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</strong>
                 </p>
               </div>
             </div>
@@ -499,26 +515,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 <ExternalLink className="w-3 h-3" />
               </a>
 
-              <div className="flex gap-2">
+              <div className="flex">
                 <button
                   type="button"
                   onClick={() => setIsWriteReviewModalOpen(true)}
-                  className="flex-1 px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer text-center"
+                  className="w-full px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer text-center flex items-center justify-center gap-2"
                 >
-                  Write Review
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsAdminModalOpen(true)}
-                  className="px-3.5 py-2 rounded-full bg-[#221612] hover:bg-[#D57C63]/25 border border-[#3e2c22] text-[#bcab9e] hover:text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer relative"
-                  title="Admin Dashboard (rahilakareem389@gmail.com)"
-                >
-                  <Lock className="w-3 h-3 text-[#D57C63]" />
-                  <span>Admin</span>
-                  {(pendingReviewsCount > 0 || pendingFaqsCount > 0) && (
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                  )}
+                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                  <span>Write Client Review</span>
                 </button>
               </div>
             </div>
@@ -586,27 +590,18 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               ))}
             </div>
 
-            {/* Grid or Official GMB Live Hub */}
+            {/* Grid or Empty Reviews State */}
             {filteredReviews.length === 0 ? (
-              <div className="p-8 sm:p-12 rounded-[32px] bg-[#1a120e] border border-[#33271f] text-center max-w-2xl mx-auto space-y-5">
-                <div className="w-16 h-16 rounded-3xl bg-white flex items-center justify-center p-3 mx-auto shadow-md">
-                  <svg className="w-10 h-10" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                  </svg>
+              <div className="p-8 sm:p-12 rounded-[32px] bg-[#1a120e] border border-[#33271f] text-center max-w-lg mx-auto space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-[#D57C63]/10 border border-[#D57C63]/30 flex items-center justify-center mx-auto text-[#D57C63]">
+                  <MessageSquare className="w-6 h-6" />
                 </div>
-                <div className="space-y-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Official Google Business Profile (GMB)</span>
-                  </span>
-                  <h4 className="font-heading font-black text-xl sm:text-2xl text-white">
-                    Google My Business Verified Reviews
+                <div className="space-y-1">
+                  <h4 className="font-heading font-extrabold text-lg sm:text-xl text-white">
+                    Client Reviews
                   </h4>
-                  <p className="text-xs sm:text-sm text-[#bcab9e] max-w-lg mx-auto">
-                    Live reviews synchronized directly via Google Places API for <strong className="text-white">{personalInfo.name}</strong> ({personalInfo.email}).
+                  <p className="text-xs sm:text-sm text-[#bcab9e] max-w-sm mx-auto">
+                    No reviews in this category yet. Be the first client to leave feedback!
                   </p>
                 </div>
                 <div className="pt-2 flex flex-wrap justify-center gap-3">
@@ -614,18 +609,18 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     href={personalInfo.googleBusinessUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glow-btn px-6 py-3 rounded-full text-xs font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg"
+                    className="glow-btn px-5 py-2.5 rounded-full text-xs font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg"
                   >
-                    <Globe className="w-4 h-4" />
-                    <span>Review us on Google (GMB)</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Review us on Google</span>
+                    <ExternalLink className="w-3 h-3" />
                   </a>
                   <button
                     type="button"
                     onClick={() => setIsWriteReviewModalOpen(true)}
-                    className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
+                    className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
                   >
-                    Add Client Review
+                    Write Client Review
                   </button>
                 </div>
               </div>
@@ -1085,24 +1080,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         </div>
       )}
 
-      {/* ======================================================== */}
-      {/* MODAL 3: MASTER ADMIN DASHBOARD MODAL */}
-      {/* ======================================================== */}
-      <AdminDashboardModal
-        isOpen={isAdminModalOpen}
-        onClose={() => setIsAdminModalOpen(false)}
-        reviews={reviews}
-        onApproveReview={handleApproveReview}
-        onRejectReview={handleRejectReview}
-        onDeleteReview={handleDeleteReview}
-        onReplyReview={handleReplyReview}
-        onAddManualReview={handleAddManualReview}
-        faqs={faqs}
-        onAnswerFaq={handleAnswerFaq}
-        onDeleteFaq={handleDeleteFaq}
-        onAddManualFaq={handleAddManualFaq}
-        users={users}
-      />
+
 
     </section>
   );

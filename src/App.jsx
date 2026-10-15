@@ -14,6 +14,7 @@ import FullStackPage from './components/FullStackPage';
 import SeoPage from './components/SeoPage';
 import WordPressPage from './components/WordPressPage';
 import Testimonials from './components/Testimonials';
+import AdminPage from './components/AdminPage';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -23,7 +24,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      const validTabs = ['home', 'about', 'services', 'portfolio', 'pricing', 'contact', 'fullstack', 'seo', 'wordpress'];
+      const validTabs = ['home', 'about', 'services', 'portfolio', 'pricing', 'contact', 'fullstack', 'seo', 'wordpress', 'admin'];
       if (hash === 'testimonials') {
         setActiveTab('home');
         setTimeout(() => {
@@ -87,11 +88,13 @@ function App() {
       {/* 3D Interactive Three.js Background Constellation */}
       <Background3D enabled={true} />
 
-      {/* Modern Fixed Navbar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={handleTabChange}
-      />
+      {/* Modern Fixed Navbar (hidden on dedicated admin page) */}
+      {activeTab !== 'admin' && (
+        <Navbar
+          activeTab={activeTab}
+          setActiveTab={handleTabChange}
+        />
+      )}
 
       {/* Main Dynamic View with Smooth Open/Close Transitions */}
       <main className="flex-1 relative z-10">
@@ -165,10 +168,18 @@ function App() {
             setSelectedPlan={setSelectedPlan}
           />
         )}
+
+        {activeTab === 'admin' && (
+          <AdminPage
+            setActiveTab={handleTabChange}
+          />
+        )}
       </main>
 
-      {/* Global Footer */}
-      <Footer setActiveTab={handleTabChange} />
+      {/* Global Footer (hidden on dedicated admin page) */}
+      {activeTab !== 'admin' && (
+        <Footer setActiveTab={handleTabChange} />
+      )}
     </div>
   );
 }

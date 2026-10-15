@@ -98,10 +98,17 @@ const Footer = ({ setActiveTab }) => {
           WordPress designer · WordPress developer · WooCommerce · e-commerce website · SEO · responsive web design · MERN Stack · freelance web developer Pakistan
         </p>
 
-        {/* Copyright */}
-        <p className="text-[13px] text-[#8a7a70] mt-2">
-          © {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}
-        </p>
+        {/* Copyright & Discreet Admin Portal */}
+        <div className="flex flex-col sm:flex-row items-center justify-between text-[13px] text-[#8a7a70] mt-3 pt-2 gap-2">
+          <p>© {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}</p>
+          <button
+            onClick={() => handleNav('admin')}
+            className="text-[12px] text-[#8a7a70] hover:text-[#D57C63] transition-colors cursor-pointer flex items-center gap-1.5"
+            title="Owner Portal (wordpressrahila@gmail.com)"
+          >
+            <span>Admin Portal</span>
+          </button>
+        </div>
 
       </div>
     </footer>

@@ -71,7 +71,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
-            access_key: '6d6e0418-bb66-48ed-81eb-aaf8f0a9486d',
+            access_key: 'ad131140-827b-407f-a476-5afd66b1fa0b',
             name: formData.name,
             email: formData.email,
             subject: `Project inquiry: ${formData.plan}`,

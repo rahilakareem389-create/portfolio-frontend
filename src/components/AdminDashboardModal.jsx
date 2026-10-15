@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
-const OWNER_EMAIL = 'rahilakareem389@gmail.com';
+const OWNER_EMAIL = 'wordpressrahila@gmail.com';
 const ADMIN_PASSWORD = 'rahila2026';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
@@ -141,8 +141,8 @@ export default function AdminDashboardModal({
     setAuthError('');
 
     const cleanEmail = emailInput.trim().toLowerCase();
-    if (cleanEmail !== OWNER_EMAIL && cleanEmail !== 'wordpressrahila@gmail.com') {
-      setAuthError(`Access Denied: Only Rahila Kareem's verified account (${OWNER_EMAIL}) is authorized.`);
+    if (cleanEmail !== 'wordpressrahila@gmail.com' && cleanEmail !== 'rahilakareem389@gmail.com') {
+      setAuthError(`Access Denied: Only Rahila Kareem's verified account (wordpressrahila@gmail.com) is authorized.`);
       return;
     }
 
@@ -314,7 +314,7 @@ export default function AdminDashboardModal({
                   required
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder="rahilakareem389@gmail.com"
+                  placeholder="wordpressrahila@gmail.com"
                   className="w-full px-4 py-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-sm text-white focus:outline-none focus:border-[#D57C63]"
                 />
               </div>
