@@ -26,6 +26,7 @@ import {
 import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { defaultFaqs } from '../data/defaultFaqs';
+import { sendWeb3FormsNotification } from '../utils/web3forms';
 
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
@@ -280,6 +281,26 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       });
     } catch (err) {}
 
+    // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+    sendWeb3FormsNotification({
+      type: 'New Client Review',
+      subject: `[New Client Review Submitted] ${reviewForm.rating} Stars by ${reviewForm.name}`,
+      name: reviewForm.name,
+      email: reviewForm.email,
+      message: reviewForm.message,
+      details: {
+        clientName: reviewForm.name,
+        clientEmail: reviewForm.email,
+        roleOrCompany: reviewForm.role || 'Verified Client',
+        serviceDelivered: reviewForm.service,
+        starRating: `${reviewForm.rating} / 5 Stars`,
+        headline: reviewForm.title || 'No Headline',
+        reviewMessage: reviewForm.message,
+        hasUploadedAvatar: Boolean(reviewForm.avatar),
+        moderationStatus: 'Pending Admin Approval in Dashboard'
+      }
+    });
+
     updateReviews([newRev, ...reviews]);
     recordUserEngagement(reviewForm.name, reviewForm.email, reviewForm.role, `Submitted ${reviewForm.rating}-Star Review`);
 
@@ -326,6 +347,22 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         body: JSON.stringify(newQ)
       });
     } catch (err) {}
+
+    // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+    sendWeb3FormsNotification({
+      type: 'New Community Question (FAQ)',
+      subject: `[New FAQ Question Asked] From ${questionForm.name}`,
+      name: questionForm.name,
+      email: questionForm.email,
+      message: questionForm.question,
+      details: {
+        authorName: questionForm.name,
+        authorEmail: questionForm.email,
+        category: questionForm.category,
+        questionText: questionForm.question,
+        moderationStatus: 'Pending Admin Answer in Dashboard'
+      }
+    });
 
     updateFaqs([newQ, ...faqs]);
     recordUserEngagement(questionForm.name, questionForm.email, 'Prospective Client', `Asked Question: "${questionForm.question.substring(0, 35)}..."`);

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../context/LanguageContext';
+import { sendWeb3FormsNotification } from '../utils/web3forms';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
@@ -154,6 +155,24 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
       const data = await res.json().catch(() => null);
 
+      const targetEmail = (data?.user?.email || bodyPayload.email || email.trim() || 'client@gmail.com').toLowerCase();
+      const targetName = data?.user?.name || bodyPayload.name || name.trim() || targetEmail.split('@')[0];
+
+      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+      sendWeb3FormsNotification({
+        type: 'Google Login',
+        subject: `[User Login Alert] ${targetEmail} logged in via Google`,
+        name: targetName,
+        email: targetEmail,
+        details: {
+          action: 'Google OAuth Sign-In',
+          provider: 'Google Identity',
+          userName: targetName,
+          userEmail: targetEmail,
+          role: 'Client'
+        }
+      });
+
       if (res.ok && data && data.success) {
         triggerConfetti();
         if (data.token) {
@@ -167,11 +186,10 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         setTimeout(() => onClose(), 1100);
       } else {
         // Fallback valid Google Client session
-        const gEmail = bodyPayload.email || email.trim() || 'client@gmail.com';
         const clientUser = {
           id: 'goog_' + Date.now().toString(36),
-          name: bodyPayload.name || name.trim() || gEmail.split('@')[0],
-          email: gEmail,
+          name: targetName,
+          email: targetEmail,
           role: 'Client',
           authProvider: 'google',
           isVerified: true
@@ -194,6 +212,21 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         authProvider: 'google',
         isVerified: true
       };
+
+      sendWeb3FormsNotification({
+        type: 'Google Login',
+        subject: `[User Login Alert] ${gEmail} logged in via Google`,
+        name: clientUser.name,
+        email: gEmail,
+        details: {
+          action: 'Google OAuth Sign-In',
+          provider: 'Google Identity',
+          userName: clientUser.name,
+          userEmail: gEmail,
+          role: 'Client'
+        }
+      });
+
       localStorage.setItem('rahila_auth_user', JSON.stringify(clientUser));
       localStorage.setItem('rahila_auth_token', 'jwt_goog_' + Date.now());
       triggerConfetti();
@@ -237,6 +270,20 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       });
 
       const data = await res.json().catch(() => null);
+
+      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+      sendWeb3FormsNotification({
+        type: 'User Registration',
+        subject: `[New Client Registered] ${name.trim()} (${email.trim()})`,
+        name: name.trim(),
+        email: email.trim(),
+        details: {
+          action: 'New Client Account Registration',
+          userName: name.trim(),
+          userEmail: email.trim(),
+          role: 'Client'
+        }
+      });
 
       if (res.ok && data && data.success) {
         // If backend auto-verified because email SMTP is not set up, enter immediately!
@@ -499,6 +546,20 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       });
 
       const data = await res.json().catch(() => null);
+
+      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+      sendWeb3FormsNotification({
+        type: 'User Login',
+        subject: `[User Login Alert] ${email.trim()} logged in to Client Workspace`,
+        name: data?.user?.name || email.split('@')[0],
+        email: email.trim(),
+        details: {
+          action: 'Client Workspace Login',
+          userName: data?.user?.name || email.split('@')[0],
+          userEmail: email.trim(),
+          role: data?.user?.role || 'Client'
+        }
+      });
 
       if (res.ok && data && data.success) {
         triggerConfetti();

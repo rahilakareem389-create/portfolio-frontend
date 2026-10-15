@@ -3,6 +3,7 @@ import { ArrowLeft, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
+import { sendWeb3FormsNotification } from '../utils/web3forms';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
@@ -39,8 +40,24 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
     e.preventDefault();
     setStatus({ submitting: true, message: t('contact.btnSending') });
 
+    // Always dispatch directly to Web3Forms from browser so it appears in Web3Forms dashboard
+    sendWeb3FormsNotification({
+      type: 'Project Inquiry',
+      subject: `[New Inquiry] ${formData.name} - ${formData.plan}`,
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      details: {
+        clientName: formData.name,
+        clientEmail: formData.email,
+        phoneNumber: formData.phone || 'Not specified',
+        selectedPlan: formData.plan,
+        inquiryMessage: formData.message
+      }
+    });
+
     try {
-      // 1. Backend /api/contact endpoint (sends to Web3Forms + saves to MongoDB Atlas!)
+      // 1. Backend /api/contact endpoint (saves to MongoDB Atlas / JSON)
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
