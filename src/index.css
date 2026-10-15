@@ -520,11 +520,15 @@ body {
 }
 
 /* Headings Typography */
-h1, h2, h3, h4, h5, h6, .logo, .tw, .font-heading {
+h1, h2, h3, h4, h5, h6, .logo, .tw {
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
   letter-spacing: -0.015em;
   margin: 0;
-  color: var(--ink);
+}
+
+.font-heading {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+  letter-spacing: -0.015em;
 }
 
 h1 {
@@ -1194,4 +1198,74 @@ p, span, a, input, select, textarea, button, li, small {
 
 .animate-text-up-delay-2 {
   animation: textSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+
+/* ==========================================================================
+   Admin Portal Dedicated High-Contrast Styling (100% Text Visibility)
+   ========================================================================== */
+.admin-portal {
+  background-color: #0e0805 !important;
+  color: #f7ede3 !important;
+}
+
+.admin-portal h1,
+.admin-portal h2,
+.admin-portal h3,
+.admin-portal h4,
+.admin-portal h5,
+.admin-portal h6,
+.admin-portal .font-heading,
+.admin-portal .admin-title,
+.admin-portal .admin-stat-num {
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .admin-portal h1,
+:root[data-theme="light"] .admin-portal h2,
+:root[data-theme="light"] .admin-portal h3,
+:root[data-theme="light"] .admin-portal h4,
+:root[data-theme="light"] .admin-portal h5,
+:root[data-theme="light"] .admin-portal h6,
+:root[data-theme="light"] .admin-portal .font-heading,
+:root[data-theme="light"] .admin-portal .admin-title,
+:root[data-theme="light"] .admin-portal .admin-stat-num {
+  color: #ffffff !important;
+}
+
+.admin-portal input,
+.admin-portal textarea,
+.admin-portal select,
+:root[data-theme="light"] .admin-portal input,
+:root[data-theme="light"] .admin-portal textarea,
+:root[data-theme="light"] .admin-portal select {
+  background-color: #1a100b !important;
+  color: #ffffff !important;
+  border-color: #38241b !important;
+}
+
+.admin-portal input::placeholder,
+.admin-portal textarea::placeholder,
+:root[data-theme="light"] .admin-portal input::placeholder,
+:root[data-theme="light"] .admin-portal textarea::placeholder {
+  color: #9d897b !important;
+}
+
+.admin-portal .text-white,
+:root[data-theme="light"] .admin-portal .text-white {
+  color: #ffffff !important;
+}
+
+.admin-portal .text-\[\#8a7569\],
+:root[data-theme="light"] .admin-portal .text-\[\#8a7569\] {
+  color: #d1c2b5 !important;
+}
+
+.admin-portal .text-\[\#bcab9e\],
+:root[data-theme="light"] .admin-portal .text-\[\#bcab9e\] {
+  color: #e2d6cc !important;
+}
+
+.admin-portal .text-\[\#d6c7bc\],
+:root[data-theme="light"] .admin-portal .text-\[\#d6c7bc\] {
+  color: #ebe2d9 !important;
 }

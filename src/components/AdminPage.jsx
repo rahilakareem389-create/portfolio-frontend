@@ -503,7 +503,7 @@ export default function AdminPage({ setActiveTab }) {
   // =========================================================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0e0805] text-white flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-[#0e0805] text-white flex items-center justify-center p-4 relative overflow-hidden admin-portal">
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D57C63]/15 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#ff7a1a]/15 rounded-full blur-[140px] pointer-events-none" />
@@ -628,7 +628,7 @@ export default function AdminPage({ setActiveTab }) {
   // VIEW 2: AUTHENTICATED DEDICATED ADMIN DASHBOARD WITH SIDEBAR
   // =========================================================================
   return (
-    <div className="min-h-screen bg-[#0e0805] text-white flex flex-col md:flex-row relative">
+    <div className="min-h-screen bg-[#0e0805] text-white flex flex-col md:flex-row relative admin-portal">
       
       {/* Toast Notification */}
       {actionSuccess && (
@@ -670,16 +670,16 @@ export default function AdminPage({ setActiveTab }) {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-heading font-black text-base text-white">Master Console</h2>
+              <h2 className="font-heading font-black text-base text-white admin-title">Master Console</h2>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Verified Active</span>
               </span>
             </div>
           </div>
-          <div className="p-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-[11px] text-[#bcab9e] space-y-0.5">
+          <div className="p-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-[11px] text-[#e2d5cb] space-y-0.5">
             <div className="font-bold text-white truncate">Rahila Kareem</div>
-            <div className="text-[#D57C63] truncate">{OWNER_EMAIL}</div>
+            <div className="text-[#D57C63] font-semibold truncate">{OWNER_EMAIL}</div>
           </div>
         </div>
 
@@ -741,12 +741,12 @@ export default function AdminPage({ setActiveTab }) {
                 className={`w-full px-4 py-3 rounded-2xl text-xs font-bold flex items-center justify-between transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#D57C63] text-white shadow-lg'
-                    : 'text-[#bcab9e] hover:bg-[#221612] hover:text-white'
+                    : 'text-[#e5d8cd] hover:bg-[#221612] hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#D57C63]'}`} />
-                  <span>{item.label}</span>
+                  <span className="font-semibold">{item.label}</span>
                 </div>
                 {item.badge && (
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${item.badgeColor}`}>
@@ -788,7 +788,7 @@ export default function AdminPage({ setActiveTab }) {
         <header className="p-5 sm:p-6 border-b border-[#2d1b14] bg-[#140c08]/80 backdrop-blur-md sticky top-0 z-20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="font-heading font-black text-xl sm:text-2xl text-white capitalize">
+              <h1 className="font-heading font-black text-xl sm:text-2xl text-white admin-title capitalize">
                 {activeSection === 'inquiries' && 'Contact Inquiries & Web3Forms'}
                 {activeSection === 'reviews' && 'Reviews Moderation & Direct Reply'}
                 {activeSection === 'faqs' && 'Community Questions & Admin Answers'}
@@ -797,8 +797,8 @@ export default function AdminPage({ setActiveTab }) {
                 {activeSection === 'cloud' && 'MongoDB Atlas & Web3Forms Cloud Diagnostics'}
               </h1>
             </div>
-            <p className="text-xs text-[#8a7569] mt-0.5">
-              Real-time synchronization with Vercel API, MongoDB Atlas, and Web3Forms key: <code className="text-[#D57C63]">ad131140...</code>
+            <p className="text-xs text-[#d6c7bc] mt-1 font-medium">
+              Real-time synchronization with Vercel API, MongoDB Atlas, and Web3Forms key: <code className="text-[#ff9a7b] font-mono">ad131140...</code>
             </p>
           </div>
 
@@ -840,52 +840,52 @@ export default function AdminPage({ setActiveTab }) {
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-2xl bg-[#170e0a] border border-[#2d1b14]">
-              <div className="flex items-center justify-between text-xs text-[#8a7569] mb-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
+              <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>Inquiries</span>
                 <Inbox className="w-4 h-4 text-[#D57C63]" />
               </div>
-              <div className="font-heading font-black text-2xl text-white">{messages.length}</div>
-              <div className="text-[11px] text-amber-400 mt-1">{newMessagesCount} New Unhandled</div>
+              <div className="font-heading font-black text-3xl text-white admin-stat-num">{messages.length}</div>
+              <div className="text-[11px] font-bold text-amber-400 mt-1">{newMessagesCount} New Unhandled</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#170e0a] border border-[#2d1b14]">
-              <div className="flex items-center justify-between text-xs text-[#8a7569] mb-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
+              <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>Reviews</span>
                 <Star className="w-4 h-4 text-[#ff7a1a]" />
               </div>
-              <div className="font-heading font-black text-2xl text-white">{reviews.length}</div>
-              <div className="text-[11px] text-[#ff7a1a] mt-1">{pendingReviewsCount} Pending Moderation</div>
+              <div className="font-heading font-black text-3xl text-white admin-stat-num">{reviews.length}</div>
+              <div className="text-[11px] font-bold text-[#ff9a7b] mt-1">{pendingReviewsCount} Pending Moderation</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#170e0a] border border-[#2d1b14]">
-              <div className="flex items-center justify-between text-xs text-[#8a7569] mb-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
+              <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>FAQs</span>
                 <HelpCircle className="w-4 h-4 text-emerald-400" />
               </div>
-              <div className="font-heading font-black text-2xl text-white">{faqs.length}</div>
-              <div className="text-[11px] text-emerald-400 mt-1">{unansweredFaqsCount} Need Answer</div>
+              <div className="font-heading font-black text-3xl text-white admin-stat-num">{faqs.length}</div>
+              <div className="text-[11px] font-bold text-emerald-400 mt-1">{unansweredFaqsCount} Need Answer</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#170e0a] border border-[#2d1b14]">
-              <div className="flex items-center justify-between text-xs text-[#8a7569] mb-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
+              <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>Active Users</span>
                 <Users className="w-4 h-4 text-blue-400" />
               </div>
-              <div className="font-heading font-black text-2xl text-white">{users.length}</div>
-              <div className="text-[11px] text-blue-400 mt-1">Live Audit Directory</div>
+              <div className="font-heading font-black text-3xl text-white admin-stat-num">{users.length}</div>
+              <div className="text-[11px] font-bold text-blue-400 mt-1">Live Audit Directory</div>
             </div>
           </div>
 
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-[#8a7569] absolute left-4 top-3.5" />
+            <Search className="w-4 h-4 text-[#d6c7bc] absolute left-4 top-3.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search across all entries, emails, names, messages..."
-              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] text-xs sm:text-sm text-white focus:outline-none focus:border-[#D57C63]"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#170e0a] border border-[#3e2c22] text-xs sm:text-sm text-white focus:outline-none focus:border-[#D57C63] transition-all"
             />
           </div>
 
@@ -903,7 +903,7 @@ export default function AdminPage({ setActiveTab }) {
                     className={`px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all cursor-pointer ${
                       messageFilter === f
                         ? 'bg-[#D57C63] text-white shadow-md'
-                        : 'bg-[#1e130d] text-[#8a7569] hover:text-white'
+                        : 'bg-[#1e130d] text-[#e0d3c7] hover:text-white'
                     }`}
                   >
                     {f} ({messages.filter((m) => (f === 'all' ? true : m.status === f)).length})
@@ -912,10 +912,10 @@ export default function AdminPage({ setActiveTab }) {
               </div>
 
               {filteredMessages.length === 0 ? (
-                <div className="p-12 text-center rounded-3xl bg-[#170e0a] border border-[#2d1b14] text-[#8a7569]">
-                  <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D57C63]" />
-                  <p className="text-sm font-bold text-white">No contact inquiries found</p>
-                  <p className="text-xs mt-1">When clients submit the contact form, inquiries will appear here and email to {OWNER_EMAIL}.</p>
+                <div className="p-12 text-center rounded-3xl bg-[#170e0a] border border-[#2d1b14] text-[#d6c7bc]">
+                  <Inbox className="w-12 h-12 mx-auto mb-3 opacity-80 text-[#D57C63]" />
+                  <p className="text-base font-bold text-white mb-1.5">No contact inquiries found</p>
+                  <p className="text-xs text-[#d6c7bc] max-w-md mx-auto">When clients submit the contact form, inquiries will appear here and email to {OWNER_EMAIL}.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
