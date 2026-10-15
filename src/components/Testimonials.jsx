@@ -649,14 +649,9 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
                             <div>
                               <h4 className="font-heading font-extrabold text-base text-white">{rev.name}</h4>
-                              <p className="text-xs text-[#a9988d]">{rev.role || 'Verified Client'}</p>
+                              <p className="text-xs text-[#a9988d]">{rev.role || 'Client'}</p>
                             </div>
                           </div>
-
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10.5px] font-bold shrink-0">
-                            <Check className="w-3 h-3" />
-                            <span>Client Review</span>
-                          </span>
                         </div>
 
                         {/* Stars & Service */}
