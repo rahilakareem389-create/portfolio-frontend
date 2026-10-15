@@ -1038,6 +1038,93 @@ p, span, a, input, select, textarea, button, li, small {
   box-shadow: 0 8px 24px rgba(207, 82, 8, 0.12) !important;
 }
 
+/* ======================================================== */
+/* DIALOG & REVIEW/QUESTION MODALS HIGH-CONTRAST VISIBILITY */
+/* ======================================================== */
+.dialog-modal-box {
+  background-color: #18110e !important;
+  color: #f7ede3 !important;
+  border: 2px solid rgba(213, 124, 99, 0.45) !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 40px rgba(213, 124, 99, 0.15) !important;
+}
+
+.dialog-modal-box .modal-title {
+  color: #ffffff !important;
+}
+
+.dialog-modal-box .modal-subtitle {
+  color: #d6c7bc !important;
+}
+
+.dialog-modal-box .modal-label {
+  color: #f3e9e2 !important;
+  font-weight: 700 !important;
+}
+
+.dialog-modal-box .modal-input {
+  background-color: #221612 !important;
+  color: #ffffff !important;
+  border: 1px solid #3e2c22 !important;
+}
+
+.dialog-modal-box .modal-input::placeholder {
+  color: #9c8a7e !important;
+}
+
+.dialog-modal-box .modal-cancel-btn {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.dialog-modal-box .modal-cancel-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Light Mode Overrides for Dialog Modals */
+:root[data-theme="light"] .dialog-modal-box {
+  background-color: #ffffff !important;
+  color: #140d07 !important;
+  border: 2px solid #decbb8 !important;
+  border-top: 5px solid #cf5208 !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(207, 82, 8, 0.15) !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-title {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-subtitle {
+  color: #59473b !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-label {
+  color: #1f140d !important;
+  font-weight: 700 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-input {
+  background-color: #fbf7f2 !important;
+  color: #140d07 !important;
+  border: 1.5px solid #d8c7b4 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-input::placeholder {
+  color: #8b7768 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-cancel-btn {
+  background-color: #ede2d7 !important;
+  color: #1f140d !important;
+  border: 1px solid #d8c7b4 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-cancel-btn:hover {
+  background-color: #e0d1c3 !important;
+  color: #000000 !important;
+}
+
 /* Active Category Pill Styling */
 .category-pill-active {
   background: linear-gradient(135deg, #ff6a00 0%, #ff8c37 100%) !important;
