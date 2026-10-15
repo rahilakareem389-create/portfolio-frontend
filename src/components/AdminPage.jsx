@@ -720,13 +720,6 @@ export default function AdminPage({ setActiveTab }) {
               icon: Globe,
               badge: '5.0 ★',
               badgeColor: 'bg-blue-500/20 text-blue-400'
-            },
-            {
-              id: 'cloud',
-              label: 'Atlas & Web3Forms Status',
-              icon: Database,
-              badge: 'Sync OK',
-              badgeColor: 'bg-emerald-500/20 text-emerald-400'
             }
           ].map((item) => {
             const Icon = item.icon;
@@ -794,11 +787,10 @@ export default function AdminPage({ setActiveTab }) {
                 {activeSection === 'faqs' && 'Community Questions & Admin Answers'}
                 {activeSection === 'users' && 'User Login & Session Audit ("kon login huwa")'}
                 {activeSection === 'gmb' && 'Official Google My Business Integration'}
-                {activeSection === 'cloud' && 'MongoDB Atlas & Web3Forms Cloud Diagnostics'}
               </h1>
             </div>
             <p className="text-xs text-[#d6c7bc] mt-1 font-medium">
-              Real-time synchronization with Vercel API, MongoDB Atlas, and Web3Forms key: <code className="text-[#ff9a7b] font-mono">ad131140...</code>
+              Real-time synchronization for messages, client reviews, and community questions.
             </p>
           </div>
 
@@ -1369,71 +1361,6 @@ export default function AdminPage({ setActiveTab }) {
                 <div className="p-4 rounded-xl bg-[#221612] border border-[#3e2c22]">
                   <span className="text-[#8a7569] block mb-1">Official GMB Rating</span>
                   <span className="font-bold text-amber-400 text-sm">5.0 ★ (Verified Client Endorsements)</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* =============================================================== */}
-          {/* SECTION 6: CLOUD & MONGODB ATLAS DIAGNOSTICS */}
-          {/* =============================================================== */}
-          {activeSection === 'cloud' && (
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#170e0a] border border-[#2d1b14] space-y-6">
-              <div>
-                <h3 className="font-heading font-black text-lg text-white">Cloud Diagnostics &amp; Sync</h3>
-                <p className="text-xs text-[#8a7569] mt-1">
-                  Architecture status for MongoDB Atlas, Web3Forms, and Vercel serverless persistence.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-5 rounded-2xl bg-[#1e130d] border border-[#332219] space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#bcab9e]">
-                    <span>MongoDB Atlas</span>
-                    <Database className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div className="font-heading font-bold text-sm text-emerald-400 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>{cloudStats.mongoDbAtlas || 'Configured & Standby'}</span>
-                  </div>
-                  <p className="text-[11px] text-[#8a7569]">
-                    Dual-layer persistence: Writes to MongoDB Atlas cloud cluster with fallback to high-speed JSON store.
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-[#1e130d] border border-[#332219] space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#bcab9e]">
-                    <span>Web3Forms API</span>
-                    <Mail className="w-4 h-4 text-[#ff7a1a]" />
-                  </div>
-                  <div className="font-heading font-bold text-sm text-[#ff7a1a]">
-                    Connected &amp; Active
-                  </div>
-                  <p className="text-[11px] text-[#8a7569]">
-                    Alerts dispatched to <strong className="text-white">{OWNER_EMAIL}</strong> for logins, inquiries, reviews, and questions.
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-[#1e130d] border border-[#332219] space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#bcab9e]">
-                    <span>Backend Server (Vercel)</span>
-                    <Globe className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div className="font-heading font-bold text-sm text-blue-400 truncate">
-                    portfolio-backend-omega-tan.vercel.app
-                  </div>
-                  <p className="text-[11px] text-[#8a7569]">
-                    Serverless API endpoints live with CORS open to frontend.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#221612] border border-[#3e2c22] text-xs space-y-2">
-                <span className="font-bold text-white block">Active Environment Keys</span>
-                <div className="font-mono text-[11px] text-[#8a7569] space-y-1">
-                  <div>WEB3FORMS_ACCESS_KEY: <span className="text-white">ad131140-827b-407f-a476-5afd66b1fa0b</span></div>
-                  <div>OWNER_ACCOUNT: <span className="text-white">{OWNER_EMAIL}</span></div>
-                  <div>FALLBACK_ACCOUNT: <span className="text-white">{SECONDARY_EMAIL}</span></div>
                 </div>
               </div>
             </div>
