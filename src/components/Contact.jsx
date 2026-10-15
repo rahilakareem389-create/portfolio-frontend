@@ -277,13 +277,6 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                 </div>
 
                 <div className="pt-2">
-                  <strong className="text-white block text-xs uppercase text-[#eaa487]">Fiverr:</strong>
-                  <a href={personalInfo.fiverrUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#ff7a1a] transition-colors">
-                    Fiverr Pro Profile
-                  </a>
-                </div>
-
-                <div className="pt-2">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Location & Response:</strong>
                   <span>{t('contact.location')}</span>
                   <br />

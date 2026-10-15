@@ -79,9 +79,6 @@ const Footer = ({ setActiveTab }) => {
               <a href={personalInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="block py-0.5 hover:text-[#ff7a1a] transition-colors">
                 WhatsApp: {personalInfo.phone}
               </a>
-              <a href={personalInfo.fiverrUrl} target="_blank" rel="noopener noreferrer" className="block py-0.5 hover:text-[#ff7a1a] transition-colors">
-                Fiverr Pro
-              </a>
               <a href={personalInfo.linkedinUrl} target="_blank" rel="noopener noreferrer" className="block py-0.5 hover:text-[#ff7a1a] transition-colors">
                 LinkedIn Profile
               </a>
