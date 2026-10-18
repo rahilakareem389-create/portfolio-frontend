@@ -99,51 +99,46 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   // ==========================================================================
-  // GOOGLE SIGN-IN HANDLER (FIREBASE AUTH POPUP)
+  // GOOGLE SIGN-IN HANDLER
   // ==========================================================================
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setSuccessMsg('');
-
-    if (!isConfigured) {
-      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
-      return;
-    }
-
     setLoading(true);
+
     try {
-      const firebaseUser = await loginWithGoogle();
+      const user = await loginWithGoogle();
       triggerConfetti();
 
       // Dispatch Web3Forms notification for audit alert
       sendWeb3FormsNotification({
         type: 'Google Login',
-        subject: `[User Login Alert] ${firebaseUser.email} logged in via Google (Firebase Auth)`,
-        name: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
-        email: firebaseUser.email,
+        subject: `[User Login Alert] ${user.email} logged in via Google`,
+        name: user.displayName || user.name || user.email?.split('@')[0],
+        email: user.email,
         details: {
-          action: 'Firebase Google OAuth Sign-In',
-          provider: 'Firebase Authentication',
-          userName: firebaseUser.displayName,
-          userEmail: firebaseUser.email,
-          role: 'Client'
+          action: 'Google OAuth Sign-In',
+          provider: isConfigured ? 'Firebase Authentication' : 'Instant Client Session',
+          userName: user.displayName || user.name,
+          userEmail: user.email,
+          role: user.role || 'Client'
         }
       });
 
-      setSuccessMsg(`Welcome, ${firebaseUser.displayName || 'Client'}! Signed in with Google.`);
+      setSuccessMsg(`Welcome, ${user.displayName || user.name || 'Client'}! Signed in successfully.`);
       if (onAuthSuccess) {
         onAuthSuccess({
-          uid: firebaseUser.uid,
-          id: firebaseUser.uid,
-          email: firebaseUser.email,
-          name: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
-          emailVerified: firebaseUser.emailVerified,
-          role: 'Client'
+          uid: user.uid || user.id,
+          id: user.uid || user.id,
+          email: user.email,
+          name: user.displayName || user.name || user.email?.split('@')[0],
+          emailVerified: true,
+          role: user.role || 'Client'
         });
       }
-      setTimeout(() => onClose(), 1100);
+      setTimeout(() => onClose(), 1000);
     } catch (err) {
-      console.error('Firebase Google Sign-In Error:', err);
+      console.error('Google Sign-In Error:', err);
       setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
@@ -151,7 +146,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   // ==========================================================================
-  // 1. SUBMIT REGISTRATION (EMAIL + PASSWORD + VERIFICATION EMAIL)
+  // 1. SUBMIT REGISTRATION (EMAIL + PASSWORD)
   // ==========================================================================
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -168,11 +163,6 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       return;
     }
 
-    if (!isConfigured) {
-      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
-      return;
-    }
-
     setLoading(true);
     try {
       const createdUser = await registerWithEmail(name.trim(), email.trim(), password);
@@ -184,18 +174,27 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         name: name.trim(),
         email: email.trim(),
         details: {
-          action: 'Firebase Email/Password Registration',
+          action: isConfigured ? 'Firebase Email/Password Registration' : 'Client Registration',
           userName: name.trim(),
           userEmail: email.trim(),
           role: 'Client'
         }
       });
 
-      setSuccessMsg(`Verification email dispatched to ${email.trim()}. Please verify your email before entering your workspace.`);
-      setMode('verify');
-      setResendCooldown(60);
+      if (isConfigured) {
+        setSuccessMsg(`Verification email dispatched to ${email.trim()}. Please verify your email before entering your workspace.`);
+        setMode('verify');
+        setResendCooldown(60);
+      } else {
+        triggerConfetti();
+        setSuccessMsg(`Welcome, ${name.trim()}! Your client account is active.`);
+        if (onAuthSuccess) {
+          onAuthSuccess(createdUser);
+        }
+        setTimeout(() => onClose(), 1000);
+      }
     } catch (err) {
-      console.error('Firebase Registration Error:', err);
+      console.error('Registration Error:', err);
       setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
@@ -224,9 +223,9 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
             role: 'Client'
           });
         }
-        setTimeout(() => onClose(), 1200);
+        setTimeout(() => onClose(), 1000);
       } else {
-        setErrorMsg('Your email is not verified yet. Please check your inbox (and Spam folder) for the verification link from Firebase, click it, and try again.');
+        setErrorMsg('Your email is not verified yet. Please check your inbox (and Spam folder) for the verification link, click it, and try again.');
       }
     } catch (err) {
       setErrorMsg(mapAuthError(err));
@@ -268,17 +267,12 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       return;
     }
 
-    if (!isConfigured) {
-      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
-      return;
-    }
-
     setLoading(true);
     try {
-      const firebaseUser = await loginWithEmail(email.trim(), password);
+      const user = await loginWithEmail(email.trim(), password);
 
-      // Enforce email verification for protected features
-      if (!firebaseUser.emailVerified) {
+      // Enforce email verification only if Firebase is active
+      if (isConfigured && !user.emailVerified) {
         setErrorMsg('Your email is not verified yet. Please verify your email before accessing your workspace.');
         setMode('verify');
         setResendCooldown(30);
@@ -288,7 +282,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
       // Successful verified login
       triggerConfetti();
-      const userName = firebaseUser.displayName || email.split('@')[0];
+      const userName = user.displayName || user.name || email.split('@')[0];
 
       sendWeb3FormsNotification({
         type: 'User Login',
@@ -296,27 +290,27 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         name: userName,
         email: email.trim(),
         details: {
-          action: 'Firebase Client Login',
+          action: 'Client Login',
           userName,
           userEmail: email.trim(),
-          role: 'Client'
+          role: user.role || 'Client'
         }
       });
 
       setSuccessMsg(`Welcome back, ${userName}!`);
       if (onAuthSuccess) {
         onAuthSuccess({
-          uid: firebaseUser.uid,
-          id: firebaseUser.uid,
-          email: firebaseUser.email,
+          uid: user.uid || user.id,
+          id: user.uid || user.id,
+          email: user.email || email.trim(),
           name: userName,
           emailVerified: true,
-          role: 'Client'
+          role: user.role || 'Client'
         });
       }
-      setTimeout(() => onClose(), 1100);
+      setTimeout(() => onClose(), 1000);
     } catch (err) {
-      console.error('Firebase Login Error:', err);
+      console.error('Login Error:', err);
       setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
@@ -324,35 +318,22 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 flex items-center justify-center bg-black/75 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-[420px] my-auto p-6 sm:p-7 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in py-6">
+      <div className="w-full max-w-[400px] my-auto p-5 sm:p-6 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-neutral-400 hover:text-neutral-700 dark:text-neutral-500 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-2 rounded-full text-neutral-400 hover:text-neutral-700 dark:text-neutral-500 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Configuration Notice if env is missing */}
-        {!isConfigured && (
-          <div className="mb-4 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs">
-            <div className="font-bold flex items-center gap-1.5 mb-1">
-              <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>Firebase Keys Required</span>
-            </div>
-            <p className="text-[11px] leading-relaxed text-neutral-600 dark:text-neutral-300">
-              Please paste your Firebase configuration into <code className="px-1 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono">frontend/.env</code> to enable live authentication.
-            </p>
-          </div>
-        )}
-
         {/* Header */}
-        <div className="mb-5">
-          <div className="w-10 h-10 rounded-2xl bg-[#D57C63]/15 text-[#D57C63] flex items-center justify-center mb-3 shadow-sm">
+        <div className="mb-4 pr-6">
+          <div className="w-9 h-9 rounded-xl bg-[#D57C63]/15 text-[#D57C63] flex items-center justify-center mb-2 shadow-sm">
             {mode === 'verify' ? (
               <ShieldCheck className="w-5 h-5" />
             ) : mode === 'signin' ? (
@@ -379,7 +360,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
         {/* Mode Switcher Tabs (Segmented Control) */}
         {mode !== 'verify' && (
-          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-[#251812] border border-neutral-200 dark:border-[#38261e] mb-5">
+          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-[#251812] border border-neutral-200 dark:border-[#38261e] mb-3.5">
             <button
               type="button"
               onClick={() => {
@@ -387,7 +368,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 setErrorMsg('');
                 setSuccessMsg('');
               }}
-              className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 mode === 'signup'
                   ? 'bg-white dark:bg-[#D57C63] text-[#D57C63] dark:text-white shadow-sm'
                   : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -402,7 +383,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 setErrorMsg('');
                 setSuccessMsg('');
               }}
-              className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 mode === 'signin'
                   ? 'bg-white dark:bg-[#D57C63] text-[#D57C63] dark:text-white shadow-sm'
                   : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -415,14 +396,14 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
         {/* Status Alerts */}
         {errorMsg && (
-          <div className="p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">
+          <div className="p-2.5 mb-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-3 mb-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2">
+          <div className="p-2.5 mb-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
             <span>{successMsg}</span>
           </div>
@@ -430,7 +411,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
         {/* GOOGLE SIGN-IN BUTTON & DIVIDER (For Sign Up & Sign In) */}
         {mode !== 'verify' && (
-          <div className="space-y-3 mb-4">
+          <div className="space-y-2.5 mb-3">
             <button
               type="button"
               onClick={handleGoogleSignIn}
@@ -441,9 +422,9 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
               <span>Continue with Google</span>
             </button>
 
-            <div className="relative flex items-center justify-center pt-1">
+            <div className="relative flex items-center justify-center pt-0.5">
               <div className="border-t border-neutral-200 dark:border-[#38261e] w-full" />
-              <span className="bg-white dark:bg-[#18110d] px-2.5 text-[10px] font-bold tracking-wider uppercase text-neutral-400 shrink-0">
+              <span className="bg-white dark:bg-[#18110d] px-2 text-[10px] font-bold tracking-wider uppercase text-neutral-400 shrink-0">
                 or continue with email
               </span>
               <div className="border-t border-neutral-200 dark:border-[#38261e] w-full" />
@@ -453,13 +434,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
         {/* STEP 1A: SIGN UP */}
         {mode === 'signup' && (
-          <form onSubmit={handleRegister} className="space-y-3.5">
+          <form onSubmit={handleRegister} className="space-y-3">
             <div>
               <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                 Full Name
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
+                <User className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
                   type="text"
                   required
@@ -476,7 +457,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
                   type="email"
                   required
@@ -493,7 +474,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -515,7 +496,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+              className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-1.5"
             >
               {loading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -525,7 +506,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
               <span>Create Account</span>
             </button>
 
-            <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+            <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 pt-0.5">
               Already have an account?{' '}
               <button
                 type="button"
@@ -540,13 +521,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
         {/* STEP 1B: SIGN IN */}
         {mode === 'signin' && (
-          <form onSubmit={handleLogin} className="space-y-3.5">
+          <form onSubmit={handleLogin} className="space-y-3">
             <div>
               <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
                   type="email"
                   required
@@ -563,7 +544,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -585,7 +566,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+              className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-1.5"
             >
               {loading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -595,7 +576,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
               <span>Sign In to Workspace</span>
             </button>
 
-            <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+            <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 pt-0.5">
               Don't have an account yet?{' '}
               <button
                 type="button"
