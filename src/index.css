@@ -464,6 +464,7 @@ body {
 }
 
 /* Background color overrides for light mode */
+:root[data-theme="light"] .bg-\[\#1b1410\],
 :root[data-theme="light"] .bg-\[\#1b1411\],
 :root[data-theme="light"] .bg-\[\#1b120d\],
 :root[data-theme="light"] .bg-\[\#19100c\],
@@ -488,6 +489,7 @@ body {
   background-color: #e5d6c5 !important;
 }
 
+:root[data-theme="light"] .border-\[\#38261b\],
 :root[data-theme="light"] .border-\[\#33271f\],
 :root[data-theme="light"] .border-\[\#3d2e26\],
 :root[data-theme="light"] .border-white\/10,
@@ -1167,32 +1169,175 @@ p, span, a, input, select, textarea, button, li, small {
 }
 
 /* Interactive 3D Service Card with Rich Background & Deep 3D Shadow */
+/* Ensure all direct card children always render ABOVE the orange pseudo-element */
+.service-3d-card > *,
+.service-domain-card > *,
+.skill-card > * {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
 .service-3d-card {
   position: relative;
   background: linear-gradient(155deg, #1e130d 0%, #150d09 60%, #100805 100%);
   border: 1.5px solid rgba(213, 124, 99, 0.28);
   border-radius: 18px;
   overflow: hidden;
-  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.28s ease, border-color 0.25s ease;
+  transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   transform-style: preserve-3d;
   will-change: transform;
-  box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.75), 0 0 22px rgba(213, 124, 99, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 38px -8px rgba(0, 0, 0, 0.85), 0 0 24px rgba(213, 124, 99, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
-.service-3d-card:hover {
-  border-color: #D57C63;
-  box-shadow: 0 28px 58px -10px rgba(0, 0, 0, 0.88), 0 0 35px rgba(213, 124, 99, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+/* Down to Up Orange Surface Sweep on Hover with Suitable Transparency & Glass Blur */
+.service-3d-card::before,
+.service-domain-card::before,
+.skill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(213, 75, 20, 0.84) 0%,
+    rgba(234, 88, 12, 0.8) 50%,
+    rgba(255, 122, 26, 0.75) 100%
+  ) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1 !important;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
-:root[data-theme="light"] .service-3d-card {
-  background: linear-gradient(155deg, #ffffff 0%, #fdf8f4 65%, #f7ede3 100%) !important;
-  border: 1.5px solid #e5d6c5 !important;
-  box-shadow: 0 10px 28px -4px rgba(207, 82, 8, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+.service-3d-card:hover::before,
+.service-domain-card:hover::before,
+.skill-card:hover::before {
+  transform: scaleY(1);
 }
 
-:root[data-theme="light"] .service-3d-card:hover {
-  border-color: #cf5208 !important;
-  box-shadow: 0 24px 48px -8px rgba(207, 82, 8, 0.24), 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+.service-3d-card:hover,
+.service-domain-card:hover,
+.skill-card:hover {
+  border-color: #f97316 !important;
+  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.55), 0 0 35px rgba(249, 115, 22, 0.4) !important;
+}
+
+/* On Hover: All text & icons turn pure, brilliant WHITE with 100% visibility */
+.service-3d-card:hover *,
+.service-domain-card:hover * {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.service-3d-card:hover h3,
+.service-3d-card:hover .service-card-title,
+.service-domain-card:hover h3,
+.service-domain-card:hover .service-card-title,
+.skill-card:hover .skill-card-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.service-3d-card:hover p,
+.service-3d-card:hover .service-card-desc,
+.service-domain-card:hover p,
+.service-domain-card:hover .service-card-desc,
+.skill-card:hover .skill-card-statement {
+  color: #ffffff !important;
+  opacity: 0.98 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.service-3d-card:hover .service-price-text,
+.service-domain-card:hover .service-price-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.service-3d-card:hover .service-badge-pill,
+.service-domain-card:hover .service-badge-pill {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(4px);
+}
+
+.service-3d-card:hover svg,
+.service-domain-card:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Specific Skill Card Hover High-Contrast Rules */
+.skill-card:hover .skill-card-btn,
+.skill-card:hover .skill-open-btn {
+  color: #ffffff !important;
+}
+
+.skill-card:hover .skill-card-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.skill-card:hover .skill-card-icon-wrap {
+  background: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.skill-card:hover .skill-card-icon-wrap svg {
+  color: #c2410c !important;
+  stroke: #c2410c !important;
+}
+
+.skill-card:hover .skill-exp-pill {
+  background: #ffffff !important;
+  color: #9e3505 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.skill-card:hover .skill-shadow-tag {
+  background: #ffffff !important;
+  color: #b03e08 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.skill-card:hover .skill-shutter-click-btn {
+  background: #ffffff !important;
+  color: #140d07 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.skill-card:hover .skill-shutter-click-btn * {
+  color: #140d07 !important;
+  text-shadow: none !important;
+}
+
+.skill-card:hover .skill-shutter-click-btn svg {
+  color: #c2410c !important;
+  stroke: #c2410c !important;
+}
+
+.service-domain-card:hover .service-link-row {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.service-3d-card:hover .service-card-btn {
+  background: #ffffff !important;
+  color: #ea580c !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.service-3d-card:hover .service-card-btn * {
+  color: #ea580c !important;
 }
 
 /* Card Inner Typography */
@@ -1244,33 +1389,276 @@ p, span, a, input, select, textarea, button, li, small {
   color: #ffffff !important;
 }
 
-/* Top Showcase Domain Cards in Light & Dark Mode with 3D Depth */
+/* Top Showcase Domain Cards (3 Shadows + Down-to-Up Orange Hover & Click) */
 .service-domain-card {
   position: relative;
   background: linear-gradient(145deg, #22150f 0%, #170e0a 60%, #100805 100%);
   border: 1.5px solid rgba(213, 124, 99, 0.35);
-  box-shadow: 0 16px 38px -8px rgba(0, 0, 0, 0.75), 0 0 24px rgba(213, 124, 99, 0.16);
+  box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.9), 0 0 28px rgba(213, 124, 99, 0.22);
   border-radius: 20px;
   overflow: hidden;
-  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.28s ease, border-color 0.25s ease;
+  transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   transform-style: preserve-3d;
   will-change: transform;
 }
 
-.service-domain-card:hover {
-  border-color: #D57C63;
-  box-shadow: 0 28px 60px -10px rgba(0, 0, 0, 0.88), 0 0 36px rgba(213, 124, 99, 0.42);
+/* Day Mode (:root[data-theme="light"]) */
+:root[data-theme="light"] .service-3d-card {
+  background: linear-gradient(155deg, #ffffff 0%, #fdf8f4 65%, #f7ede3 100%) !important;
+  border: 1.5px solid #e5d6c5 !important;
+  box-shadow: 0 14px 34px -4px rgba(207, 82, 8, 0.18), 0 4px 14px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 :root[data-theme="light"] .service-domain-card {
   background: linear-gradient(145deg, #ffffff 0%, #fdf9f6 60%, #faeee5 100%) !important;
   border: 1.5px solid #decbb8 !important;
-  box-shadow: 0 12px 30px -5px rgba(207, 82, 8, 0.14), 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 16px 38px -5px rgba(207, 82, 8, 0.2), 0 6px 18px rgba(0, 0, 0, 0.08) !important;
 }
 
-:root[data-theme="light"] .service-domain-card:hover {
+:root[data-theme="light"] .service-3d-card::before,
+:root[data-theme="light"] .service-domain-card::before,
+:root[data-theme="light"] .skill-card::before {
+  background: linear-gradient(
+    0deg,
+    rgba(207, 75, 10, 0.86) 0%,
+    rgba(234, 88, 12, 0.82) 50%,
+    rgba(255, 122, 26, 0.76) 100%
+  ) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root[data-theme="light"] .service-3d-card:hover,
+:root[data-theme="light"] .service-domain-card:hover,
+:root[data-theme="light"] .skill-card:hover {
+  border-color: #ea580c !important;
+  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.45), 0 0 35px rgba(249, 115, 22, 0.35) !important;
+}
+
+:root[data-theme="light"] .service-3d-card:hover *,
+:root[data-theme="light"] .service-domain-card:hover * {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap svg {
+  color: #c2410c !important;
+  stroke: #c2410c !important;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn {
+  background: #ffffff !important;
+  color: #140d07 !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn * {
+  color: #140d07 !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn svg {
+  color: #c2410c !important;
+  stroke: #c2410c !important;
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-exp-pill {
+  background: #ffffff !important;
+  color: #9e3505 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] .skill-card:hover .skill-shadow-tag {
+  background: #ffffff !important;
+  color: #b03e08 !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] .service-3d-card:hover .service-card-btn {
+  background: #ffffff !important;
+  color: #ea580c !important;
+  border-color: #ffffff !important;
+}
+
+:root[data-theme="light"] .service-3d-card:hover .service-card-btn * {
+  color: #ea580c !important;
+}
+
+/* ==========================================================================
+   Recent Projects & Case Studies Dedicated Compact Styling
+   (NO orange sweep/wash on hover, compact, sleek & proportionate)
+   ========================================================================== */
+.recent-project-card {
+  position: relative;
+  background: linear-gradient(155deg, #1b120d 0%, #140d09 60%, #0f0805 100%);
+  border: 1px solid rgba(213, 124, 99, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.recent-project-card:hover {
+  transform: translateY(-4px);
+  border-color: #D57C63 !important;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.8), 0 0 24px rgba(213, 124, 99, 0.25) !important;
+}
+
+:root[data-theme="light"] .recent-project-card {
+  background: linear-gradient(155deg, #ffffff 0%, #fdfbf9 60%, #f7efe7 100%) !important;
+  border: 1px solid #e3d3c4 !important;
+  box-shadow: 0 8px 20px -3px rgba(207, 82, 8, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+:root[data-theme="light"] .recent-project-card:hover {
   border-color: #cf5208 !important;
-  box-shadow: 0 26px 52px -8px rgba(207, 82, 8, 0.26) !important;
+  box-shadow: 0 14px 30px -4px rgba(207, 82, 8, 0.22), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ==========================================================================
+   Certificate Container 3 Stacked Backdrop Layers & Bars
+   (1st Moti, 2nd Us Se Patli, 3rd Phir Us Se Patli with Orange Glow)
+   ========================================================================== */
+.cert-stack-layer-1 {
+  background: linear-gradient(180deg, rgba(34, 21, 14, 0.95) 0%, rgba(20, 12, 8, 0.98) 100%);
+  border: 1.5px solid rgba(255, 122, 26, 0.65);
+  border-bottom: 4px solid #ff7a1a;
+  box-shadow: 0 8px 24px -2px rgba(255, 106, 0, 0.42), 0 0 16px rgba(255, 122, 26, 0.28);
+}
+
+.cert-stack-layer-2 {
+  background: linear-gradient(180deg, rgba(26, 16, 11, 0.9) 0%, rgba(15, 9, 6, 0.95) 100%);
+  border: 1px solid rgba(255, 122, 26, 0.45);
+  border-bottom: 2.5px solid rgba(255, 122, 26, 0.85);
+  box-shadow: 0 10px 28px -4px rgba(255, 106, 0, 0.32), 0 0 14px rgba(255, 122, 26, 0.2);
+}
+
+.cert-stack-layer-3 {
+  background: linear-gradient(180deg, rgba(18, 11, 7, 0.85) 0%, rgba(10, 6, 4, 0.92) 100%);
+  border: 1px solid rgba(255, 122, 26, 0.3);
+  border-bottom: 1.5px solid rgba(255, 122, 26, 0.6);
+  box-shadow: 0 12px 32px -6px rgba(255, 106, 0, 0.22), 0 0 12px rgba(255, 122, 26, 0.15);
+}
+
+/* Day Mode (:root[data-theme="light"]) */
+:root[data-theme="light"] .cert-stack-layer-1 {
+  background: linear-gradient(180deg, #fdf8f4 0%, #f7ebe1 100%);
+  border: 1.5px solid rgba(234, 88, 12, 0.6);
+  border-bottom: 4px solid #ea580c;
+  box-shadow: 0 8px 22px -2px rgba(234, 88, 12, 0.25), 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="light"] .cert-stack-layer-2 {
+  background: linear-gradient(180deg, #f8efe8 0%, #f1e3d7 100%);
+  border: 1px solid rgba(234, 88, 12, 0.4);
+  border-bottom: 2.5px solid rgba(234, 88, 12, 0.75);
+  box-shadow: 0 10px 24px -4px rgba(234, 88, 12, 0.18), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="light"] .cert-stack-layer-3 {
+  background: linear-gradient(180deg, #f3e6dc 0%, #ecdacf 100%);
+  border: 1px solid rgba(234, 88, 12, 0.28);
+  border-bottom: 1.5px solid rgba(234, 88, 12, 0.5);
+  box-shadow: 0 12px 28px -6px rgba(234, 88, 12, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* ==========================================================================
+   Certifications & Credentials Entire Section 3 Stacked Layers & Bars
+   (1st Moti, 2nd Us Se Patli, 3rd Phir Us Se Patli with Neon Orange Glow)
+   ========================================================================== */
+.cert-section-layer-1 {
+  background: linear-gradient(180deg, rgba(35, 22, 15, 0.96) 0%, rgba(22, 13, 9, 0.98) 100%);
+  border: 1.5px solid rgba(255, 122, 26, 0.7);
+  border-bottom: 5px solid #ff7a1a !important;
+  box-shadow: 0 10px 30px -2px rgba(255, 106, 0, 0.5), 0 0 22px 2px rgba(255, 122, 26, 0.35);
+}
+
+.cert-section-layer-2 {
+  background: linear-gradient(180deg, rgba(28, 17, 12, 0.92) 0%, rgba(16, 10, 7, 0.95) 100%);
+  border: 1px solid rgba(255, 122, 26, 0.5);
+  border-bottom: 3px solid rgba(255, 122, 26, 0.85) !important;
+  box-shadow: 0 12px 36px -4px rgba(255, 106, 0, 0.38), 0 0 18px rgba(255, 122, 26, 0.25);
+}
+
+.cert-section-layer-3 {
+  background: linear-gradient(180deg, rgba(20, 12, 8, 0.88) 0%, rgba(12, 7, 5, 0.92) 100%);
+  border: 1px solid rgba(255, 122, 26, 0.35);
+  border-bottom: 1.5px solid rgba(255, 122, 26, 0.65) !important;
+  box-shadow: 0 16px 42px -6px rgba(255, 106, 0, 0.28), 0 0 14px rgba(255, 122, 26, 0.18);
+}
+
+/* Day Mode (:root[data-theme="light"]) */
+:root[data-theme="light"] .cert-section-layer-1 {
+  background: linear-gradient(180deg, #fdf8f4 0%, #f7ece1 100%);
+  border: 1.5px solid rgba(234, 88, 12, 0.65);
+  border-bottom: 5px solid #ea580c !important;
+  box-shadow: 0 10px 26px -2px rgba(234, 88, 12, 0.3), 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .cert-section-layer-2 {
+  background: linear-gradient(180deg, #f8efe8 0%, #f1e3d7 100%);
+  border: 1px solid rgba(234, 88, 12, 0.45);
+  border-bottom: 3px solid rgba(234, 88, 12, 0.8) !important;
+  box-shadow: 0 12px 28px -4px rgba(234, 88, 12, 0.22), 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="light"] .cert-section-layer-3 {
+  background: linear-gradient(180deg, #f3e6dc 0%, #ecdacf 100%);
+  border: 1px solid rgba(234, 88, 12, 0.32);
+  border-bottom: 1.5px solid rgba(234, 88, 12, 0.55) !important;
+  box-shadow: 0 14px 32px -6px rgba(234, 88, 12, 0.16), 0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 3 Global Distinct Shadows */
+.shadow-type-1 {
+  box-shadow: 0 12px 32px -4px rgba(213, 124, 99, 0.45), 0 0 26px 4px rgba(213, 124, 99, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
+}
+.shadow-type-1:hover {
+  box-shadow: 0 22px 52px -4px rgba(255, 122, 26, 0.65), 0 0 42px 10px rgba(255, 120, 60, 0.5) !important;
+}
+
+.shadow-type-2 {
+  box-shadow: 0 26px 50px -10px rgba(0, 0, 0, 0.96), 0 12px 24px -4px rgba(213, 124, 99, 0.35), 0 0 0 1px rgba(213, 124, 99, 0.3) !important;
+}
+.shadow-type-2:hover {
+  box-shadow: 0 36px 70px -10px rgba(0, 0, 0, 1), 0 18px 34px -2px rgba(255, 122, 26, 0.55) !important;
+}
+
+.shadow-type-3 {
+  box-shadow: -16px 20px 44px -6px rgba(213, 90, 50, 0.48), 16px 24px 48px -6px rgba(245, 158, 11, 0.35), 0 12px 30px rgba(0, 0, 0, 0.75) !important;
+}
+.shadow-type-3:hover {
+  box-shadow: -20px 28px 60px -4px rgba(255, 122, 26, 0.7), 20px 32px 66px -4px rgba(255, 94, 0, 0.55) !important;
+}
+
+:root[data-theme="light"] .shadow-type-1 {
+  box-shadow: 0 14px 32px -4px rgba(207, 82, 8, 0.28), 0 4px 18px rgba(207, 82, 8, 0.18), 0 0 0 1px rgba(207, 82, 8, 0.2) !important;
+}
+:root[data-theme="light"] .shadow-type-1:hover {
+  box-shadow: 0 24px 50px -4px rgba(255, 122, 26, 0.52), 0 8px 26px rgba(255, 94, 0, 0.38) !important;
+}
+
+:root[data-theme="light"] .shadow-type-2 {
+  box-shadow: 0 24px 44px -8px rgba(45, 25, 15, 0.22), 0 8px 22px -2px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(207, 82, 8, 0.22) !important;
+}
+:root[data-theme="light"] .shadow-type-2:hover {
+  box-shadow: 0 36px 62px -10px rgba(45, 25, 15, 0.35), 0 16px 30px -4px rgba(255, 122, 26, 0.45) !important;
+}
+
+:root[data-theme="light"] .shadow-type-3 {
+  box-shadow: -12px 16px 38px -4px rgba(207, 82, 8, 0.28), 12px 18px 42px -4px rgba(234, 140, 20, 0.26), 0 6px 18px rgba(0, 0, 0, 0.1) !important;
+}
+:root[data-theme="light"] .shadow-type-3:hover {
+  box-shadow: -18px 28px 54px -4px rgba(255, 122, 26, 0.48), 18px 30px 58px -4px rgba(255, 94, 0, 0.42) !important;
 }
 
 /* Down to Up Text Animation */
@@ -1365,4 +1753,50 @@ p, span, a, input, select, textarea, button, li, small {
 .admin-portal .text-\[\#d6c7bc\],
 :root[data-theme="light"] .admin-portal .text-\[\#d6c7bc\] {
   color: #ebe2d9 !important;
+}
+
+/* ==========================================================
+   PRICING SCOPE NOTE (Crystal-Clear Moon & Day Mode Visibility)
+   ========================================================== */
+.pricing-scope-note {
+  background: #18110e;
+  border: 1.5px solid #3d2b20;
+  border-left: 4px solid #D57C63;
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 0 15px rgba(213, 124, 99, 0.1);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pricing-scope-note:hover {
+  border-color: #D57C63;
+  box-shadow: 0 10px 28px -6px rgba(213, 124, 99, 0.25);
+}
+
+.pricing-scope-note-text {
+  color: #e4d5cb !important;
+}
+
+.pricing-scope-note-label {
+  color: #ff7a1a !important;
+}
+
+:root[data-theme="light"] .pricing-scope-note {
+  background: #ffffff !important;
+  border: 1.5px solid #decbb8 !important;
+  border-left: 4px solid #cf5208 !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(207, 82, 8, 0.08) !important;
+}
+
+:root[data-theme="light"] .pricing-scope-note:hover {
+  border-color: #cf5208 !important;
+  box-shadow: 0 8px 26px rgba(207, 82, 8, 0.18) !important;
+}
+
+:root[data-theme="light"] .pricing-scope-note-text {
+  color: #1f140c !important;
+  font-weight: 500 !important;
+}
+
+:root[data-theme="light"] .pricing-scope-note-label {
+  color: #cf5208 !important;
+  font-weight: 700 !important;
 }

@@ -20,7 +20,8 @@ import {
   HelpCircle,
   FileText,
   BarChart3,
-  Award
+  Award,
+  Info
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
@@ -514,8 +515,49 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
         {(selectedCategory === 'all' || selectedCategory === 'fullstack') && fullStackSection && (
           <div className="reveal-up mb-20">
             
-            {/* 1. UP SHOWCASE BANNER */}
-            <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative overflow-hidden mb-10 shadow-2xl">
+            {/* 1. UP SHOWCASE BANNER WITH 3-STEPPED RADIANT NEON BARS */}
+            <div className="relative my-6 mb-10">
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - LEFT */}
+              <div className="absolute -top-3.5 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - RIGHT */}
+              <div className="absolute -top-3.5 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* Main Banner Container */}
+              <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative z-10 overflow-hidden shadow-2xl border border-[#D57C63]/40 hover:border-[#ff7a1a]/60 transition-colors duration-300">
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - LEFT */}
+                <div className="absolute top-0 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
+
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - RIGHT */}
+                <div className="absolute top-0 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#D57C63]/15 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -613,6 +655,7 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
                 </div>
               </div>
             </div>
+          </div>
 
             {/* 2. FULL STACK PRICING CARDS */}
             <div className="mb-10">
@@ -722,8 +765,49 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
         {(selectedCategory === 'all' || selectedCategory === 'seo') && seoSection && (
           <div className="reveal-up mb-20">
             
-            {/* 1. UP SHOWCASE BANNER */}
-            <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative overflow-hidden mb-10 shadow-2xl border-[#D57C63]/40">
+            {/* 1. UP SHOWCASE BANNER WITH 3-STEPPED RADIANT NEON BARS */}
+            <div className="relative my-6 mb-10">
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - LEFT */}
+              <div className="absolute -top-3.5 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - RIGHT */}
+              <div className="absolute -top-3.5 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* Main Banner Container */}
+              <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative z-10 overflow-hidden shadow-2xl border border-[#D57C63]/40 hover:border-[#ff7a1a]/60 transition-colors duration-300">
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - LEFT */}
+                <div className="absolute top-0 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
+
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - RIGHT */}
+                <div className="absolute top-0 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#D57C63]/15 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -821,6 +905,7 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
                 </div>
               </div>
             </div>
+          </div>
 
             {/* 2. SEO PRICING CARDS */}
             <div className="mb-10">
@@ -930,8 +1015,49 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
         {(selectedCategory === 'all' || selectedCategory === 'wordpress') && wordpressSection && (
           <div className="reveal-up mb-20">
             
-            {/* 1. UP SHOWCASE BANNER */}
-            <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative overflow-hidden mb-10 shadow-2xl border-[#D57C63]/40">
+            {/* 1. UP SHOWCASE BANNER WITH 3-STEPPED RADIANT NEON BARS */}
+            <div className="relative my-6 mb-10">
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - LEFT */}
+              <div className="absolute -top-3.5 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* 3 Stepped Layer Bars Behind the Card on TOP - RIGHT */}
+              <div className="absolute -top-3.5 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-0">
+                {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
+                <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
+                {/* Layer 2: Us se patli (Medium thickness & width tier) */}
+                <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
+                {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
+                <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
+              </div>
+
+              {/* Main Banner Container */}
+              <div className="pricing-fs-banner p-8 sm:p-12 rounded-[28px] relative z-10 overflow-hidden shadow-2xl border border-[#D57C63]/40 hover:border-[#ff7a1a]/60 transition-colors duration-300">
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - LEFT */}
+                <div className="absolute top-0 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
+
+                {/* 3 Stepped Radiant Glowing Bars on TOP of Card - RIGHT */}
+                <div className="absolute top-0 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-20">
+                  {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
+                  <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+                  {/* Bar 2: Us se patli (Medium thickness & width) */}
+                  <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+                  {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
+                  <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+                </div>
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#D57C63]/15 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -1029,6 +1155,7 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
                 </div>
               </div>
             </div>
+          </div>
 
             {/* 2. WORDPRESS PRICING CARDS */}
             <div className="mb-10">
@@ -1100,9 +1227,13 @@ const Pricing = ({ setActiveTab, setSelectedPlan }) => {
               </div>
 
               {/* Scope Note */}
-              <div className="mt-8 p-4 rounded-xl bg-[#1b1410] border border-[#38261b] text-center max-w-3xl mx-auto">
-                <p className="text-xs text-[#a8988b] leading-relaxed">
-                  <strong>Pricing note:</strong> Domain, hosting, premium themes/plugins, paid subscriptions, and extensive custom functionality are charged separately. Final scope and delivery time should be agreed before starting.
+              <div className="mt-8 p-4 sm:p-5 rounded-2xl pricing-scope-note text-center max-w-3xl mx-auto">
+                <p className="text-xs sm:text-[13px] pricing-scope-note-text leading-relaxed">
+                  <span className="inline-flex items-center gap-1.5 font-bold pricing-scope-note-label mr-1.5">
+                    <Info className="w-4 h-4 shrink-0 inline-block align-text-bottom" />
+                    Pricing note:
+                  </span>
+                  Domain, hosting, premium themes/plugins, paid subscriptions, and extensive custom functionality are charged separately. Final scope and delivery time should be agreed before starting.
                 </p>
               </div>
             </div>

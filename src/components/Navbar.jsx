@@ -4,6 +4,7 @@ import AuthModal from './AuthModal';
 import ClientDashboardModal from './ClientDashboardModal';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 // Client Countries & Global Regions with Currencies:
 const clientCountries = [
@@ -20,6 +21,7 @@ const clientCountries = [
 
 const Navbar = ({ activeTab, setActiveTab }) => {
   const { t, currentLang, changeLanguage, selectedLangObj, languagesList } = useLanguage();
+  const { user, logout } = useAuth();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesModalOpen, setMobileServicesModalOpen] = useState(false);
@@ -32,14 +34,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
   });
 
   // Authenticated User & Client Dashboard state
-  const [authUser, setAuthUser] = useState(() => {
-    try {
-      const stored = localStorage.getItem('rahila_auth_user');
-      return stored ? JSON.parse(stored) : null;
-    } catch (_) {
-      return null;
-    }
-  });
+  const authUser = user;
   const [dashboardModalOpen, setDashboardModalOpen] = useState(false);
 
   // Auth Modal state (single button opens modal with Sign up first)
@@ -589,27 +584,21 @@ const Navbar = ({ activeTab, setActiveTab }) => {
         )}
       </header>
 
-      {/* Auth Modal (Registration with Real OTP Verification & Login) */}
+      {/* Auth Modal (Firebase Registration, Email Verification & Login) */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         initialMode="signup"
-        onAuthSuccess={(u) => setAuthUser(u)}
+        onAuthSuccess={() => {}}
       />
 
       {/* Client Protected Dashboard Modal */}
       <ClientDashboardModal
         isOpen={dashboardModalOpen}
         onClose={() => setDashboardModalOpen(false)}
-        user={authUser}
+        user={user}
         onLogout={async () => {
-          try {
-            const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
-            await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
-          } catch (_) {}
-          localStorage.removeItem('rahila_auth_token');
-          localStorage.removeItem('rahila_auth_user');
-          setAuthUser(null);
+          await logout();
           setDashboardModalOpen(false);
         }}
       />

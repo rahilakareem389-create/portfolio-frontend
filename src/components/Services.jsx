@@ -578,7 +578,7 @@ const servicesFaqs = [
 ];
 
 // Reusable Compact 3D Service Card Component with Glare & Depth
-const Service3DCard = ({ item, onAction }) => {
+const Service3DCard = ({ item, onAction, shadowClass = '' }) => {
   const [imgError, setImgError] = useState(false);
   const [transformStyle, setTransformStyle] = useState('');
   const [glareStyle, setGlareStyle] = useState({ opacity: 0, x: 50, y: 50 });
@@ -620,7 +620,7 @@ const Service3DCard = ({ item, onAction }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ transform: transformStyle }}
-      className="service-3d-card flex flex-col justify-between group cursor-pointer relative"
+      className={`service-3d-card ${shadowClass} flex flex-col justify-between group cursor-pointer relative`}
     >
       {/* 3D Specular Glare Overlay */}
       <div
@@ -667,15 +667,15 @@ const Service3DCard = ({ item, onAction }) => {
         </div>
 
         {/* Compact Centered Body Content */}
-        <div className="p-4 sm:p-4.5 text-center flex flex-col items-center">
+        <div className="p-4 sm:p-4.5 text-center flex flex-col items-center relative z-10">
           <h3
-            className="font-heading font-bold text-[15px] sm:text-[16px] service-card-title mb-1.5 leading-snug group-hover:text-[#D57C63] transition-colors"
+            className="font-heading font-bold text-[15px] sm:text-[16px] service-card-title mb-1.5 leading-snug transition-colors"
             style={{ transform: 'translateZ(24px)' }}
           >
             {item.title}
           </h3>
           <p
-            className="text-[12.5px] sm:text-[13px] service-card-desc leading-relaxed line-clamp-2"
+            className="text-[12.5px] sm:text-[13px] service-card-desc leading-relaxed line-clamp-2 transition-colors"
             style={{ transform: 'translateZ(16px)' }}
           >
             {item.description}
@@ -684,7 +684,7 @@ const Service3DCard = ({ item, onAction }) => {
       </div>
 
       {/* Centered Compact Action Button */}
-      <div className="px-4 pb-4 pt-1" style={{ transform: 'translateZ(28px)' }}>
+      <div className="px-4 pb-4 pt-1 relative z-10" style={{ transform: 'translateZ(28px)' }}>
         <button
           type="button"
           onClick={(e) => {
@@ -702,24 +702,26 @@ const Service3DCard = ({ item, onAction }) => {
 };
 
 // Reusable 3D Domain Hero Card Component
-const DomainHero3DCard = ({ icon: Icon, badge, price, title, description, linkText, onClick }) => {
+// Reusable 3D Domain Hero Card Component with Left-to-Right Orange Hover & Slow Orange Page Click
+const DomainHero3DCard = ({ icon: Icon, badge, price, title, description, linkText, shadowClass = '', shadowName = '', onClick }) => {
   const [transformStyle, setTransformStyle] = useState('');
   const [glareStyle, setGlareStyle] = useState({ opacity: 0, x: 50, y: 50 });
+  const [isWiping, setIsWiping] = useState(false);
   const cardRef = useRef(null);
 
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || isWiping) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = -((y - centerY) / centerY) * 9;
-    const rotateY = ((x - centerX) / centerX) * 9;
+    const rotateX = -((y - centerY) / centerY) * 7;
+    const rotateY = ((x - centerX) / centerX) * 7;
 
     setTransformStyle(
-      `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale3d(1.025, 1.025, 1.025)`
+      `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale3d(1.02, 1.02, 1.02)`
     );
 
     const glareX = (x / rect.width) * 100;
@@ -736,46 +738,117 @@ const DomainHero3DCard = ({ icon: Icon, badge, price, title, description, linkTe
     setGlareStyle({ opacity: 0, x: 50, y: 50 });
   };
 
+  const handleClick = (e) => {
+    if (isWiping) return;
+    setIsWiping(true);
+
+    // Subtle audio click feedback
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(540, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.13);
+      }
+    } catch {}
+
+    // Slow cinematic orange page opens left to right over 720ms
+    setTimeout(() => {
+      if (onClick) onClick(e);
+      setTimeout(() => {
+        setIsWiping(false);
+      }, 350);
+    }, 720);
+  };
+
   return (
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={onClick}
+      onClick={handleClick}
       style={{ transform: transformStyle }}
-      className="service-domain-card p-6 sm:p-7 rounded-2xl cursor-pointer group flex flex-col justify-between relative min-h-[220px]"
+      className={`service-domain-card ${shadowClass} p-6 sm:p-7 rounded-2xl cursor-pointer group flex flex-col justify-between relative min-h-[220px] select-none`}
     >
+      {/* 1. Down-to-Up Hover Orange Backdrop is handled via CSS ::before */}
+
+      {/* 2. Slow New Orange Page Wipe: Down to Up on Click with Pure White Text */}
       <div
-        className="pointer-events-none absolute inset-0 z-20 rounded-2xl transition-opacity duration-300"
+        className={`pointer-events-none absolute inset-0 z-30 overflow-hidden rounded-2xl transition-opacity duration-200 ${
+          isWiping ? 'opacity-100' : 'opacity-0'
+        }`}
+        aria-hidden="true"
+      >
+        <div
+          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#c2410c]/85 via-[#ea580c]/85 to-[#f97316]/80 backdrop-blur-md flex flex-col justify-center items-center px-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-[0_-6px_35px_rgba(0,0,0,0.5)] border-t-3 border-white/80"
+          style={{
+            height: isWiping ? '100%' : '0%',
+          }}
+        >
+          <div className="flex items-center gap-2.5 text-white font-extrabold text-base tracking-wide uppercase drop-shadow-md">
+            <Icon className="w-5 h-5 text-white animate-spin" />
+            <span>Opening {title}...</span>
+          </div>
+          <p className="text-white/95 text-xs font-bold mt-1 drop-shadow-sm">
+            {price} • 6 Deliverables
+          </p>
+          <div className="mt-2 text-[10px] uppercase tracking-widest font-extrabold px-3 py-0.5 rounded-full bg-white text-[#c2410c] shadow-md">
+            Loading Catalog &darr;
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Subtle 3D Glare */}
+      <div
+        className="pointer-events-none absolute inset-0 z-10 rounded-2xl transition-opacity duration-300"
         style={{
           opacity: glareStyle.opacity,
-          background: `radial-gradient(circle at ${glareStyle.x}% ${glareStyle.y}%, rgba(255, 255, 255, 0.18), transparent 60%)`,
+          background: `radial-gradient(circle at ${glareStyle.x}% ${glareStyle.y}%, rgba(255, 255, 255, 0.22), transparent 60%)`,
         }}
       />
 
-      <div style={{ transform: 'translateZ(18px)' }}>
+      {/* 4. Card Content (Positioned above hover orange backdrop) */}
+      <div className="relative z-10" style={{ transform: 'translateZ(18px)' }}>
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#D57C63]/15 text-[#D57C63] border border-[#D57C63]/30 flex items-center gap-1.5 shadow-sm">
+          <span className="service-badge-pill px-3 py-1 rounded-full text-xs font-bold bg-[#D57C63]/15 text-[#D57C63] border border-[#D57C63]/30 flex items-center gap-1.5 shadow-sm transition-colors duration-300">
             <Icon className="w-3.5 h-3.5" />
             <span>{badge}</span>
           </span>
-          <span className="text-xs text-[var(--mute)] font-semibold">{price}</span>
+          <span className="service-price-text text-xs text-[var(--mute)] font-semibold transition-colors duration-300">
+            {price}
+          </span>
         </div>
-        <h3 className="font-heading font-bold text-xl sm:text-2xl text-[var(--ink)] group-hover:text-[#D57C63] transition-colors mb-2 text-left">
+        <h3 className="service-card-title font-heading font-bold text-xl sm:text-2xl text-[var(--ink)] transition-colors duration-300 mb-2 text-left">
           {title}
         </h3>
-        <p className="text-xs sm:text-[13.5px] text-[var(--mute)] leading-relaxed mb-4 text-left">
+        <p className="service-card-desc text-xs sm:text-[13.5px] text-[var(--mute)] leading-relaxed mb-4 text-left transition-colors duration-300">
           {description}
         </p>
       </div>
 
-      <span
+      <div
+        className="service-link-row relative z-10 text-xs sm:text-sm font-bold text-[#D57C63] flex items-center justify-between pt-3 border-t border-[var(--line)] transition-colors duration-300"
         style={{ transform: 'translateZ(24px)' }}
-        className="text-xs sm:text-sm font-bold text-[#D57C63] flex items-center gap-2 pt-3 border-t border-[var(--line)]"
       >
-        <span>{linkText}</span>
-        <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
-      </span>
+        <span className="flex items-center gap-2">
+          <span>{linkText}</span>
+          <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1.5 transition-transform" />
+        </span>
+        {shadowName && (
+          <span className="text-[10px] font-semibold opacity-75 uppercase tracking-wider">
+            {shadowName}
+          </span>
+        )}
+      </div>
     </div>
   );
 };
@@ -1236,6 +1309,8 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   title="WordPress Development"
                   description="Website Design, Elementor, WooCommerce, and Website Redesign."
                   linkText="View Services (6 Deliverables)"
+                  shadowClass="shadow-type-1"
+                  shadowName="Cyber Neon Glow"
                   onClick={() => handleSkillSelect('wordpress', 'wordpress-services')}
                 />
 
@@ -1246,6 +1321,8 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   title="SEO Services"
                   description="Keyword Research, On-Page SEO, Technical SEO, and Website Audits."
                   linkText="View Services (6 Deliverables)"
+                  shadowClass="shadow-type-2"
+                  shadowName="3D Deep Elevation"
                   onClick={() => handleSkillSelect('seo', 'seo-services')}
                 />
 
@@ -1256,6 +1333,8 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   title="Full Stack Development"
                   description="React.js, Node.js, Express.js, MongoDB, and API Integration."
                   linkText="View Services (6 Deliverables)"
+                  shadowClass="shadow-type-3"
+                  shadowName="Dual-Tone Aurora"
                   onClick={() => handleSkillSelect('fullstack', 'fullstack-services')}
                 />
               </div>
@@ -1321,8 +1400,13 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
-                    {wordpressServicesData.map((item) => (
-                      <Service3DCard key={item.id} item={item} onAction={handleAction} />
+                    {wordpressServicesData.map((item, idx) => (
+                      <Service3DCard
+                        key={item.id}
+                        item={item}
+                        onAction={handleAction}
+                        shadowClass={['shadow-type-1', 'shadow-type-2', 'shadow-type-3'][idx % 3]}
+                      />
                     ))}
                   </div>
                 </div>
@@ -1345,8 +1429,13 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
-                    {seoServicesData.map((item) => (
-                      <Service3DCard key={item.id} item={item} onAction={handleAction} />
+                    {seoServicesData.map((item, idx) => (
+                      <Service3DCard
+                        key={item.id}
+                        item={item}
+                        onAction={handleAction}
+                        shadowClass={['shadow-type-2', 'shadow-type-3', 'shadow-type-1'][idx % 3]}
+                      />
                     ))}
                   </div>
                 </div>
@@ -1369,8 +1458,13 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
-                    {fullstackServicesData.map((item) => (
-                      <Service3DCard key={item.id} item={item} onAction={handleAction} />
+                    {fullstackServicesData.map((item, idx) => (
+                      <Service3DCard
+                        key={item.id}
+                        item={item}
+                        onAction={handleAction}
+                        shadowClass={['shadow-type-3', 'shadow-type-1', 'shadow-type-2'][idx % 3]}
+                      />
                     ))}
                   </div>
                 </div>
@@ -1395,28 +1489,29 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-            {whyChooseData.map((item) => {
+            {whyChooseData.map((item, idx) => {
               const Icon = item.icon;
+              const shadowClass = ['shadow-type-1', 'shadow-type-2', 'shadow-type-3', 'shadow-type-1'][idx % 4];
               return (
                 <div
                   key={item.id}
-                  className="service-3d-card p-6 flex flex-col justify-between text-center items-center group cursor-pointer"
+                  className={`service-3d-card ${shadowClass} p-6 flex flex-col justify-between text-center items-center group cursor-pointer`}
                 >
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 rounded-2xl bg-[#D57C63]/15 border border-[#D57C63]/30 flex items-center justify-center text-[#D57C63] mb-4 group-hover:scale-110 transition-transform shadow-sm">
+                  <div className="flex flex-col items-center relative z-10">
+                    <div className="w-12 h-12 rounded-2xl bg-[#D57C63]/15 border border-[#D57C63]/30 flex items-center justify-center text-[#D57C63] mb-4 group-hover:scale-110 group-hover:bg-white/20 group-hover:text-white transition-all shadow-sm">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[11px] font-bold text-[#D57C63] tracking-wide mb-1.5 uppercase">
+                    <span className="text-[11px] font-bold text-[#D57C63] group-hover:text-white tracking-wide mb-1.5 uppercase transition-colors">
                       {item.badge}
                     </span>
-                    <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-2 service-card-title">
+                    <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-2 service-card-title group-hover:text-white transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs sm:text-[13px] text-[var(--mute)] service-card-desc leading-relaxed">
+                    <p className="text-xs sm:text-[13px] text-[var(--mute)] service-card-desc leading-relaxed group-hover:text-white transition-colors">
                       {item.description}
                     </p>
                   </div>
-                  <div className="w-8 h-1 rounded-full bg-[#D57C63]/40 mt-5 group-hover:w-16 group-hover:bg-[#D57C63] transition-all" />
+                  <div className="w-8 h-1 rounded-full bg-[#D57C63]/40 mt-5 group-hover:w-16 group-hover:bg-white transition-all relative z-10" />
                 </div>
               );
             })}
@@ -1441,34 +1536,35 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-            {workProcessSteps.map((step) => {
+            {workProcessSteps.map((step, idx) => {
               const Icon = step.icon;
+              const shadowClass = ['shadow-type-1', 'shadow-type-2', 'shadow-type-3', 'shadow-type-1'][idx % 4];
               return (
                 <div
                   key={step.step}
-                  className="service-section-wrap rounded-2xl p-6 text-center flex flex-col justify-between relative group hover:border-[#D57C63] transition-all duration-300"
+                  className={`service-3d-card ${shadowClass} rounded-2xl p-6 text-center flex flex-col justify-between relative group cursor-pointer transition-all duration-300`}
                 >
                   {/* Step Number Top Pill */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="w-8 h-8 rounded-full bg-[#D57C63] text-white text-xs font-black flex items-center justify-center shadow-md">
+                  <div className="flex items-center justify-between mb-4 relative z-10">
+                    <span className="w-8 h-8 rounded-full bg-[#D57C63] group-hover:bg-white group-hover:text-[#ea580c] text-white text-xs font-black flex items-center justify-center shadow-md transition-colors">
                       {step.step}
                     </span>
-                    <Icon className="w-5 h-5 text-[#D57C63] opacity-80 group-hover:scale-110 transition-transform" />
+                    <Icon className="w-5 h-5 text-[#D57C63] group-hover:text-white opacity-80 group-hover:scale-110 transition-transform" />
                   </div>
 
-                  <div>
-                    <span className="text-[11px] font-semibold text-[var(--mute)] uppercase tracking-wider block mb-1">
+                  <div className="relative z-10">
+                    <span className="text-[11px] font-semibold text-[var(--mute)] group-hover:text-white/90 uppercase tracking-wider block mb-1 transition-colors">
                       {step.subtitle}
                     </span>
-                    <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-2.5 group-hover:text-[#D57C63] transition-colors">
+                    <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-2.5 service-card-title group-hover:text-white transition-colors">
                       {step.title}
                     </h3>
-                    <p className="text-xs sm:text-[13px] text-[var(--mute)] leading-relaxed">
+                    <p className="text-xs sm:text-[13px] text-[var(--mute)] service-card-desc leading-relaxed group-hover:text-white transition-colors">
                       {step.description}
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-[var(--line)] flex items-center justify-center text-[11px] font-bold text-[#D57C63]">
+                  <div className="pt-4 mt-4 border-t border-[var(--line)] group-hover:border-white/30 flex items-center justify-center text-[11px] font-bold text-[#D57C63] group-hover:text-white relative z-10 transition-colors">
                     <span>Phase {step.step}</span>
                   </div>
                 </div>
@@ -1533,59 +1629,64 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
 
           {/* Pricing Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full max-w-6xl mx-auto">
-            {pricingPackages[pricingCategory].map((plan, idx) => (
-              <div
-                key={plan.name}
-                className={`service-3d-card p-6 sm:p-7 flex flex-col justify-between relative rounded-2xl ${
-                  plan.popular ? 'border-[#D57C63] ring-1 ring-[#D57C63]/50' : ''
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[#D57C63] text-white text-[10.5px] font-bold uppercase tracking-wider shadow-md">
-                    Most Popular
-                  </div>
-                )}
-
-                <div>
-                  <div className="text-center pb-4 mb-4 border-b border-[var(--line)]">
-                    <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-1">
-                      {plan.name}
-                    </h3>
-                    <div className="flex items-baseline justify-center gap-1 my-2">
-                      <span className="font-heading font-extrabold text-3xl sm:text-4xl text-[#D57C63]">
-                        {plan.price}
-                      </span>
-                      <span className="text-xs text-[var(--mute)]">/{plan.period}</span>
-                    </div>
-                    <p className="text-xs text-[var(--mute)] leading-relaxed">
-                      {plan.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-2.5 mb-6 text-left">
-                    {plan.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-2 text-xs text-[var(--ink)]">
-                        <Check className="w-3.5 h-3.5 text-[#D57C63] shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectPricingPlan(plan.name, plan.price)}
-                  className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                    plan.popular
-                      ? 'glow-btn text-white'
-                      : 'service-card-btn'
+            {pricingPackages[pricingCategory].map((plan, idx) => {
+              const shadowClass = ['shadow-type-1', 'shadow-type-2', 'shadow-type-3'][idx % 3];
+              return (
+                <div
+                  key={plan.name}
+                  className={`service-3d-card ${shadowClass} p-6 sm:p-7 flex flex-col justify-between relative rounded-2xl cursor-pointer ${
+                    plan.popular ? 'border-[#D57C63] ring-1 ring-[#D57C63]/50' : ''
                   }`}
                 >
-                  <span>Select {plan.name}</span>
-                  <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
-                </button>
-              </div>
-            ))}
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[#D57C63] text-white text-[10.5px] font-bold uppercase tracking-wider shadow-md">
+                      Most Popular
+                    </div>
+                  )}
+
+                  <div className="relative z-10">
+                    <div className="text-center pb-4 mb-4 border-b border-[var(--line)] group-hover:border-white/30">
+                      <h3 className="font-heading font-bold text-lg text-[var(--ink)] mb-1 service-card-title group-hover:text-white transition-colors">
+                        {plan.name}
+                      </h3>
+                      <div className="flex items-baseline justify-center gap-1 my-2">
+                        <span className="font-heading font-extrabold text-3xl sm:text-4xl text-[#D57C63] group-hover:text-white transition-colors">
+                          {plan.price}
+                        </span>
+                        <span className="text-xs text-[var(--mute)] group-hover:text-white/90 transition-colors">/{plan.period}</span>
+                      </div>
+                      <p className="text-xs text-[var(--mute)] service-card-desc leading-relaxed group-hover:text-white transition-colors">
+                        {plan.description}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2.5 mb-6 text-left">
+                      {plan.features.map((feat, fIdx) => (
+                        <div key={fIdx} className="flex items-start gap-2 text-xs text-[var(--ink)] group-hover:text-white transition-colors">
+                          <Check className="w-3.5 h-3.5 text-[#D57C63] group-hover:text-white shrink-0 mt-0.5 transition-colors" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative z-10">
+                    <button
+                      type="button"
+                      onClick={() => handleSelectPricingPlan(plan.name, plan.price)}
+                      className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        plan.popular
+                          ? 'glow-btn text-white'
+                          : 'service-card-btn'
+                      }`}
+                    >
+                      <span>Select {plan.name}</span>
+                      <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -1606,57 +1707,58 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 lg:gap-6 w-full max-w-5xl mx-auto">
             {recentProjectsData.map((proj) => (
               <div
                 key={proj.id}
-                className="service-domain-card rounded-2xl overflow-hidden group flex flex-col justify-between"
+                className="recent-project-card group flex flex-col justify-between cursor-pointer"
               >
                 <div>
-                  <div className="relative h-52 sm:h-60 md:h-64 w-full overflow-hidden bg-[#1f1510] border-b border-[var(--line)]">
+                  {/* Compact Screenshot Banner (h-36 sm:h-40 md:h-44) */}
+                  <div className="relative h-36 sm:h-40 md:h-44 w-full overflow-hidden bg-[#1f1510] border-b border-[var(--line)]">
                     <img
                       src={proj.image}
                       alt={proj.title}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#140e0b]/85 backdrop-blur-md text-[#D57C63] border border-[#D57C63]/30 shadow-sm">
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-[#140e0b]/85 backdrop-blur-md text-[#D57C63] border border-[#D57C63]/30 shadow-sm">
                         {proj.badge}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-5 sm:p-6 text-left">
-                    <span className="text-[11px] font-bold text-[#D57C63] uppercase tracking-wider block mb-1">
+                  <div className="p-4 sm:p-5 text-left">
+                    <span className="text-[10px] font-bold text-[#D57C63] uppercase tracking-wider block mb-1">
                       Role: {proj.role}
                     </span>
-                    <h3 className="font-heading font-bold text-lg sm:text-xl text-[var(--ink)] mb-2 group-hover:text-[#D57C63] transition-colors">
+                    <h3 className="font-heading font-bold text-[15px] sm:text-base text-[var(--ink)] mb-1.5 group-hover:text-[#D57C63] transition-colors">
                       {proj.title}
                     </h3>
-                    <p className="text-xs sm:text-[13px] text-[var(--mute)] leading-relaxed mb-4">
+                    <p className="text-xs text-[var(--mute)] leading-relaxed mb-3 line-clamp-2">
                       {proj.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
                       {proj.technologies.map((t, tIdx) => (
                         <span
                           key={tIdx}
-                          className="px-2 py-0.5 rounded-md text-[11px] bg-[var(--panel)] text-[var(--ink)] border border-[var(--line)] font-medium"
+                          className="px-2 py-0.5 rounded-md text-[10.5px] bg-[var(--panel)] text-[var(--ink)] border border-[var(--line)] font-medium"
                         >
                           {t}
                         </span>
                       ))}
                     </div>
 
-                    <div className="p-2.5 rounded-lg bg-[#D57C63]/10 border border-[#D57C63]/20 text-[11.5px] text-[var(--ink)] flex items-center gap-2">
+                    <div className="p-2 rounded-lg bg-[#D57C63]/10 border border-[#D57C63]/20 text-[11px] text-[var(--ink)] flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#D57C63] shrink-0" />
-                      <span>{proj.verifiedResult}</span>
+                      <span className="line-clamp-1">{proj.verifiedResult}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 pt-0 text-left">
+                <div className="px-4 pb-4 pt-0 sm:px-5 sm:pb-5 text-left border-t border-[var(--line)]/60 pt-3">
                   {proj.link !== '#' ? (
                     <a
                       href={proj.link}
@@ -1740,42 +1842,44 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
         {/* 8. FINAL CALL TO ACTION (CTA) (As Requested)             */}
         {/* ======================================================== */}
         <section id="final-cta" className="reveal-up scroll-mt-24 w-full max-w-6xl mx-auto">
-          <div className="service-domain-card p-8 sm:p-14 lg:p-16 rounded-3xl text-center w-full shadow-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D57C63]/15 text-xs font-bold text-[#D57C63] border border-[#D57C63]/30 mb-4">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Let's Build Something Great</span>
-            </div>
+          <div className="service-domain-card shadow-type-2 p-8 sm:p-14 lg:p-16 rounded-3xl text-center w-full relative group">
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D57C63]/15 text-xs font-bold text-[#D57C63] group-hover:text-white group-hover:bg-white/20 border border-[#D57C63]/30 mb-4 transition-colors">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Let's Build Something Great</span>
+              </div>
 
-            <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--ink)] mb-3 text-center">
-              Have a Project in Mind?
-            </h2>
+              <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--ink)] mb-3 text-center service-card-title group-hover:text-white transition-colors">
+                Have a Project in Mind?
+              </h2>
 
-            <p className="text-sm sm:text-base text-[var(--mute)] leading-relaxed text-center max-w-xl mx-auto mb-8">
-              Let’s discuss your requirements and find the right solution for your business. From custom websites to complete SEO overhauls.
-            </p>
+              <p className="text-sm sm:text-base text-[var(--mute)] leading-relaxed text-center max-w-xl mx-auto mb-8 service-card-desc group-hover:text-white transition-colors">
+                Let’s discuss your requirements and find the right solution for your business. From custom websites to complete SEO overhauls.
+              </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-3.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('contact');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="glow-btn px-8 py-3.5 rounded-full text-sm font-bold flex items-center gap-2 cursor-pointer shadow-lg"
-              >
-                <span>Contact Me</span>
-                <Send className="w-4 h-4" />
-              </button>
+              <div className="flex flex-wrap items-center justify-center gap-3.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('contact');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="glow-btn px-8 py-3.5 rounded-full text-sm font-bold flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <span>Contact Me</span>
+                  <Send className="w-4 h-4" />
+                </button>
 
-              <a
-                href={personalInfo.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-3.5 rounded-full bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--org)]/50 text-[var(--ink)] text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm"
-              >
-                <span>Discuss Your Project</span>
-                <MessageSquare className="w-4 h-4 text-[#D57C63]" />
-              </a>
+                <a
+                  href={personalInfo.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-3.5 rounded-full bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--org)]/50 text-[var(--ink)] text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <span>Discuss Your Project</span>
+                  <MessageSquare className="w-4 h-4 text-[#D57C63]" />
+                </a>
+              </div>
             </div>
           </div>
         </section>

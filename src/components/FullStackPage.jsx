@@ -792,102 +792,185 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
 
             </div>
 
-            {/* Right Column: 3D Interactive Profile Stage with Dynamic Movement & Badges */}
+            {/* Right Column: 3D Tilting Stage with Image 1 Layered Style & Circular Floating Badges */}
             <div className="lg:col-span-5 flex flex-col justify-center items-center">
               <div
                 onMouseMove={handleHeroMouseMove}
                 onMouseLeave={handleHeroMouseLeave}
-                className="reveal-up hero-reveal relative w-full max-w-[460px] cursor-pointer"
+                className="reveal-up hero-reveal relative w-full max-w-[430px] px-3 sm:px-5 py-4 cursor-pointer"
                 style={{ perspective: '1100px' }}
               >
-                {/* 3D Tilting Card Wrapper */}
+                {/* 3D Tilting Multi-Layer Deck Wrapper */}
                 <div
                   ref={heroCardRef}
-                  className="fs-profile-stage relative rounded-[32px] p-6 sm:p-8 flex flex-col items-center justify-center overflow-hidden"
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    willChange: 'transform',
-                  }}
+                  className="relative w-full aspect-[4/5] sm:aspect-[4/4.85] flex flex-col items-center justify-center"
+                  style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                 >
-                  {/* Glowing Radial Background Accents */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#D57C63]/25 rounded-full blur-[80px] pointer-events-none" />
-                  <div className="absolute -top-12 -right-12 w-44 h-44 bg-[#D57C63]/18 rounded-full blur-2xl pointer-events-none" />
-                  <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-[#D57C63]/18 rounded-full blur-2xl pointer-events-none" />
-
-                  {/* Circular Rotating Dashed Orbit Ring Behind Photo */}
+                  {/* Layer 1: Deep Obsidian Black Backdrop Card (tilted left, ~ -7deg) */}
                   <div
-                    className="absolute inset-5 rounded-full border border-dashed border-[#D57C63]/35 pointer-events-none animate-spin-slower"
-                    style={{ transform: 'translateZ(-10px)' }}
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#000000] via-[#120d0a] to-[#20140e] border border-[#D57C63]/35 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_24px_rgba(213,124,99,0.22)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-26px) rotate(-7deg) scale(0.97) translate(-14px, 4px)',
+                      transformOrigin: 'center center',
+                    }}
                   />
 
-                  {/* Floating Top-Left Badge: MERN Stack Specialist */}
+                  {/* Layer 2: Radiant Blazing Orange Backdrop Card (tilted top-right, ~ +5deg, expanded & prominent) */}
                   <div
-                    className="fs-float-badge fs-float-badge-1 absolute top-4 left-4 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md cursor-pointer hover:scale-105 transition-transform"
-                    style={{ transform: 'translateZ(45px)' }}
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#D57C63] animate-ping" />
-                    <span className="text-xs font-extrabold tracking-wide text-[#D57C63]">
-                      ⚡ MERN Stack
-                    </span>
-                  </div>
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#b85c43] via-[#D57C63] to-[#ff7a1a] shadow-[0_20px_50px_rgba(213,124,99,0.65),0_0_35px_rgba(255,122,26,0.35)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-16px) rotate(5.2deg) scale(1.05) translate(22px, -20px)',
+                      transformOrigin: 'center center',
+                    }}
+                  />
 
-                  {/* Floating Top-Right Badge: React.js & Node.js */}
+                  {/* Layer 3: Jet Black & Glowing Amber Charcoal Backdrop Card (tilted bottom-right, ~ +7.5deg) */}
                   <div
-                    className="fs-float-badge fs-float-badge-2 absolute top-4 right-4 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md cursor-pointer hover:scale-105 transition-transform"
-                    style={{ transform: 'translateZ(45px)' }}
-                  >
-                    <Code2 className="w-4 h-4 text-[#D57C63]" />
-                    <span className="text-xs font-extrabold tracking-wide">
-                      React &amp; Node.js
-                    </span>
-                  </div>
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#080504] via-[#180e08] to-[#2d160a] border-2 border-[#ff7a1a]/45 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_28px_rgba(255,122,26,0.24)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-6px) rotate(7.5deg) scale(0.99) translate(16px, 18px)',
+                      transformOrigin: 'center center',
+                    }}
+                  />
 
-                  {/* Rahila Kareem Full Stack Portrait Image with Breathing Movement */}
+                  {/* Layer 4: Central Portrait Card (clipping portrait neatly at bottom rounded edge) */}
                   <div
-                    className="relative z-10 w-full flex items-center justify-center pt-8 pb-3"
-                    style={{ transform: 'translateZ(30px)' }}
+                    className="fs-profile-stage relative w-full h-full rounded-[32px] sm:rounded-[38px] overflow-hidden flex flex-col items-center justify-end z-10"
+                    style={{ transform: 'translateZ(14px)' }}
                   >
-                    <img
-                      src={fullstackProfileImg}
-                      alt="Rahila Kareem - Full Stack JavaScript Developer | MERN Stack Specialist"
-                      className="fs-profile-img-breathe w-auto h-[340px] sm:h-[400px] lg:h-[430px] object-contain select-none pointer-events-none filter drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
-                      loading="eager"
+                    {/* Glowing Accents */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(213,124,99,0.35),transparent_70%)] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#D57C63]/30 rounded-full blur-[80px] pointer-events-none" />
+
+                    {/* Circular Rotating Dashed Orbit Ring */}
+                    <div
+                      className="absolute inset-6 rounded-full border border-dashed border-[#D57C63]/30 pointer-events-none animate-spin-slower"
+                      style={{ transform: 'translateZ(-5px)' }}
                     />
+
+                    {/* Rahila Kareem Full Stack Portrait Image */}
+                    <div
+                      className="relative z-10 w-full h-full flex items-end justify-center pt-8 pb-0"
+                      style={{ transform: 'translateZ(26px)' }}
+                    >
+                      <img
+                        itemProp="image"
+                        src={fullstackProfileImg}
+                        alt="Rahila Kareem - Full Stack JavaScript Developer | MERN Stack Specialist"
+                        className="fs-profile-img-breathe w-auto max-h-[92%] object-contain select-none pointer-events-none filter drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
+                        loading="eager"
+                      />
+                    </div>
                   </div>
 
-                  {/* Floating Bottom-Left Badge: REST APIs & CRUD */}
+                  {/* 6 Perimeter Floating Circular Badges (z-30) */}
+                  {/* Badge 1: Top-Left (HTML5 Shield) */}
                   <div
-                    className="fs-float-badge fs-float-badge-3 absolute bottom-16 left-3 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md cursor-pointer hover:scale-105 transition-transform"
-                    style={{ transform: 'translateZ(45px)' }}
+                    className="group absolute -top-5 sm:-top-6 left-[18%] sm:left-[20%] z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="HTML5 Modern Standards"
                   >
-                    <Cpu className="w-3.5 h-3.5 text-[#D57C63]" />
-                    <span className="text-[11.5px] font-bold">
-                      REST APIs &amp; CRUD
+                    <svg viewBox="0 0 512 512" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <path fill="#E34F26" d="M71,460 L30,0 481,0 440,460 255,512" />
+                      <path fill="#EF652A" d="M256,472 L406,430 440,48 256,48" />
+                      <path fill="#EBEBEB" d="M256,208 L181,208 176,150 256,150 256,94 114,94 129,264 256,264 z M256,355 L192,338 188,293 132,293 140,382 255,414 z" />
+                      <path fill="#FFFFFF" d="M255,208 L255,264 326,264 319,338 255,355 255,414 371,382 386,208 z M255,94 L255,150 391,150 396,94 z" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      HTML5
                     </span>
                   </div>
 
-                  {/* Floating Bottom-Right Badge: MongoDB Atlas */}
+                  {/* Badge 2: Top-Right (Tailwind CSS) */}
                   <div
-                    className="fs-float-badge fs-float-badge-4 absolute bottom-16 right-3 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md cursor-pointer hover:scale-105 transition-transform"
-                    style={{ transform: 'translateZ(45px)' }}
+                    className="group absolute -top-5 sm:-top-6 right-[18%] sm:right-[20%] z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Tailwind CSS Modern Styling"
                   >
-                    <Database className="w-3.5 h-3.5 text-[#D57C63]" />
-                    <span className="text-[11.5px] font-bold">
-                      MongoDB Cloud
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 sm:w-8 sm:h-8" fill="#38BDF8">
+                      <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/>
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Tailwind
                     </span>
                   </div>
 
-                  {/* Bottom Pedestal Tag */}
+                  {/* Badge 3: Left (Node.js) */}
                   <div
-                    className="relative z-20 mt-1 w-full py-2.5 px-4 rounded-2xl fs-pedestal-bar flex items-center justify-center gap-2 text-center"
-                    style={{ transform: 'translateZ(38px)' }}
+                    className="group absolute -left-5 sm:-left-6 top-[44%] sm:top-[46%] -translate-y-1/2 z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Node.js & Express.js Backend"
                   >
-                    <Sparkles className="w-4 h-4 text-[#D57C63]" />
-                    <span className="text-xs sm:text-[13px] font-extrabold tracking-wide fs-heading">
-                      Rahila Kareem • Full Stack Engineer
+                    <svg viewBox="0 0 32 32" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <path fill="#339933" d="M16 2.3l12.8 7.4v14.6L16 31.7 3.2 24.3V9.7L16 2.3z" />
+                      <path fill="#FFFFFF" d="M16 4.7L5.5 10.8v12.2L16 29.1l10.5-6.1V10.8L16 4.7zm0 2.8l7.8 4.5v9L16 25.5l-7.8-4.5v-9L16 7.5z" />
+                      <path fill="#339933" d="M14.5 13.5v5.2h3v-2.7c0-.8.4-1.3 1.2-1.3.7 0 1 .4 1 1.2v2.8h3v-3.2c0-2-1.1-3.2-2.8-3.2-1.2 0-2.1.6-2.6 1.6V13.5h-2.8z" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Node.js
                     </span>
                   </div>
 
+                  {/* Badge 4: Right (CSS3 Shield) */}
+                  <div
+                    className="group absolute -right-5 sm:-right-6 top-[30%] sm:top-[32%] -translate-y-1/2 z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="CSS3 & Responsive Design"
+                  >
+                    <svg viewBox="0 0 512 512" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <path fill="#1572B6" d="M71,460 L30,0 481,0 440,460 255,512" />
+                      <path fill="#33A9DC" d="M256,472 L406,430 440,48 256,48" />
+                      <path fill="#EBEBEB" d="M256,208 L181,208 176,150 256,150 256,94 114,94 129,264 256,264 z M256,355 L192,338 188,293 132,293 140,382 255,414 z" />
+                      <path fill="#FFFFFF" d="M255,208 L255,264 326,264 319,338 255,355 255,414 371,382 386,208 z M255,94 L255,150 391,150 396,94 z" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      CSS3
+                    </span>
+                  </div>
+
+                  {/* Badge 5: Bottom-Right (JavaScript - Dark Circle Badge like Image 1) */}
+                  <div
+                    className="group absolute right-[4%] sm:right-[6%] bottom-[14%] sm:bottom-[16%] translate-x-1/4 translate-y-1/4 z-30 w-12 h-12 sm:w-15 sm:h-15 rounded-full bg-[#18181b] border-2 border-[#27272a] shadow-[0_10px_25px_-3px_rgba(0,0,0,0.45)] flex items-center justify-center p-2 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="JavaScript ES6+"
+                  >
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F7DF1E] rounded flex items-end justify-end p-0.5 sm:p-1 select-none">
+                      <span className="font-black text-black text-[10px] sm:text-xs leading-none tracking-tighter">JS</span>
+                    </div>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      JavaScript
+                    </span>
+                  </div>
+
+                  {/* Badge 6: Bottom (React.js Atom) */}
+                  <div
+                    className="group absolute -bottom-5 sm:-bottom-6 left-[28%] sm:left-[30%] z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="React.js Frontend"
+                  >
+                    <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
+                      <g stroke="#61DAFB" strokeWidth="1" fill="none">
+                        <ellipse rx="11" ry="4.2" />
+                        <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                        <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                      </g>
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      React.js
+                    </span>
+                  </div>
+
+                </div>
+
+                {/* Bottom Pedestal Tag */}
+                <div
+                  className="fs-pedestal-bar mt-8 sm:mt-10 px-5 py-2.5 rounded-2xl text-center z-10 backdrop-blur-md shadow-md max-w-sm mx-auto"
+                  style={{ transform: 'translateZ(35px)' }}
+                >
+                  <span className="font-heading font-black text-xs sm:text-[13px] tracking-wider uppercase text-[#D57C63]">
+                    Rahila Kareem • Full Stack JavaScript Engineer
+                  </span>
                 </div>
               </div>
             </div>
@@ -1024,13 +1107,10 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
                   className="reveal-up fs-card p-7 sm:p-9 flex flex-col justify-between"
                   style={{ transitionDelay: `${(idx % 3) * 120}ms` }}
                 >
-                  {/* Top Bar: Number + Icon */}
+                  {/* Top Bar: Top-Left Half-Circle Icon Badge */}
                   <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <span className="font-heading font-black text-3xl fs-number">
-                        {srv.number}
-                      </span>
-                      <div className="w-12 h-12 rounded-2xl bg-[#D57C63]/15 flex items-center justify-center text-[#D57C63]">
+                    <div className="flex items-center justify-start mb-6">
+                      <div className="fs-service-icon-badge" title={srv.title}>
                         <ServiceIcon className="w-6 h-6" />
                       </div>
                     </div>
@@ -1602,12 +1682,52 @@ const css = `
   box-shadow: 0 24px 55px -10px rgba(213, 124, 99, 0.38);
 }
 
+.fs-card:active {
+  transform: translateY(-2px) scale(0.995);
+  border-color: #D57C63;
+  box-shadow: 0 0 30px rgba(213, 124, 99, 0.55), 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
 .fs-card:hover .fs-heading {
   color: #D57C63 !important;
 }
 
 .fs-card:hover .fs-number {
   color: #D57C63 !important;
+}
+
+/* Service Card Top-Left Half-Circle Icon Badge */
+.fs-service-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 46px;
+  border-radius: 0 9999px 9999px 0;
+  background: rgba(213, 124, 99, 0.16);
+  border: 1.5px solid rgba(213, 124, 99, 0.4);
+  border-left: 3.5px solid #D57C63;
+  color: #D57C63;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 10px rgba(213, 124, 99, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+[dir="rtl"] .fs-service-icon-badge {
+  border-radius: 9999px 0 0 9999px;
+  border-left: 1.5px solid rgba(213, 124, 99, 0.4);
+  border-right: 3.5px solid #D57C63;
+}
+
+.fs-card:hover .fs-service-icon-badge,
+.fs-card:active .fs-service-icon-badge,
+.fs-service-icon-badge:hover,
+.fs-service-icon-badge:active {
+  background: rgba(213, 124, 99, 0.28);
+  border-color: #D57C63;
+  color: #ff8833;
+  box-shadow: 0 0 24px rgba(213, 124, 99, 0.6), 0 4px 16px rgba(213, 124, 99, 0.3);
+  transform: scale(1.05);
 }
 
 .fs-node-card {
@@ -1643,10 +1763,9 @@ const css = `
 }
 
 .fs-profile-stage {
-  background: linear-gradient(155deg, rgba(28, 19, 15, 0.95) 0%, rgba(18, 12, 9, 0.98) 100%);
+  background: linear-gradient(155deg, rgba(28, 19, 15, 0.96) 0%, rgba(18, 12, 9, 0.98) 100%);
   border: 2px solid rgba(213, 124, 99, 0.35);
-  border-bottom: 5px solid #D57C63;
-  border-radius: 32px;
+  border-radius: 36px;
   box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(213, 124, 99, 0.22);
 }
 
@@ -1841,6 +1960,36 @@ const css = `
   color: #cf5208 !important;
 }
 
+:root[data-theme="light"] .fs-card:active {
+  transform: translateY(-2px) scale(0.995) !important;
+  border-color: #cf5208 !important;
+  box-shadow: 0 0 28px rgba(207, 82, 8, 0.4), 0 8px 24px rgba(207, 82, 8, 0.2) !important;
+}
+
+:root[data-theme="light"] .fs-service-icon-badge {
+  background: #fdf4ee !important;
+  border: 1.5px solid #decbb8 !important;
+  border-left: 3.5px solid #cf5208 !important;
+  color: #cf5208 !important;
+  box-shadow: 0 3px 10px rgba(207, 82, 8, 0.1) !important;
+}
+
+:root[data-theme="light"] [dir="rtl"] .fs-service-icon-badge {
+  border-left: 1.5px solid #decbb8 !important;
+  border-right: 3.5px solid #cf5208 !important;
+}
+
+:root[data-theme="light"] .fs-card:hover .fs-service-icon-badge,
+:root[data-theme="light"] .fs-card:active .fs-service-icon-badge,
+:root[data-theme="light"] .fs-service-icon-badge:hover,
+:root[data-theme="light"] .fs-service-icon-badge:active {
+  background: #fce8dc !important;
+  border-color: #cf5208 !important;
+  color: #cf5208 !important;
+  box-shadow: 0 0 22px rgba(207, 82, 8, 0.42), 0 4px 14px rgba(207, 82, 8, 0.22) !important;
+  transform: scale(1.05);
+}
+
 :root[data-theme="light"] .fs-card:hover .fs-number {
   color: #cf5208 !important;
 }
@@ -1883,7 +2032,7 @@ const css = `
 :root[data-theme="light"] .fs-profile-stage {
   background: linear-gradient(155deg, #ffffff 0%, #fff7f2 100%) !important;
   border: 2px solid #decbb8 !important;
-  border-bottom: 5px solid #cf5208 !important;
+  border-radius: 36px !important;
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.12), 0 4px 20px rgba(207, 82, 8, 0.12) !important;
 }
 

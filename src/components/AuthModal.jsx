@@ -11,14 +11,13 @@ import {
   Eye,
   EyeOff,
   CheckCircle2,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth, mapAuthError } from '../context/AuthContext';
 import { sendWeb3FormsNotification } from '../utils/web3forms';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 // Official Multicolor Google 'G' SVG
 const GoogleIcon = () => (
@@ -44,21 +43,29 @@ const GoogleIcon = () => (
 
 const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) => {
   const { t } = useLanguage();
+  const {
+    registerWithEmail,
+    loginWithEmail,
+    loginWithGoogle,
+    resendVerificationEmail,
+    checkEmailVerification,
+    isConfigured
+  } = useAuth();
 
   // Mode: 'signup' | 'signin' | 'verify'
   const [mode, setMode] = useState(initialMode || 'signup');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   // Status & Loading states
   const [loading, setLoading] = useState(false);
+  const [checkingVerification, setCheckingVerification] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Resend OTP cooldown timer
+  // Resend Verification cooldown timer
   const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
@@ -66,7 +73,6 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       setMode(initialMode || 'signup');
       setErrorMsg('');
       setSuccessMsg('');
-      setOtp('');
     }
   }, [isOpen, initialMode]);
 
@@ -78,19 +84,6 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
     }
     return () => clearTimeout(timer);
   }, [resendCooldown]);
-
-  // Initialize Google Identity Services if client ID is configured
-  useEffect(() => {
-    if (isOpen && window.google?.accounts?.id && GOOGLE_CLIENT_ID) {
-      try {
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: (response) => handleGoogleSignIn(response),
-          auto_select: false
-        });
-      } catch (_) {}
-    }
-  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -106,140 +99,59 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   // ==========================================================================
-  // GOOGLE SIGN-IN HANDLER (OFFICIAL GOOGLE OAUTH / GIS / VALIDATED CLIENT)
+  // GOOGLE SIGN-IN HANDLER (FIREBASE AUTH POPUP)
   // ==========================================================================
-  const handleGoogleSignIn = async (credentialResponse = null) => {
+  const handleGoogleSignIn = async () => {
     setErrorMsg('');
     setSuccessMsg('');
+
+    if (!isConfigured) {
+      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
+      return;
+    }
+
     setLoading(true);
-
     try {
-      let bodyPayload = {};
-
-      if (credentialResponse?.credential) {
-        // Real Google Identity Services JWT id_token
-        bodyPayload = { credential: credentialResponse.credential };
-      } else if (credentialResponse?.access_token) {
-        // OAuth access token
-        bodyPayload = { accessToken: credentialResponse.access_token };
-      } else if (email && email.includes('@')) {
-        // User already entered email in form
-        bodyPayload = {
-          email: email.trim().toLowerCase(),
-          name: name.trim() || email.split('@')[0],
-          authProvider: 'google'
-        };
-      } else {
-        // Prompt for verified Google account email
-        const userPrompt = window.prompt(
-          'Enter your authentic Google email (e.g. yourname@gmail.com):',
-          email || ''
-        );
-        if (!userPrompt || !userPrompt.includes('@')) {
-          setLoading(false);
-          return;
-        }
-        bodyPayload = {
-          email: userPrompt.trim().toLowerCase(),
-          name: userPrompt.split('@')[0],
-          authProvider: 'google'
-        };
-      }
-
-      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(bodyPayload)
-      });
-
-      const data = await res.json().catch(() => null);
-
-      const targetEmail = (data?.user?.email || bodyPayload.email || email.trim() || 'client@gmail.com').toLowerCase();
-      const targetName = data?.user?.name || bodyPayload.name || name.trim() || targetEmail.split('@')[0];
-
-      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
-      sendWeb3FormsNotification({
-        type: 'Google Login',
-        subject: `[User Login Alert] ${targetEmail} logged in via Google`,
-        name: targetName,
-        email: targetEmail,
-        details: {
-          action: 'Google OAuth Sign-In',
-          provider: 'Google Identity',
-          userName: targetName,
-          userEmail: targetEmail,
-          role: 'Client'
-        }
-      });
-
-      if (res.ok && data && data.success) {
-        triggerConfetti();
-        if (data.token) {
-          localStorage.setItem('rahila_auth_token', data.token);
-        }
-        if (data.user) {
-          localStorage.setItem('rahila_auth_user', JSON.stringify(data.user));
-          if (onAuthSuccess) onAuthSuccess(data.user);
-        }
-        setSuccessMsg(data.message || `Welcome, ${data.user?.name || 'Client'}! Signed in with Google.`);
-        setTimeout(() => onClose(), 1100);
-      } else {
-        // Fallback valid Google Client session
-        const clientUser = {
-          id: 'goog_' + Date.now().toString(36),
-          name: targetName,
-          email: targetEmail,
-          role: 'Client',
-          authProvider: 'google',
-          isVerified: true
-        };
-        localStorage.setItem('rahila_auth_user', JSON.stringify(clientUser));
-        localStorage.setItem('rahila_auth_token', 'jwt_goog_' + Date.now());
-        triggerConfetti();
-        if (onAuthSuccess) onAuthSuccess(clientUser);
-        setSuccessMsg(`Welcome, ${clientUser.name}! Signed in with Google.`);
-        setTimeout(() => onClose(), 1100);
-      }
-    } catch (err) {
-      console.error('Google Sign-In Error:', err);
-      const gEmail = email.trim() || 'client@gmail.com';
-      const clientUser = {
-        id: 'goog_' + Date.now().toString(36),
-        name: name.trim() || gEmail.split('@')[0],
-        email: gEmail,
-        role: 'Client',
-        authProvider: 'google',
-        isVerified: true
-      };
-
-      sendWeb3FormsNotification({
-        type: 'Google Login',
-        subject: `[User Login Alert] ${gEmail} logged in via Google`,
-        name: clientUser.name,
-        email: gEmail,
-        details: {
-          action: 'Google OAuth Sign-In',
-          provider: 'Google Identity',
-          userName: clientUser.name,
-          userEmail: gEmail,
-          role: 'Client'
-        }
-      });
-
-      localStorage.setItem('rahila_auth_user', JSON.stringify(clientUser));
-      localStorage.setItem('rahila_auth_token', 'jwt_goog_' + Date.now());
+      const firebaseUser = await loginWithGoogle();
       triggerConfetti();
-      if (onAuthSuccess) onAuthSuccess(clientUser);
-      setSuccessMsg(`Welcome, ${clientUser.name}! Signed in with Google.`);
+
+      // Dispatch Web3Forms notification for audit alert
+      sendWeb3FormsNotification({
+        type: 'Google Login',
+        subject: `[User Login Alert] ${firebaseUser.email} logged in via Google (Firebase Auth)`,
+        name: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
+        email: firebaseUser.email,
+        details: {
+          action: 'Firebase Google OAuth Sign-In',
+          provider: 'Firebase Authentication',
+          userName: firebaseUser.displayName,
+          userEmail: firebaseUser.email,
+          role: 'Client'
+        }
+      });
+
+      setSuccessMsg(`Welcome, ${firebaseUser.displayName || 'Client'}! Signed in with Google.`);
+      if (onAuthSuccess) {
+        onAuthSuccess({
+          uid: firebaseUser.uid,
+          id: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
+          emailVerified: firebaseUser.emailVerified,
+          role: 'Client'
+        });
+      }
       setTimeout(() => onClose(), 1100);
+    } catch (err) {
+      console.error('Firebase Google Sign-In Error:', err);
+      setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================================================
-  // 1. SUBMIT REGISTRATION
+  // 1. SUBMIT REGISTRATION (EMAIL + PASSWORD + VERIFICATION EMAIL)
   // ==========================================================================
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -256,272 +168,95 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       return;
     }
 
+    if (!isConfigured) {
+      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          password: password
-        })
-      });
+      const createdUser = await registerWithEmail(name.trim(), email.trim(), password);
 
-      const data = await res.json().catch(() => null);
-
-      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+      // Web3Forms notification for admin awareness
       sendWeb3FormsNotification({
         type: 'User Registration',
         subject: `[New Client Registered] ${name.trim()} (${email.trim()})`,
         name: name.trim(),
         email: email.trim(),
         details: {
-          action: 'New Client Account Registration',
+          action: 'Firebase Email/Password Registration',
           userName: name.trim(),
           userEmail: email.trim(),
           role: 'Client'
         }
       });
 
-      if (res.ok && data && data.success) {
-        // If backend auto-verified because email SMTP is not set up, enter immediately!
-        if (data.autoVerified && data.token) {
-          localStorage.setItem('rahila_auth_token', data.token);
-          if (data.user) {
-            localStorage.setItem('rahila_auth_user', JSON.stringify(data.user));
-            if (onAuthSuccess) onAuthSuccess(data.user);
-          }
-          triggerConfetti();
-          setSuccessMsg(data.message || 'Account activated successfully! Entering your workspace...');
-          setTimeout(() => onClose(), 1100);
-          return;
-        }
-
-        setSuccessMsg(data.message || 'Verification code sent to your email.');
-        setMode('verify');
-        setResendCooldown(60);
-      } else if (data?.message) {
-        setErrorMsg(data.message);
-      } else {
-        // Smooth resilient client workspace session
-        const clientUser = {
-          id: 'cli_' + Date.now().toString(36),
-          name: name.trim(),
-          email: email.trim(),
-          role: 'Client',
-          isVerified: true
-        };
-        localStorage.setItem('rahila_auth_user', JSON.stringify(clientUser));
-        localStorage.setItem('rahila_auth_token', 'jwt_' + Date.now());
-        triggerConfetti();
-        if (onAuthSuccess) onAuthSuccess(clientUser);
-        setSuccessMsg('Account created successfully! Entering your workspace...');
-        setTimeout(() => onClose(), 1100);
-      }
+      setSuccessMsg(`Verification email dispatched to ${email.trim()}. Please verify your email before entering your workspace.`);
+      setMode('verify');
+      setResendCooldown(60);
     } catch (err) {
-      // Offline / fallback client workspace activation
-      const clientUser = {
-        id: 'cli_' + Date.now().toString(36),
-        name: name.trim(),
-        email: email.trim(),
-        role: 'Client',
-        isVerified: true
-      };
-      localStorage.setItem('rahila_auth_user', JSON.stringify(clientUser));
-      localStorage.setItem('rahila_auth_token', 'jwt_' + Date.now());
-      triggerConfetti();
-      if (onAuthSuccess) onAuthSuccess(clientUser);
-      setSuccessMsg('Account created successfully! Entering your workspace...');
-      setTimeout(() => onClose(), 1100);
+      console.error('Firebase Registration Error:', err);
+      setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================================================
-  // 2. SUBMIT OTP EMAIL VERIFICATION
+  // 2. CHECK EMAIL VERIFICATION STATUS
   // ==========================================================================
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
+  const handleCheckVerification = async () => {
     setErrorMsg('');
     setSuccessMsg('');
+    setCheckingVerification(true);
 
-    if (!otp || otp.trim().length < 6) {
-      setErrorMsg('Please enter the complete 6-digit verification code.');
-      return;
-    }
-
-    setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/verify-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email.trim(),
-          otp: otp.trim()
-        })
-      });
+      const verified = await checkEmailVerification();
 
-      const data = await res.json().catch(() => null);
-
-      if (res.ok && data && data.success) {
+      if (verified) {
         triggerConfetti();
-        if (data.token) {
-          localStorage.setItem('rahila_auth_token', data.token);
+        setSuccessMsg('Email verified successfully! Entering your workspace...');
+        if (onAuthSuccess) {
+          onAuthSuccess({
+            email,
+            name: name || email.split('@')[0],
+            emailVerified: true,
+            role: 'Client'
+          });
         }
-        if (data.user) {
-          localStorage.setItem('rahila_auth_user', JSON.stringify(data.user));
-          if (onAuthSuccess) onAuthSuccess(data.user);
-        }
-
-        setSuccessMsg('Account verified successfully! Entering your workspace...');
-        setTimeout(() => onClose(), 1100);
+        setTimeout(() => onClose(), 1200);
       } else {
-        // Fallback verification for seamless client testing
-        const stored = localStorage.getItem('rahila_auth_user');
-        let userObj = stored ? JSON.parse(stored) : {
-          id: 'cli_' + Date.now().toString(36),
-          name: name.trim() || email.split('@')[0],
-          email: email.trim(),
-          role: 'Client',
-          isVerified: true
-        };
-        userObj.isVerified = true;
-        localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-        triggerConfetti();
-        if (onAuthSuccess) onAuthSuccess(userObj);
-        setSuccessMsg('Account verified successfully! Entering your workspace...');
-        setTimeout(() => onClose(), 1100);
+        setErrorMsg('Your email is not verified yet. Please check your inbox (and Spam folder) for the verification link from Firebase, click it, and try again.');
       }
     } catch (err) {
-      const stored = localStorage.getItem('rahila_auth_user');
-      let userObj = stored ? JSON.parse(stored) : {
-        id: 'cli_' + Date.now().toString(36),
-        name: name.trim() || email.split('@')[0],
-        email: email.trim(),
-        role: 'Client',
-        isVerified: true
-      };
-      userObj.isVerified = true;
-      localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-      triggerConfetti();
-      if (onAuthSuccess) onAuthSuccess(userObj);
-      setSuccessMsg('Account verified successfully! Entering your workspace...');
-      setTimeout(() => onClose(), 1100);
+      setErrorMsg(mapAuthError(err));
     } finally {
-      setLoading(false);
+      setCheckingVerification(false);
     }
   };
 
   // ==========================================================================
-  // 3. INSTANT ACTIVATE (FOR DELAYED / UNDELIVERED EMAIL CODES)
+  // 3. RESEND VERIFICATION EMAIL
   // ==========================================================================
-  const handleInstantActivate = async () => {
-    if (!email) {
-      setErrorMsg('Please provide your registered email address.');
-      return;
-    }
-
-    setErrorMsg('');
-    setSuccessMsg('');
-    setLoading(true);
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/instant-activate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: email.trim() })
-      });
-
-      const data = await res.json().catch(() => null);
-
-      if (res.ok && data && data.success) {
-        triggerConfetti();
-        if (data.token) {
-          localStorage.setItem('rahila_auth_token', data.token);
-        }
-        if (data.user) {
-          localStorage.setItem('rahila_auth_user', JSON.stringify(data.user));
-          if (onAuthSuccess) onAuthSuccess(data.user);
-        }
-        setSuccessMsg(data.message || 'Account activated successfully! Entering your workspace...');
-        setTimeout(() => onClose(), 1100);
-      } else {
-        // Direct local instant activation fallback
-        const stored = localStorage.getItem('rahila_auth_user');
-        let userObj = stored ? JSON.parse(stored) : {
-          id: 'cli_' + Date.now().toString(36),
-          name: name.trim() || email.split('@')[0],
-          email: email.trim(),
-          role: 'Client',
-          isVerified: true
-        };
-        userObj.isVerified = true;
-        localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-        triggerConfetti();
-        if (onAuthSuccess) onAuthSuccess(userObj);
-        setSuccessMsg('Account activated successfully! Entering your workspace...');
-        setTimeout(() => onClose(), 1100);
-      }
-    } catch (err) {
-      const stored = localStorage.getItem('rahila_auth_user');
-      let userObj = stored ? JSON.parse(stored) : {
-        id: 'cli_' + Date.now().toString(36),
-        name: name.trim() || email.split('@')[0],
-        email: email.trim(),
-        role: 'Client',
-        isVerified: true
-      };
-      userObj.isVerified = true;
-      localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-      triggerConfetti();
-      if (onAuthSuccess) onAuthSuccess(userObj);
-      setSuccessMsg('Account activated successfully! Entering your workspace...');
-      setTimeout(() => onClose(), 1100);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ==========================================================================
-  // 4. RESEND VERIFICATION OTP
-  // ==========================================================================
-  const handleResendOtp = async () => {
+  const handleResendVerification = async () => {
     if (resendCooldown > 0) return;
     setErrorMsg('');
     setSuccessMsg('');
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/resend-verification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: email.trim() })
-      });
-
-      const data = await res.json().catch(() => null);
-      if (res.ok && data && data.success) {
-        setSuccessMsg(data.message || 'A fresh verification code has been dispatched.');
-        setResendCooldown(60);
-      } else {
-        setSuccessMsg('Verification code sent! Please check your inbox.');
-        setResendCooldown(60);
-      }
-    } catch (err) {
-      setSuccessMsg('Verification code sent! Please check your inbox.');
+      await resendVerificationEmail();
+      setSuccessMsg(`A fresh verification email has been sent to ${email}. Please check your inbox.`);
       setResendCooldown(60);
+    } catch (err) {
+      setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================================================
-  // 5. SUBMIT LOGIN
+  // 4. SUBMIT LOGIN (EMAIL + PASSWORD)
   // ==========================================================================
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -533,97 +268,56 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       return;
     }
 
+    if (!isConfigured) {
+      setErrorMsg('Firebase configuration missing. Please add VITE_FIREBASE_* variables in .env.');
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email.trim(),
-          password: password
-        })
-      });
+      const firebaseUser = await loginWithEmail(email.trim(), password);
 
-      const data = await res.json().catch(() => null);
+      // Enforce email verification for protected features
+      if (!firebaseUser.emailVerified) {
+        setErrorMsg('Your email is not verified yet. Please verify your email before accessing your workspace.');
+        setMode('verify');
+        setResendCooldown(30);
+        setLoading(false);
+        return;
+      }
 
-      // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
+      // Successful verified login
+      triggerConfetti();
+      const userName = firebaseUser.displayName || email.split('@')[0];
+
       sendWeb3FormsNotification({
         type: 'User Login',
         subject: `[User Login Alert] ${email.trim()} logged in to Client Workspace`,
-        name: data?.user?.name || email.split('@')[0],
+        name: userName,
         email: email.trim(),
         details: {
-          action: 'Client Workspace Login',
-          userName: data?.user?.name || email.split('@')[0],
+          action: 'Firebase Client Login',
+          userName,
           userEmail: email.trim(),
-          role: data?.user?.role || 'Client'
+          role: 'Client'
         }
       });
 
-      if (res.ok && data && data.success) {
-        triggerConfetti();
-        if (data.token) {
-          localStorage.setItem('rahila_auth_token', data.token);
-        }
-        if (data.user) {
-          localStorage.setItem('rahila_auth_user', JSON.stringify(data.user));
-          if (onAuthSuccess) onAuthSuccess(data.user);
-        }
-
-        setSuccessMsg(`Welcome back, ${data.user?.name || 'Client'}!`);
-        setTimeout(() => onClose(), 1100);
-      } else if (data?.code === 'UNVERIFIED_EMAIL') {
-        setErrorMsg(data.message);
-        setMode('verify');
-        setResendCooldown(30);
-      } else {
-        // Fallback login
-        const storedUser = localStorage.getItem('rahila_auth_user');
-        let userObj = {
-          id: 'cli_' + Date.now().toString(36),
-          name: email.split('@')[0],
-          email: email.trim(),
-          role: 'Client',
-          isVerified: true
-        };
-        if (storedUser) {
-          try {
-            const parsed = JSON.parse(storedUser);
-            if (parsed.email?.toLowerCase() === email.trim().toLowerCase()) {
-              userObj = parsed;
-            }
-          } catch (_) {}
-        }
-        localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-        triggerConfetti();
-        if (onAuthSuccess) onAuthSuccess(userObj);
-        setSuccessMsg(`Welcome back, ${userObj.name}!`);
-        setTimeout(() => onClose(), 1100);
+      setSuccessMsg(`Welcome back, ${userName}!`);
+      if (onAuthSuccess) {
+        onAuthSuccess({
+          uid: firebaseUser.uid,
+          id: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: userName,
+          emailVerified: true,
+          role: 'Client'
+        });
       }
-    } catch (err) {
-      // Offline fallback login
-      const storedUser = localStorage.getItem('rahila_auth_user');
-      let userObj = {
-        id: 'cli_' + Date.now().toString(36),
-        name: email.split('@')[0],
-        email: email.trim(),
-        role: 'Client',
-        isVerified: true
-      };
-      if (storedUser) {
-        try {
-          const parsed = JSON.parse(storedUser);
-          if (parsed.email?.toLowerCase() === email.trim().toLowerCase()) {
-            userObj = parsed;
-          }
-        } catch (_) {}
-      }
-      localStorage.setItem('rahila_auth_user', JSON.stringify(userObj));
-      triggerConfetti();
-      if (onAuthSuccess) onAuthSuccess(userObj);
-      setSuccessMsg(`Welcome back, ${userObj.name}!`);
       setTimeout(() => onClose(), 1100);
+    } catch (err) {
+      console.error('Firebase Login Error:', err);
+      setErrorMsg(mapAuthError(err));
     } finally {
       setLoading(false);
     }
@@ -643,6 +337,19 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           <X className="w-5 h-5" />
         </button>
 
+        {/* Configuration Notice if env is missing */}
+        {!isConfigured && (
+          <div className="mb-4 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs">
+            <div className="font-bold flex items-center gap-1.5 mb-1">
+              <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
+              <span>Firebase Keys Required</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-neutral-600 dark:text-neutral-300">
+              Please paste your Firebase configuration into <code className="px-1 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono">frontend/.env</code> to enable live authentication.
+            </p>
+          </div>
+        )}
+
         {/* Header */}
         <div className="mb-5">
           <div className="w-10 h-10 rounded-2xl bg-[#D57C63]/15 text-[#D57C63] flex items-center justify-center mb-3 shadow-sm">
@@ -656,14 +363,14 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           </div>
           <h3 className="font-heading font-extrabold text-2xl text-neutral-900 dark:text-white tracking-tight">
             {mode === 'verify'
-              ? 'Verify Email'
+              ? 'Verify Your Email'
               : mode === 'signin'
               ? 'Welcome Back'
               : 'Create Client Account'}
           </h3>
           <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {mode === 'verify'
-              ? 'Enter the 6-digit code sent to your email'
+              ? 'A verification link was dispatched to your inbox'
               : mode === 'signin'
               ? 'Sign in to access your client dashboard & deliverables'
               : 'Sign up to track your projects & deliverables'}
@@ -726,7 +433,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           <div className="space-y-3 mb-4">
             <button
               type="button"
-              onClick={() => handleGoogleSignIn()}
+              onClick={handleGoogleSignIn}
               disabled={loading}
               className="w-full py-2.5 px-4 rounded-xl border border-neutral-300 dark:border-[#3d271e] bg-white dark:bg-[#221612] hover:bg-neutral-50 dark:hover:bg-[#2c1c16] text-neutral-800 dark:text-neutral-100 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50 hover:shadow"
             >
@@ -901,77 +608,62 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           </form>
         )}
 
-        {/* STEP 2: VERIFY OTP SCREEN (WITH INSTANT ACTIVATE BYPASS) */}
+        {/* STEP 2: VERIFICATION SCREEN (FIREBASE EMAIL VERIFICATION) */}
         {mode === 'verify' && (
-          <form onSubmit={handleVerifyOtp} className="space-y-4">
-            <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-[#221612] border border-neutral-200 dark:border-[#38261e] text-center space-y-0.5">
-              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 block">Verification code for:</span>
+          <div className="space-y-4">
+            <div className="p-3.5 rounded-2xl bg-neutral-50 dark:bg-[#221612] border border-neutral-200 dark:border-[#38261e] text-center space-y-1">
+              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 block">Verification link sent to:</span>
               <span className="text-xs sm:text-sm font-bold text-[#D57C63] font-mono block truncate">{email}</span>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1.5 text-center">
-                Enter 6-Digit Code
-              </label>
-              <input
-                type="text"
-                required
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                placeholder="000000"
-                className="w-full py-2.5 text-center tracking-[10px] font-mono font-bold text-xl rounded-2xl border border-neutral-200 dark:border-[#38261e] bg-neutral-50/70 dark:bg-[#20140e] text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D57C63]/30 focus:border-[#D57C63]"
-              />
+            <div className="p-4 rounded-2xl bg-[#D57C63]/10 border border-[#D57C63]/30 text-xs text-neutral-700 dark:text-neutral-200 space-y-2 leading-relaxed">
+              <div className="font-bold flex items-center gap-1.5 text-[#D57C63]">
+                <Sparkles className="w-4 h-4 shrink-0" />
+                <span>One Click Activation</span>
+              </div>
+              <p>
+                Open your email app, look for the verification email sent by Firebase, and click the confirmation link.
+              </p>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+                Can't find it? Check your Spam or Promotions tab.
+              </p>
             </div>
 
+            {/* Check Verification Status Button */}
             <button
-              type="submit"
-              disabled={loading || otp.length < 6}
+              type="button"
+              onClick={handleCheckVerification}
+              disabled={checkingVerification}
               className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {loading ? (
+              {checkingVerification ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
               ) : (
                 <ShieldCheck className="w-4 h-4" />
               )}
-              <span>Verify &amp; Continue</span>
+              <span>I Have Verified My Email</span>
             </button>
 
-            {/* INSTANT ACTIVATE RESCUE CARD (If email didn't arrive) */}
-            <div className="p-3 rounded-xl bg-[#D57C63]/10 border border-[#D57C63]/30 text-center space-y-2">
-              <p className="text-[11px] text-neutral-600 dark:text-neutral-300 leading-snug">
-                Code didn't arrive in your inbox or spam?
-              </p>
-              <button
-                type="button"
-                onClick={handleInstantActivate}
-                disabled={loading}
-                className="w-full py-2 px-3 rounded-lg bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Instant Activate Account</span>
-              </button>
-            </div>
-
+            {/* Resend Verification Button */}
             <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-[#291b15] text-xs">
               <button
                 type="button"
-                onClick={() => setMode('signup')}
+                onClick={() => setMode('signin')}
                 className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white cursor-pointer"
               >
-                ← Back
+                ← Back to Sign In
               </button>
 
               <button
                 type="button"
-                onClick={handleResendOtp}
+                onClick={handleResendVerification}
                 disabled={resendCooldown > 0 || loading}
                 className="text-[#D57C63] hover:underline font-bold disabled:opacity-50 cursor-pointer"
               >
-                {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
+                {resendCooldown > 0 ? `Resend link in ${resendCooldown}s` : 'Resend Verification Link'}
               </button>
             </div>
-          </form>
+          </div>
         )}
 
       </div>

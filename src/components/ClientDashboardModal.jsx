@@ -61,7 +61,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
     }
   };
 
-  if (!isOpen || !user) return null;
+  if (!isOpen || !user || !user.emailVerified) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
@@ -89,7 +89,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
               </span>
             </div>
             <p className="text-xs text-[#bcab9e] mt-0.5">
-              Secure client dashboard authenticated against MongoDB &amp; email verification
+              Secure client dashboard authenticated via Firebase Authentication &amp; email verification
             </p>
           </div>
         </div>

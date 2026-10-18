@@ -769,97 +769,164 @@ export default function SeoPage({ setActiveTab, setSelectedPlan }) {
 
             </div>
 
-            {/* Right Column: 3D Tilting Stage with Portrait & Google Ranking Badges */}
+            {/* Right Column: 3D Tilting Stage with Image 1 Layered Style & Circular Floating Badges */}
             <div className="lg:col-span-5 flex flex-col justify-center items-center">
               <div
                 onMouseMove={handleHeroMouseMove}
                 onMouseLeave={handleHeroMouseLeave}
-                className="reveal-up hero-reveal relative w-full max-w-[460px] cursor-pointer"
+                className="reveal-up hero-reveal relative w-full max-w-[430px] px-3 sm:px-5 py-4 cursor-pointer"
                 style={{ perspective: '1100px' }}
               >
+                {/* 3D Tilting Multi-Layer Deck Wrapper */}
                 <div
                   ref={heroCardRef}
-                  className="seo-profile-stage relative rounded-[32px] p-6 sm:p-8 flex flex-col items-center justify-center overflow-hidden"
+                  className="relative w-full aspect-[4/5] sm:aspect-[4/4.85] flex flex-col items-center justify-center"
                   style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                 >
-                  {/* Glowing Accents */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#D57C63]/25 rounded-full blur-[80px] pointer-events-none" />
-                  <div className="absolute -top-12 -right-12 w-44 h-44 bg-[#D57C63]/18 rounded-full blur-2xl pointer-events-none" />
-                  <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-[#D57C63]/18 rounded-full blur-2xl pointer-events-none" />
-
-                  {/* Circular Rotating Orbit Ring */}
+                  {/* Layer 1: Deep Obsidian Black Backdrop Card (tilted left, ~ -7deg) */}
                   <div
-                    className="absolute inset-5 rounded-full border border-dashed border-[#D57C63]/35 pointer-events-none animate-spin-slower"
-                    style={{ transform: 'translateZ(-10px)' }}
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#000000] via-[#120d0a] to-[#20140e] border border-[#D57C63]/35 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_24px_rgba(213,124,99,0.22)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-26px) rotate(-7deg) scale(0.97) translate(-14px, 4px)',
+                      transformOrigin: 'center center',
+                    }}
                   />
 
-                  {/* Floating Badge 1: Top Google Rankings */}
+                  {/* Layer 2: Radiant Blazing Orange Backdrop Card (tilted top-right, ~ +5deg, expanded & prominent) */}
                   <div
-                    className="seo-float-badge seo-float-badge-1 absolute top-4 left-4 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md"
-                    style={{ transform: 'translateZ(45px)' }}
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#D57C63] animate-ping" />
-                    <span className="text-xs font-extrabold text-[#D57C63]">
-                      ⚡ Google Rank #1
-                    </span>
-                  </div>
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#b85c43] via-[#D57C63] to-[#ff7a1a] shadow-[0_20px_50px_rgba(213,124,99,0.65),0_0_35px_rgba(255,122,26,0.35)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-16px) rotate(5.2deg) scale(1.05) translate(22px, -20px)',
+                      transformOrigin: 'center center',
+                    }}
+                  />
 
-                  {/* Floating Badge 2: On-Page & Technical */}
+                  {/* Layer 3: Jet Black & Glowing Amber Charcoal Backdrop Card (tilted bottom-right, ~ +7.5deg) */}
                   <div
-                    className="seo-float-badge seo-float-badge-2 absolute top-4 right-4 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md"
-                    style={{ transform: 'translateZ(45px)' }}
-                  >
-                    <Search className="w-4 h-4 text-[#D57C63]" />
-                    <span className="text-xs font-extrabold">
-                      On-Page &amp; Technical
-                    </span>
-                  </div>
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#080504] via-[#180e08] to-[#2d160a] border-2 border-[#ff7a1a]/45 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_28px_rgba(255,122,26,0.24)] pointer-events-none"
+                    style={{
+                      transform: 'translateZ(-6px) rotate(7.5deg) scale(0.99) translate(16px, 18px)',
+                      transformOrigin: 'center center',
+                    }}
+                  />
 
-                  {/* Rahila Kareem SEO Specialist Portrait */}
+                  {/* Layer 4: Central Portrait Card (clipping portrait neatly at bottom rounded edge) */}
                   <div
-                    className="relative z-10 w-full flex items-center justify-center pt-8 pb-3"
-                    style={{ transform: 'translateZ(30px)' }}
+                    className="seo-profile-stage relative w-full h-full rounded-[32px] sm:rounded-[38px] overflow-hidden flex flex-col items-center justify-end z-10"
+                    style={{ transform: 'translateZ(14px)' }}
                   >
-                    <img
-                      itemProp="image"
-                      src={fullstackProfileImg}
-                      alt="Rahila Kareem - SEO Specialist | On-Page & Technical SEO"
-                      className="seo-profile-img-breathe w-auto h-[340px] sm:h-[400px] lg:h-[430px] object-contain select-none pointer-events-none filter drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
-                      loading="eager"
+                    {/* Glowing Accents */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(213,124,99,0.32),transparent_70%)] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#D57C63]/25 rounded-full blur-[75px] pointer-events-none" />
+
+                    {/* Circular Rotating Dashed Orbit Ring */}
+                    <div
+                      className="absolute inset-6 rounded-full border border-dashed border-[#D57C63]/30 pointer-events-none animate-spin-slower"
+                      style={{ transform: 'translateZ(-5px)' }}
                     />
+
+                    {/* Rahila Kareem SEO Specialist Portrait */}
+                    <div
+                      className="relative z-10 w-full h-full flex items-end justify-center pt-8 pb-0"
+                      style={{ transform: 'translateZ(26px)' }}
+                    >
+                      <img
+                        itemProp="image"
+                        src={fullstackProfileImg}
+                        alt="Rahila Kareem - SEO Specialist | On-Page & Technical SEO"
+                        className="seo-profile-img-breathe w-auto max-h-[92%] object-contain select-none pointer-events-none filter drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
+                        loading="eager"
+                      />
+                    </div>
                   </div>
 
-                  {/* Floating Badge 3: 100% Organic Growth */}
+                  {/* 5 Perimeter Floating Circular Badges (z-30) */}
+                  {/* Badge 1: Top (Google Search) */}
                   <div
-                    className="seo-float-badge seo-float-badge-3 absolute bottom-16 left-3 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md"
-                    style={{ transform: 'translateZ(45px)' }}
+                    className="group absolute -top-5 sm:-top-6 left-[20%] sm:left-[22%] z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Google Rank #1 Focus"
                   >
-                    <LineChart className="w-3.5 h-3.5 text-[#D57C63]" />
-                    <span className="text-[11.5px] font-bold">
-                      Organic Traffic
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                      <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Google #1
                     </span>
                   </div>
 
-                  {/* Floating Badge 4: Schema & Audits */}
+                  {/* Badge 2: Left (Google Analytics) */}
                   <div
-                    className="seo-float-badge seo-float-badge-4 absolute bottom-16 right-3 z-20 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-lg backdrop-blur-md"
-                    style={{ transform: 'translateZ(45px)' }}
+                    className="group absolute -left-5 sm:-left-6 top-[44%] sm:top-[46%] -translate-y-1/2 z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Google Analytics 4"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D57C63]" />
-                    <span className="text-[11.5px] font-bold">
-                      Schema Validated
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 sm:w-8 sm:h-8">
+                      <rect x="3" y="12" width="4" height="9" rx="1.5" fill="#F9AB00" />
+                      <rect x="10" y="7" width="4" height="14" rx="1.5" fill="#E37400" />
+                      <rect x="17" y="3" width="4" height="18" rx="1.5" fill="#E37400" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Analytics 4
                     </span>
                   </div>
 
-                  {/* Bottom Pedestal Tag */}
+                  {/* Badge 3: Right (Ahrefs) */}
                   <div
-                    className="seo-pedestal-bar mt-2 px-5 py-2 rounded-xl text-center z-10 backdrop-blur-md"
-                    style={{ transform: 'translateZ(35px)' }}
+                    className="group absolute -right-5 sm:-right-6 top-[30%] sm:top-[32%] -translate-y-1/2 z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Ahrefs SEO Intelligence"
                   >
-                    <span className="font-heading font-black text-xs sm:text-sm tracking-wider uppercase text-[#D57C63]">
-                      Rahila Kareem • SEO Specialist &amp; Strategist
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 sm:w-8 sm:h-8" fill="none">
+                      <circle cx="12" cy="12" r="10" fill="#0051C3" />
+                      <path d="M7 16l3-8h4l3 8h-2.5l-.6-2h-3.8l-.6 2H7zm4.2-3.8h2.6L12.5 9.8h-.2l-1.1 2.4z" fill="#FFFFFF" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Ahrefs
                     </span>
                   </div>
+
+                  {/* Badge 4: Bottom-Right (SEO Dark Circle Badge like Image 1) */}
+                  <div
+                    className="group absolute right-[4%] sm:right-[6%] bottom-[14%] sm:bottom-[16%] translate-x-1/4 translate-y-1/4 z-30 w-12 h-12 sm:w-15 sm:h-15 rounded-full bg-[#18181b] border-2 border-[#27272a] shadow-[0_10px_25px_-3px_rgba(0,0,0,0.45)] flex items-center justify-center p-2 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="Search Console & Audit"
+                  >
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#10B981] rounded flex items-center justify-center p-0.5 select-none">
+                      <span className="font-black text-white text-[9px] sm:text-[10px] leading-none tracking-tighter">SEO</span>
+                    </div>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Console
+                    </span>
+                  </div>
+
+                  {/* Badge 5: Bottom (PageSpeed Lightning) */}
+                  <div
+                    className="group absolute -bottom-5 sm:-bottom-6 left-[28%] sm:left-[30%] z-30 w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#1e1c24] border-2 border-white/95 dark:border-white/20 shadow-[0_10px_25px_-3px_rgba(0,0,0,0.22),0_4px_8px_rgba(0,0,0,0.1)] flex items-center justify-center p-2.5 sm:p-3 hover:scale-115 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    style={{ transform: 'translateZ(46px)' }}
+                    title="PageSpeed 100 Score"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="#10B981" />
+                    </svg>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-black/90 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
+                      Speed 100
+                    </span>
+                  </div>
+
+                </div>
+
+                {/* Bottom Pedestal Tag */}
+                <div
+                  className="seo-pedestal-bar mt-8 sm:mt-10 px-5 py-2.5 rounded-2xl text-center z-10 backdrop-blur-md shadow-md max-w-sm mx-auto"
+                  style={{ transform: 'translateZ(35px)' }}
+                >
+                  <span className="font-heading font-black text-xs sm:text-[13px] tracking-wider uppercase text-[#D57C63]">
+                    Rahila Kareem • SEO Specialist &amp; Strategist
+                  </span>
                 </div>
               </div>
             </div>
@@ -896,11 +963,8 @@ export default function SeoPage({ setActiveTab, setSelectedPlan }) {
                   style={{ transitionDelay: `${(idx % 3) * 110}ms` }}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <span className="font-heading font-black text-3xl seo-number">
-                        {srv.number}
-                      </span>
-                      <div className="w-12 h-12 rounded-2xl bg-[#D57C63]/15 flex items-center justify-center text-[#D57C63]">
+                    <div className="flex items-center justify-start mb-6">
+                      <div className="seo-service-icon-badge" title={srv.title}>
                         <ServiceIcon className="w-6 h-6" />
                       </div>
                     </div>
@@ -1644,8 +1708,48 @@ const css = `
   box-shadow: 0 24px 55px -10px rgba(213, 124, 99, 0.38);
 }
 
+.seo-card:active {
+  transform: translateY(-2px) scale(0.995);
+  border-color: #D57C63;
+  box-shadow: 0 0 30px rgba(213, 124, 99, 0.55), 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
 .seo-card:hover .seo-heading {
   color: #D57C63 !important;
+}
+
+/* Service Card Top-Left Half-Circle Icon Badge */
+.seo-service-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 46px;
+  border-radius: 0 9999px 9999px 0;
+  background: rgba(213, 124, 99, 0.16);
+  border: 1.5px solid rgba(213, 124, 99, 0.4);
+  border-left: 3.5px solid #D57C63;
+  color: #D57C63;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 10px rgba(213, 124, 99, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+[dir="rtl"] .seo-service-icon-badge {
+  border-radius: 9999px 0 0 9999px;
+  border-left: 1.5px solid rgba(213, 124, 99, 0.4);
+  border-right: 3.5px solid #D57C63;
+}
+
+.seo-card:hover .seo-service-icon-badge,
+.seo-card:active .seo-service-icon-badge,
+.seo-service-icon-badge:hover,
+.seo-service-icon-badge:active {
+  background: rgba(213, 124, 99, 0.28);
+  border-color: #D57C63;
+  color: #ff8833;
+  box-shadow: 0 0 24px rgba(213, 124, 99, 0.6), 0 4px 16px rgba(213, 124, 99, 0.3);
+  transform: scale(1.05);
 }
 
 .seo-node-card {
@@ -1676,10 +1780,9 @@ const css = `
 }
 
 .seo-profile-stage {
-  background: linear-gradient(155deg, rgba(28, 19, 15, 0.95) 0%, rgba(18, 12, 9, 0.98) 100%);
+  background: linear-gradient(155deg, rgba(28, 19, 15, 0.96) 0%, rgba(18, 12, 9, 0.98) 100%);
   border: 2px solid rgba(213, 124, 99, 0.35);
-  border-bottom: 5px solid #D57C63;
-  border-radius: 32px;
+  border-radius: 36px;
   box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(213, 124, 99, 0.22);
 }
 
@@ -1831,6 +1934,36 @@ const css = `
   color: #cf5208 !important;
 }
 
+:root[data-theme="light"] .seo-card:active {
+  transform: translateY(-2px) scale(0.995) !important;
+  border-color: #cf5208 !important;
+  box-shadow: 0 0 28px rgba(207, 82, 8, 0.4), 0 8px 24px rgba(207, 82, 8, 0.2) !important;
+}
+
+:root[data-theme="light"] .seo-service-icon-badge {
+  background: #fdf4ee !important;
+  border: 1.5px solid #decbb8 !important;
+  border-left: 3.5px solid #cf5208 !important;
+  color: #cf5208 !important;
+  box-shadow: 0 3px 10px rgba(207, 82, 8, 0.1) !important;
+}
+
+:root[data-theme="light"] [dir="rtl"] .seo-service-icon-badge {
+  border-left: 1.5px solid #decbb8 !important;
+  border-right: 3.5px solid #cf5208 !important;
+}
+
+:root[data-theme="light"] .seo-card:hover .seo-service-icon-badge,
+:root[data-theme="light"] .seo-card:active .seo-service-icon-badge,
+:root[data-theme="light"] .seo-service-icon-badge:hover,
+:root[data-theme="light"] .seo-service-icon-badge:active {
+  background: #fce8dc !important;
+  border-color: #cf5208 !important;
+  color: #cf5208 !important;
+  box-shadow: 0 0 22px rgba(207, 82, 8, 0.42), 0 4px 14px rgba(207, 82, 8, 0.22) !important;
+  transform: scale(1.05);
+}
+
 :root[data-theme="light"] .seo-node-card {
   background: #faf4ee !important;
   border: 1.5px solid #e2d2c1 !important;
@@ -1864,7 +1997,7 @@ const css = `
 :root[data-theme="light"] .seo-profile-stage {
   background: linear-gradient(155deg, #ffffff 0%, #fff7f2 100%) !important;
   border: 2px solid #decbb8 !important;
-  border-bottom: 5px solid #cf5208 !important;
+  border-radius: 36px !important;
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.12), 0 4px 20px rgba(207, 82, 8, 0.12) !important;
 }
 

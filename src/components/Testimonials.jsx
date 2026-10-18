@@ -93,6 +93,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   // Modals state
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isAskQuestionModalOpen, setIsAskQuestionModalOpen] = useState(false);
+  const [expandedReplies, setExpandedReplies] = useState({});
+
+  const toggleReply = (id) => {
+    setExpandedReplies((prev) => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
 
   // Review Form
@@ -704,82 +712,156 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-3">
                 {filteredReviews.map((rev, idx) => {
+                  const isReplyExpanded = Boolean(expandedReplies[rev.id]);
                   return (
                     <div
                       key={rev.id}
-                      className="reveal-up seo-card p-7 sm:p-8 rounded-[28px] flex flex-col justify-between border border-[#33271f] hover:border-[#D57C63]/50 transition-all duration-300 hover:-translate-y-1"
+                      className="reveal-up relative pt-4 sm:pt-5"
                       style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
                     >
-                      <div>
-                        {/* Avatar, Name, Source Tag */}
-                        <div className="flex items-start justify-between gap-3 mb-4">
-                          <div className="flex items-center gap-3">
+                      {/* 1. Offset Backdrop Shape (Compact & sleek) */}
+                      <div 
+                        className="absolute -left-1.5 sm:-left-2 top-6 bottom-3 w-[88%] rounded-2xl bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-90 shadow-md transform -rotate-1 pointer-events-none" 
+                      />
+
+                      {/* 2. Main Quotation Frame (Compact size with crisp border) */}
+                      <div className="relative rounded-[24px] bg-[#1a120e] border-2 border-[#eedfd5]/90 p-5 sm:p-6 pt-7 pb-5 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-[#ff7a1a] group">
+                        
+                        {/* Top Quotation Mark “ (Sleek size) */}
+                        <div className="absolute -top-3.5 left-6 sm:left-8 px-2 bg-[#1a120e] z-10 flex items-center justify-center">
+                          <span className="font-serif text-3xl sm:text-4xl font-black text-[#ff7a1a] leading-none select-none">
+                            “
+                          </span>
+                        </div>
+
+                        {/* Bottom Quotation Mark ” (Sleek size) */}
+                        <div className="absolute -bottom-4 right-8 sm:right-10 px-2 bg-[#1a120e] z-10 flex items-center justify-center">
+                          <span className="font-serif text-3xl sm:text-4xl font-black text-[#ff7a1a] leading-none select-none">
+                            ”
+                          </span>
+                        </div>
+
+                        {/* 3. Tilted Polaroid Photo Card at Top Right with Paperclip (Compact) */}
+                        <div className="absolute -top-5 -right-1 sm:-top-6 sm:-right-2 z-20 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                          {/* Paperclip Graphic 📎 */}
+                          <svg 
+                            className="w-4 h-6 text-neutral-900 drop-shadow -rotate-12 absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 pointer-events-none" 
+                            viewBox="0 0 24 36" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2.5" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                          >
+                            <path d="M16 8v16a6 6 0 0 1-12 0V9a4 4 0 0 1 8 0v14a2 2 0 0 1-4 0V9" />
+                          </svg>
+
+                          {/* Polaroid Frame */}
+                          <div className="bg-white p-1 pb-3 sm:pb-3.5 rounded-sm shadow-md border border-neutral-200 rotate-6 sm:rotate-8 group-hover:rotate-0 transition-transform">
                             {rev.avatar ? (
                               <img
                                 src={rev.avatar}
                                 alt={rev.name}
-                                className="w-11 h-11 rounded-full object-cover border-2 border-[#D57C63]/40 shadow-sm"
+                                className="w-11 h-11 sm:w-13 sm:h-13 object-cover rounded-xs"
                               />
                             ) : (
-                              <div className="w-11 h-11 rounded-full bg-[#D57C63]/20 border border-[#D57C63]/40 flex items-center justify-center font-bold text-sm text-[#D57C63]">
+                              <div className="w-11 h-11 sm:w-13 sm:h-13 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-sm text-white">
                                 {rev.name?.charAt(0) || 'U'}
                               </div>
                             )}
-
-                            <div>
-                              <h4 className="font-heading font-extrabold text-base text-white">{rev.name}</h4>
-                              <p className="text-xs text-[#a9988d]">{rev.role || 'Client'}</p>
-                            </div>
                           </div>
                         </div>
 
-                        {/* Stars & Service */}
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <div className="flex text-amber-400 text-sm">
+                        {/* Review Content */}
+                        <div>
+                          {/* Testimonial Quote Message (Bright visible text, clamped to 2-3 lines) */}
+                          <div className="mb-3 pr-9 sm:pr-11">
+                            {rev.title && (
+                              <h5 className="font-heading font-extrabold text-[14px] sm:text-[15px] text-white mb-1 leading-snug line-clamp-1">
+                                {rev.title}
+                              </h5>
+                            )}
+                            <p className="text-[13px] sm:text-[13.5px] text-white font-medium leading-relaxed line-clamp-3">
+                              "{rev.message}"
+                            </p>
+                          </div>
+
+                          {/* 5 Rating Stars (Clean & bright) */}
+                          <div className="flex items-center gap-1 mb-2.5 text-amber-400 text-base drop-shadow-sm">
                             {Array.from({ length: rev.rating || 5 }).map((_, s) => (
                               <span key={s}>★</span>
                             ))}
                           </div>
-                          <span className="text-[11px] font-bold text-[#D57C63] bg-[#D57C63]/10 px-2.5 py-0.5 rounded-full">
-                            {rev.service || 'Client Project'}
-                          </span>
+
+                          {/* Client Name & Role */}
+                          <div className="pt-2 border-t border-[#33271f]/80 flex items-center justify-between gap-2 flex-wrap">
+                            <div>
+                              <h4 className="font-heading font-extrabold text-[14px] text-white leading-tight">
+                                {rev.name}
+                              </h4>
+                              <p className="text-[11px] text-neutral-300 mt-0.5">
+                                {rev.role || 'Verified Client'}
+                              </p>
+                            </div>
+
+                            {/* Service Tag */}
+                            {rev.service && (
+                              <span className="text-[10px] font-bold text-[#ff7a1a] bg-[#ff7a1a]/15 border border-[#ff7a1a]/30 px-2 py-0.5 rounded-full truncate max-w-[130px]">
+                                {rev.service}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Admin Reply (Collapsible See More) */}
+                          {rev.adminReply && rev.adminReply.message && (
+                            <div className="mt-2 pt-2 border-t border-[#33271f]/80">
+                              <button
+                                type="button"
+                                onClick={() => toggleReply(rev.id)}
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff7a1a] hover:text-[#ff9240] transition-colors py-0.5 cursor-pointer select-none"
+                              >
+                                <MessageSquare className="w-3 h-3" />
+                                <span>
+                                  {isReplyExpanded ? 'Hide Reply' : 'See Owner Reply (See More)'}
+                                </span>
+                                <ChevronDown
+                                  className={`w-3 h-3 transition-transform duration-300 ${
+                                    isReplyExpanded ? 'rotate-180' : ''
+                                  }`}
+                                />
+                              </button>
+
+                              {/* Collapsible Admin Reply Container */}
+                              {isReplyExpanded && (
+                                <div className="mt-2 p-2.5 rounded-xl bg-[#281a14] border border-[#ff7a1a]/30 shadow-inner space-y-1 animate-fadeIn">
+                                  <div className="flex items-center gap-1 text-[10.5px] font-bold text-[#e5937d]">
+                                    <ShieldCheck className="w-3 h-3 text-[#ff7a1a]" />
+                                    <span>Response from Rahila Kareem:</span>
+                                  </div>
+                                  <p className="text-xs text-white leading-relaxed italic line-clamp-3">
+                                    "{rev.adminReply.message}"
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
 
-                        {rev.title && (
-                          <h5 className="font-heading font-extrabold text-base text-white mb-2 leading-snug">
-                            "{rev.title}"
-                          </h5>
-                        )}
-                        <p className="text-xs sm:text-[13.5px] text-[#d6c7bc] leading-relaxed mb-4">
-                          {rev.message}
-                        </p>
+                        {/* Card Footer: Date & Helpful button */}
+                        <div className="mt-3 pt-2.5 border-t border-[#33271f]/80 flex items-center justify-between text-[11px] text-neutral-400">
+                          <span>{rev.date || 'Recent'}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleLikeReview(rev.id)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-[#ff7a1a]/20 hover:text-[#ff7a1a] transition-colors cursor-pointer text-[10.5px]"
+                          >
+                            <ThumbsUp className="w-2.5 h-2.5" />
+                            <span>Helpful ({rev.helpfulCount || 0})</span>
+                          </button>
+                        </div>
 
-                        {/* Official Admin Reply from Rahila Kareem */}
-                        {rev.adminReply && rev.adminReply.message && (
-                          <div className="mb-5 p-3 rounded-xl bg-[#281a14] border border-[#D57C63]/30 space-y-1">
-                            <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#e28c74]">
-                              <ShieldCheck className="w-3.5 h-3.5 text-[#e28c74]" />
-                              <span>Response from Rahila Kareem (Owner):</span>
-                            </div>
-                            <p className="text-xs text-[#eedfd5] leading-relaxed italic">
-                              "{rev.adminReply.message}"
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-4 border-t border-[#33271f] flex items-center justify-between text-xs text-[#a9988d]">
-                        <span>{rev.date || 'Recent'}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleLikeReview(rev.id)}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-[#D57C63]/20 hover:text-[#D57C63] transition-colors cursor-pointer text-[11px]"
-                        >
-                          <ThumbsUp className="w-3 h-3" />
-                          <span>Helpful ({rev.helpfulCount || 0})</span>
-                        </button>
                       </div>
                     </div>
                   );

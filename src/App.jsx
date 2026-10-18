@@ -15,8 +15,10 @@ import SeoPage from './components/SeoPage';
 import WordPressPage from './components/WordPressPage';
 import Testimonials from './components/Testimonials';
 import AdminPage from './components/AdminPage';
+import TerminalPreloader from './components/TerminalPreloader';
 
 function App() {
+  const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
   const [selectedPlan, setSelectedPlan] = useState('Standard ($180)');
 
@@ -85,6 +87,11 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col relative selection:bg-[#ff7a1a] selection:text-black">
+      {/* Interactive Startup Terminal Preloader */}
+      {showPreloader && (
+        <TerminalPreloader onComplete={() => setShowPreloader(false)} />
+      )}
+
       {/* 3D Interactive Three.js Background Constellation */}
       <Background3D enabled={true} />
 
