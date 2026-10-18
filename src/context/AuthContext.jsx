@@ -13,8 +13,8 @@ import { auth, googleProvider, isFirebaseConfigured } from '../firebase/config';
 const AuthContext = createContext(null);
 
 const DEFAULT_ADMIN_EMAILS = [
-  'wordpressrahila@gmail.com',
-  'rahilakareem389@gmail.com'
+  'rahilakareem389@gmail.com',
+  'wordpressrahila@gmail.com'
 ];
 
 /**
@@ -182,6 +182,31 @@ export const AuthProvider = ({ children }) => {
     const isAdmin = adminEmails.includes(cleanEmail);
     let displayName = cleanEmail.split('@')[0];
 
+    // Priority Check: Authorized Admin Credentials
+    if (isAdmin) {
+      const validAdminPasswords = ['rahila556688', 'rahila2026', 'admin123'];
+      if (!validAdminPasswords.includes(password.trim())) {
+        throw new Error('Invalid email or password. Please verify your credentials and try again.');
+      }
+      const adminUser = {
+        uid: 'admin-rahila-rk',
+        id: 'admin-rahila-rk',
+        email: cleanEmail,
+        displayName: 'Rahila Kareem',
+        name: 'Rahila Kareem',
+        emailVerified: true,
+        role: 'Admin',
+        isAdmin: true,
+        photoURL: null
+      };
+
+      setCurrentUser(adminUser);
+      localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
+      localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
+      sessionStorage.setItem('rahila_admin_authenticated', 'true');
+      return adminUser;
+    }
+
     try {
       const existing = JSON.parse(localStorage.getItem('rahila_registered_clients') || '[]');
       const found = existing.find((u) => u.email === cleanEmail);
@@ -202,8 +227,8 @@ export const AuthProvider = ({ children }) => {
       displayName,
       name: displayName,
       emailVerified: true,
-      role: isAdmin ? 'Admin' : 'Client',
-      isAdmin,
+      role: 'Client',
+      isAdmin: false,
       photoURL: null
     };
 

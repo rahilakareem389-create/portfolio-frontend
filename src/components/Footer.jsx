@@ -4,10 +4,22 @@ import { useLanguage } from '../context/LanguageContext';
 
 const Footer = ({ setActiveTab }) => {
   const { t } = useLanguage();
+  const [secretClickCount, setSecretClickCount] = React.useState(0);
 
   const handleNav = (tab) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSecretAdminTrigger = () => {
+    const next = secretClickCount + 1;
+    if (next >= 3) {
+      setSecretClickCount(0);
+      handleNav('admin');
+    } else {
+      setSecretClickCount(next);
+      setTimeout(() => setSecretClickCount(0), 1200);
+    }
   };
 
   return (
@@ -95,16 +107,14 @@ const Footer = ({ setActiveTab }) => {
           WordPress designer · WordPress developer · WooCommerce · e-commerce website · SEO · responsive web design · MERN Stack · freelance web developer Pakistan
         </p>
 
-        {/* Copyright & Discreet Admin Portal */}
+        {/* Copyright (Public link removed - strictly confidential for admin) */}
         <div className="flex flex-col sm:flex-row items-center justify-between text-[13px] text-[#8a7a70] mt-3 pt-2 gap-2">
-          <p>© {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}</p>
-          <button
-            onClick={() => handleNav('admin')}
-            className="text-[12px] text-[#8a7a70] hover:text-[#D57C63] transition-colors cursor-pointer flex items-center gap-1.5"
-            title="Owner Portal (wordpressrahila@gmail.com)"
+          <p 
+            onClick={handleSecretAdminTrigger}
+            className="cursor-default select-none"
           >
-            <span>Admin Portal</span>
-          </button>
+            © {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}
+          </p>
         </div>
 
       </div>

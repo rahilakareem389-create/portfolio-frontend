@@ -25,8 +25,15 @@ function App() {
   // Sync with window.location.hash for direct navigation & back/forward buttons
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
+      const hash = window.location.hash.replace('#', '').toLowerCase();
       const validTabs = ['home', 'about', 'services', 'portfolio', 'pricing', 'contact', 'fullstack', 'seo', 'wordpress', 'admin'];
+
+      // Secret Admin Portal Aliases: #rk-admin, #admin, #rk-portal, #rahila-admin
+      if (['rk-admin', 'admin', 'rk-portal', 'rahila-admin'].includes(hash)) {
+        setActiveTab('admin');
+        return;
+      }
+
       if (hash === 'testimonials') {
         setActiveTab('home');
         setTimeout(() => {
@@ -44,8 +51,20 @@ function App() {
       handleHashChange();
     }
 
+    // Discreet Admin shortcut: Ctrl + Shift + A
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        handleTabChange('admin');
+      }
+    };
+
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   // Update hash when activeTab changes
