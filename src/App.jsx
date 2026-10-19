@@ -16,11 +16,19 @@ import WordPressPage from './components/WordPressPage';
 import Testimonials from './components/Testimonials';
 import AdminPage from './components/AdminPage';
 import TerminalPreloader from './components/TerminalPreloader';
+import { trackPageView } from './utils/visitorTracker';
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
   const [selectedPlan, setSelectedPlan] = useState('Standard ($180)');
+
+  // Track anonymous visitor page views
+  useEffect(() => {
+    if (activeTab && activeTab !== 'admin') {
+      trackPageView(activeTab);
+    }
+  }, [activeTab]);
 
   // Sync with window.location.hash for direct navigation & back/forward buttons
   useEffect(() => {

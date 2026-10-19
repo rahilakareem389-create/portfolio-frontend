@@ -936,7 +936,7 @@ export default function AdminPage({ setActiveTab }) {
         <div className="p-5 sm:p-8 space-y-6">
 
           {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
               <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>Inquiries</span>
@@ -971,6 +971,15 @@ export default function AdminPage({ setActiveTab }) {
               </div>
               <div className="font-heading font-black text-3xl text-white admin-stat-num">{users.length}</div>
               <div className="text-[11px] font-bold text-blue-400 mt-1">Live Audit Directory</div>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm col-span-2 md:col-span-1">
+              <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
+                <span>Site Visitors</span>
+                <Globe className="w-4 h-4 text-teal-400" />
+              </div>
+              <div className="font-heading font-black text-3xl text-white admin-stat-num">{cloudStats?.totalVisitors || 0}</div>
+              <div className="text-[11px] font-bold text-teal-400 mt-1">{cloudStats?.todayVisitors || 0} Today ({cloudStats?.totalPageViews || 0} Views)</div>
             </div>
           </div>
 

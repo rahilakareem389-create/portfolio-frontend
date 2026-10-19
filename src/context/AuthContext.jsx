@@ -68,12 +68,13 @@ export const AuthProvider = ({ children }) => {
 
   // Monitor Auth State & Load Saved Session
   useEffect(() => {
-    // 1. Check local session persistence first
+    // 1. Check verified admin session persistence
     try {
       const savedUserStr = localStorage.getItem('rahila_auth_user');
-      if (savedUserStr) {
+      const isAdminSession = sessionStorage.getItem('rahila_admin_authenticated') === 'true';
+      if (savedUserStr && isAdminSession) {
         const parsed = JSON.parse(savedUserStr);
-        if (parsed && (parsed.uid || parsed.id || parsed.email)) {
+        if (parsed && parsed.isAdmin) {
           setCurrentUser(parsed);
         }
       }
@@ -111,10 +112,12 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('rahila_auth_token', token);
         } catch (_) {}
       } else {
-        // Only clear if auth was previously signed out
-        const saved = localStorage.getItem('rahila_auth_user');
-        if (!saved) {
+        // If not master admin session, clear user when Firebase user is null
+        const isAdminSession = sessionStorage.getItem('rahila_admin_authenticated') === 'true';
+        if (!isAdminSession) {
           setCurrentUser(null);
+          localStorage.removeItem('rahila_auth_user');
+          localStorage.removeItem('rahila_auth_token');
         }
       }
       setAuthLoading(false);
@@ -124,147 +127,87 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /**
-   * Register with Email & Password
-   * Supports Firebase if configured, otherwise falls back to instant local client session.
+   * Register with Email & Password (Strict Real Firebase)
    */
   const registerWithEmail = async (name, email, password) => {
-    if (isFirebaseConfigured() && auth) {
-      const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
-
-      if (name && name.trim()) {
-        await updateProfile(credential.user, { displayName: name.trim() });
-      }
-
-      await sendEmailVerification(credential.user);
-      return credential.user;
+    if (!auth) {
+      throw new Error('Firebase Authentication is not available. Please verify your connection.');
     }
 
-    // Fallback: Instant client registration
-    const adminEmails = getAdminEmails();
-    const isAdmin = adminEmails.includes(email.trim().toLowerCase());
-    const mockUser = {
-      uid: 'client-' + Date.now(),
-      id: 'client-' + Date.now(),
-      email: email.trim(),
-      displayName: name.trim() || email.split('@')[0],
-      name: name.trim() || email.split('@')[0],
-      emailVerified: true,
-      role: isAdmin ? 'Admin' : 'Client',
-      isAdmin,
-      photoURL: null
-    };
+    const cleanEmail = email.trim();
+    const cleanPass = password.trim();
 
-    try {
-      const existing = JSON.parse(localStorage.getItem('rahila_registered_clients') || '[]');
-      existing.push({ email: email.trim().toLowerCase(), password, name: name.trim() });
-      localStorage.setItem('rahila_registered_clients', JSON.stringify(existing));
-    } catch (_) {}
+    const credential = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
 
-    setCurrentUser(mockUser);
-    localStorage.setItem('rahila_auth_user', JSON.stringify(mockUser));
-    localStorage.setItem('rahila_auth_token', 'local_token_' + Date.now());
-    return mockUser;
+    if (name && name.trim()) {
+      try {
+        await updateProfile(credential.user, { displayName: name.trim() });
+      } catch (_) {}
+    }
+
+    await sendEmailVerification(credential.user);
+    return credential.user;
   };
 
   /**
-   * Log in with Email & Password
-   * Supports Firebase if configured, otherwise verifies stored credentials or allows client login.
+   * Log in with Email & Password (Strict Real Firebase)
    */
   const loginWithEmail = async (email, password) => {
-    if (isFirebaseConfigured() && auth) {
-      const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
-      return credential.user;
-    }
-
-    // Fallback: Local sign in
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPass = (password || '').trim();
     const adminEmails = getAdminEmails();
-    const cleanEmail = email.trim().toLowerCase();
     const isAdmin = adminEmails.includes(cleanEmail);
-    let displayName = cleanEmail.split('@')[0];
 
-    // Priority Check: Authorized Admin Credentials
+    // Authorized Admin Direct Access
     if (isAdmin) {
       const validAdminPasswords = ['rahila556688', 'rahila2026', 'admin123'];
-      if (!validAdminPasswords.includes(password.trim())) {
-        throw new Error('Invalid email or password. Please verify your credentials and try again.');
-      }
-      const adminUser = {
-        uid: 'admin-rahila-rk',
-        id: 'admin-rahila-rk',
-        email: cleanEmail,
-        displayName: 'Rahila Kareem',
-        name: 'Rahila Kareem',
-        emailVerified: true,
-        role: 'Admin',
-        isAdmin: true,
-        photoURL: null
-      };
-
-      setCurrentUser(adminUser);
-      localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
-      localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
-      sessionStorage.setItem('rahila_admin_authenticated', 'true');
-      return adminUser;
-    }
-
-    try {
-      const existing = JSON.parse(localStorage.getItem('rahila_registered_clients') || '[]');
-      const found = existing.find((u) => u.email === cleanEmail);
-      if (found) {
-        if (found.password !== password) {
-          throw new Error('Invalid email or password. Please verify your credentials and try again.');
+      if (validAdminPasswords.includes(cleanPass)) {
+        if (auth) {
+          try {
+            const cred = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+            return cred.user;
+          } catch (_) {}
         }
-        displayName = found.name || displayName;
+        const adminUser = {
+          uid: 'admin-rahila-rk',
+          id: 'admin-rahila-rk',
+          email: cleanEmail,
+          displayName: 'Rahila Kareem',
+          name: 'Rahila Kareem',
+          emailVerified: true,
+          role: 'Admin',
+          isAdmin: true,
+          photoURL: null
+        };
+
+        setCurrentUser(adminUser);
+        localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
+        localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
+        sessionStorage.setItem('rahila_admin_authenticated', 'true');
+        return adminUser;
+      } else {
+        throw new Error('Invalid password for admin account.');
       }
-    } catch (e) {
-      if (e.message && e.message.includes('Invalid email or password')) throw e;
     }
 
-    const mockUser = {
-      uid: 'client-' + Date.now(),
-      id: 'client-' + Date.now(),
-      email: email.trim(),
-      displayName,
-      name: displayName,
-      emailVerified: true,
-      role: 'Client',
-      isAdmin: false,
-      photoURL: null
-    };
+    // For All Users: STRICT Firebase Auth. Reject any fake or unregistered email!
+    if (!auth) {
+      throw new Error('Firebase Authentication is not available. Please verify your connection.');
+    }
 
-    setCurrentUser(mockUser);
-    localStorage.setItem('rahila_auth_user', JSON.stringify(mockUser));
-    localStorage.setItem('rahila_auth_token', 'local_token_' + Date.now());
-    return mockUser;
+    const credential = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+    return credential.user;
   };
 
   /**
-   * Sign In with Google
-   * Uses Firebase Google popup if keys provided, otherwise provides instant simulated Google client login.
+   * Sign In with Google (Strict Real Firebase OAuth)
    */
   const loginWithGoogle = async () => {
-    if (isFirebaseConfigured() && auth && googleProvider) {
-      const credential = await signInWithPopup(auth, googleProvider);
-      return credential.user;
+    if (!auth || !googleProvider) {
+      throw new Error('Google Sign-In is not available. Please check your connection.');
     }
-
-    // Fallback: Instant verified Google client login
-    const demoGoogleUser = {
-      uid: 'google-client-' + Date.now(),
-      id: 'google-client-' + Date.now(),
-      email: 'client.google@gmail.com',
-      displayName: 'Google Client',
-      name: 'Google Client',
-      emailVerified: true,
-      role: 'Client',
-      isAdmin: false,
-      photoURL: null
-    };
-
-    setCurrentUser(demoGoogleUser);
-    localStorage.setItem('rahila_auth_user', JSON.stringify(demoGoogleUser));
-    localStorage.setItem('rahila_auth_token', 'google_token_' + Date.now());
-    return demoGoogleUser;
+    const credential = await signInWithPopup(auth, googleProvider);
+    return credential.user;
   };
 
   /**

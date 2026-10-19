@@ -181,18 +181,9 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         }
       });
 
-      if (isConfigured) {
-        setSuccessMsg(`Verification email dispatched to ${email.trim()}. Please verify your email before entering your workspace.`);
-        setMode('verify');
-        setResendCooldown(60);
-      } else {
-        triggerConfetti();
-        setSuccessMsg(`Welcome, ${name.trim()}! Your client account is active.`);
-        if (onAuthSuccess) {
-          onAuthSuccess(createdUser);
-        }
-        setTimeout(() => onClose(), 1000);
-      }
+      setSuccessMsg(`Verification email dispatched to ${email.trim()}. Please verify your email before entering your workspace.`);
+      setMode('verify');
+      setResendCooldown(60);
     } catch (err) {
       console.error('Registration Error:', err);
       setErrorMsg(mapAuthError(err));
@@ -271,9 +262,9 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
     try {
       const user = await loginWithEmail(email.trim(), password);
 
-      // Enforce email verification only if Firebase is active
-      if (isConfigured && !user.emailVerified) {
-        setErrorMsg('Your email is not verified yet. Please verify your email before accessing your workspace.');
+      // Strictly enforce email verification
+      if (!user.emailVerified && !user.isAdmin) {
+        setErrorMsg('Your email is not verified yet. Please check your inbox for the verification link, click it, and try again.');
         setMode('verify');
         setResendCooldown(30);
         setLoading(false);

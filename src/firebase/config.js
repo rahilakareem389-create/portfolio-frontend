@@ -11,12 +11,12 @@ import {
  * Environment variables must be set in frontend/.env and Vercel Project Settings.
  */
 const firebaseConfig = {
-  apiKey: (import.meta.env.VITE_FIREBASE_API_KEY || '').trim(),
-  authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '').trim(),
-  projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || '').trim(),
-  storageBucket: (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '').trim(),
-  messagingSenderId: (import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '').trim(),
-  appId: (import.meta.env.VITE_FIREBASE_APP_ID || '').trim(),
+  apiKey: (import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyD8zPzSBmBElxksu1kqeybgYF7iKhDTOl8').trim(),
+  authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'rahila-portfolio-f9746.firebaseapp.com').trim(),
+  projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || 'rahila-portfolio-f9746').trim(),
+  storageBucket: (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'rahila-portfolio-f9746.firebasestorage.app').trim(),
+  messagingSenderId: (import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '806225162404').trim(),
+  appId: (import.meta.env.VITE_FIREBASE_APP_ID || '1:806225162404:web:3cd543ed067ad145f1f631').trim(),
   measurementId: (import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '').trim()
 };
 
