@@ -17,6 +17,35 @@ const DEFAULT_ADMIN_EMAILS = [
   'wordpressrahila@gmail.com'
 ];
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
+
+/**
+ * Synchronizes user session and login activity with the backend audit log ("kon login huwa")
+ */
+export const syncUserSessionToBackend = async (userData, mode = 'login') => {
+  if (!userData || !userData.email) return;
+  try {
+    const adminEmails = getAdminEmails();
+    const cleanEmail = userData.email.trim().toLowerCase();
+    const isAdmin = adminEmails.includes(cleanEmail);
+    const role = userData.role || (isAdmin ? 'Admin' : 'Client');
+    const name = userData.displayName || userData.name || cleanEmail.split('@')[0];
+
+    await fetch(`${API_BASE_URL}/api/user/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email: cleanEmail,
+        role,
+        mode
+      })
+    });
+  } catch (_) {
+    // Non-blocking
+  }
+};
+
 /**
  * Returns list of authorized admin emails configured via env or defaults.
  */
@@ -113,6 +142,9 @@ export const AuthProvider = ({ children }) => {
           const token = await firebaseUser.getIdToken();
           localStorage.setItem('rahila_auth_token', token);
         } catch (_) {}
+
+        // Automatically sync active session to live backend audit log
+        syncUserSessionToBackend(formattedUser, 'active_session');
       } else {
         // If not master admin session, clear user when Firebase user is null
         const isAdminSession = sessionStorage.getItem('rahila_admin_authenticated') === 'true';
@@ -148,6 +180,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     await sendEmailVerification(credential.user);
+    syncUserSessionToBackend({ email: cleanEmail, displayName: name, role: 'Client' }, 'signup');
     return credential.user;
   };
 
@@ -167,6 +200,7 @@ export const AuthProvider = ({ children }) => {
         if (auth) {
           try {
             const cred = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+            syncUserSessionToBackend(cred.user, 'admin_login');
             return cred.user;
           } catch (_) {}
         }
@@ -186,6 +220,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
         localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
         sessionStorage.setItem('rahila_admin_authenticated', 'true');
+        syncUserSessionToBackend(adminUser, 'admin_login');
         return adminUser;
       } else {
         throw new Error('Invalid password for admin account.');
@@ -198,6 +233,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const credential = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+    syncUserSessionToBackend(credential.user, 'login');
     return credential.user;
   };
 
@@ -209,6 +245,9 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Google Sign-In is not available. Please check your connection.');
     }
     const credential = await signInWithPopup(auth, googleProvider);
+    if (credential && credential.user) {
+      syncUserSessionToBackend(credential.user, 'google_login');
+    }
     return credential.user;
   };
 

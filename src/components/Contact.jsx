@@ -23,8 +23,13 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
     message: '',
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
+    }
   };
 
   const triggerConfetti = () => {
@@ -38,21 +43,60 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    const cleanName = (formData.name || '').trim();
+    const cleanEmail = (formData.email || '').trim().toLowerCase();
+    const cleanPhone = (formData.phone || '').trim();
+    const cleanMessage = (formData.message || '').trim();
+
+    // 1. Real Name Validation
+    if (!cleanName || cleanName.length < 2) {
+      newErrors.name = 'Please enter your real full name (at least 2 characters).';
+    }
+
+    // 2. Real Email Validation (rejects fake/dummy domains)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      newErrors.email = 'Please enter a valid, active email address.';
+    } else if (/@(example\.com|test\.com|fake\.com|none\.com|sample\.com)$/i.test(cleanEmail)) {
+      newErrors.email = 'Please provide your actual working email address, not a dummy or test domain.';
+    }
+
+    // 3. Real Phone Validation (if entered, must be valid phone digits)
+    if (cleanPhone) {
+      const digitsOnly = cleanPhone.replace(/\D/g, '');
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        newErrors.phone = 'Please enter a valid phone or WhatsApp number with country code (e.g. +92 321 7812265).';
+      }
+    }
+
+    // 4. Real Message Requirement
+    if (!cleanMessage || cleanMessage.length < 10) {
+      newErrors.message = 'Please provide at least 10 characters detailing your project requirements.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setStatus({ submitting: true, message: t('contact.btnSending') });
 
     // Always dispatch directly to Web3Forms from browser so it appears in Web3Forms dashboard
     sendWeb3FormsNotification({
       type: 'Project Inquiry',
-      subject: `[New Inquiry] ${formData.name} - ${formData.plan}`,
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
+      subject: `[New Inquiry] ${cleanName} - ${formData.plan}`,
+      name: cleanName,
+      email: cleanEmail,
+      message: cleanMessage,
       details: {
-        clientName: formData.name,
-        clientEmail: formData.email,
-        phoneNumber: formData.phone || 'Not specified',
+        clientName: cleanName,
+        clientEmail: cleanEmail,
+        phoneNumber: cleanPhone || 'Not specified',
         selectedPlan: formData.plan,
-        inquiryMessage: formData.message
+        inquiryMessage: cleanMessage
       }
     });
 
@@ -183,8 +227,15 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     onChange={handleChange}
                     required
                     autoComplete="name"
-                    className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#ff7a1a] transition-colors"
+                    className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
+                      errors.name ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                    } text-white focus:outline-none transition-colors`}
                   />
+                  {errors.name && (
+                    <p className="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                      <span>⚠</span> {errors.name}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -199,8 +250,15 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     onChange={handleChange}
                     required
                     autoComplete="email"
-                    className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#ff7a1a] transition-colors"
+                    className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
+                      errors.email ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                    } text-white focus:outline-none transition-colors`}
                   />
+                  {errors.email && (
+                    <p className="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                      <span>⚠</span> {errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -216,8 +274,15 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     placeholder={t('contact.phonePlaceholder')}
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#ff7a1a] transition-colors"
+                    className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
+                      errors.phone ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                    } text-white focus:outline-none transition-colors`}
                   />
+                  {errors.phone && (
+                    <p className="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                      <span>⚠</span> {errors.phone}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -246,8 +311,15 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#ff7a1a] transition-colors resize-y"
+                  className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
+                    errors.message ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                  } text-white focus:outline-none transition-colors resize-y`}
                 />
+                {errors.message && (
+                  <p className="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                    <span>⚠</span> {errors.message}
+                  </p>
+                )}
               </div>
 
               <button
@@ -278,35 +350,38 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                 🟢 {t('contact.availableBadge')}
               </div>
 
-              <p className="text-[16px] text-[#bcab9e] leading-[1.8] space-y-2">
+              <div className="text-[16px] text-[#bcab9e] leading-[1.8] space-y-4">
                 <div>
-                  <strong className="text-white block text-xs uppercase text-[#eaa487]">Email:</strong>
-                  <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-[#ff7a1a] transition-colors">
+                  <strong className="text-white block text-xs uppercase text-[#eaa487]">Official Email:</strong>
+                  <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-[#ff7a1a] transition-colors font-medium">
                     {personalInfo.email}
                   </a>
+                  <span className="text-xs text-[#8a7569] block mt-0.5">
+                    Secondary: <a href="mailto:rahilakareem389@gmail.com" className="text-[#e2d5cb] hover:underline">rahilakareem389@gmail.com</a>
+                  </span>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Phone:</strong>
-                  <a href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`} className="text-white hover:text-[#ff7a1a] transition-colors">
+                  <a href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`} className="text-white hover:text-[#ff7a1a] transition-colors font-medium">
                     {personalInfo.phone}
                   </a>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">WhatsApp:</strong>
-                  <a href={personalInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#ff7a1a] hover:underline">
-                    Chat on WhatsApp (Fast response)
+                  <a href={personalInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#ff7a1a] hover:underline font-semibold flex items-center gap-1.5">
+                    <span>Chat on WhatsApp (+92 321 7812265)</span>
                   </a>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Location & Response:</strong>
-                  <span>{t('contact.location')}</span>
+                  <span className="text-[#e2d5cb]">{t('contact.location')}</span>
                   <br />
                   <span className="text-xs text-[#bcab9e]">{t('contact.responseRate')}</span>
                 </div>
-              </p>
+              </div>
             </div>
           </div>
 

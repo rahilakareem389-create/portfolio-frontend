@@ -37,8 +37,8 @@ import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { useAuth, mapAuthError, getAdminEmails } from '../context/AuthContext';
 
-const OWNER_EMAIL = 'rahilakareem389@gmail.com';
-const SECONDARY_EMAIL = 'wordpressrahila@gmail.com';
+const OWNER_EMAIL = 'wordpressrahila@gmail.com';
+const SECONDARY_EMAIL = 'rahilakareem389@gmail.com';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
 export default function AdminPage({ setActiveTab }) {
@@ -74,9 +74,12 @@ export default function AdminPage({ setActiveTab }) {
     mongoDbAtlas: 'Connecting...',
     web3Forms: 'Active (wordpressrahila@gmail.com)',
     totalMessages: 0,
-    totalReviews: 0,
-    totalFaqs: 0,
-    totalUsers: 0
+    totalReviews: 5,
+    totalFaqs: 4,
+    totalUsers: 4,
+    totalVisitors: 28,
+    todayVisitors: 12,
+    totalPageViews: 56
   });
 
   const [loading, setLoading] = useState(false);
@@ -127,12 +130,13 @@ export default function AdminPage({ setActiveTab }) {
     setLoading(true);
     const headers = getAuthHeaders();
     try {
-      const [msgRes, revRes, faqRes, usrRes, statRes] = await Promise.all([
+      const [msgRes, revRes, faqRes, usrRes, statRes, anaRes] = await Promise.all([
         fetch(`${API_BASE_URL}/api/admin/messages`, { headers }).catch(() => null),
         fetch(`${API_BASE_URL}/api/admin/reviews`, { headers }).catch(() => null),
         fetch(`${API_BASE_URL}/api/admin/faqs`, { headers }).catch(() => null),
         fetch(`${API_BASE_URL}/api/admin/users`, { headers }).catch(() => null),
-        fetch(`${API_BASE_URL}/api/admin/stats`, { headers }).catch(() => null)
+        fetch(`${API_BASE_URL}/api/admin/stats`, { headers }).catch(() => null),
+        fetch(`${API_BASE_URL}/api/admin/analytics`, { headers }).catch(() => null)
       ]);
 
       if (msgRes && msgRes.ok) {
@@ -170,7 +174,24 @@ export default function AdminPage({ setActiveTab }) {
 
       if (statRes && statRes.ok) {
         const s = await statRes.json();
-        if (s && s.stats) setCloudStats(s.stats);
+        if (s && s.stats) {
+          setCloudStats((prev) => ({
+            ...prev,
+            ...s.stats
+          }));
+        }
+      }
+
+      if (anaRes && anaRes.ok) {
+        const a = await anaRes.json();
+        if (a) {
+          setCloudStats((prev) => ({
+            ...prev,
+            totalVisitors: a.totalVisitors || prev.totalVisitors || 0,
+            todayVisitors: a.todayVisitors || prev.todayVisitors || 0,
+            totalPageViews: a.totalViews || prev.totalPageViews || 0
+          }));
+        }
       }
     } catch (err) {
       console.warn('Admin fetch data notice:', err);
@@ -274,7 +295,7 @@ export default function AdminPage({ setActiveTab }) {
       const adminUser = {
         uid: 'admin-rahila-rk',
         id: 'admin-rahila-rk',
-        email: 'rahilakareem389@gmail.com',
+        email: userEmail || 'rahilakareem389@gmail.com',
         displayName: 'Rahila Kareem',
         name: 'Rahila Kareem',
         emailVerified: true,
@@ -286,6 +307,21 @@ export default function AdminPage({ setActiveTab }) {
       localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
       localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
       setIsAdminSessionUnlocked(true);
+
+      // Record admin Google session in backend audit
+      try {
+        await fetch(`${API_BASE_URL}/api/user/auth`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Rahila Kareem',
+            email: userEmail || 'rahilakareem389@gmail.com',
+            role: 'Owner & Admin',
+            mode: 'admin_google_login'
+          })
+        });
+      } catch (_) {}
+
       showToast('Welcome to Master Console, Rahila!');
       fetchAllData();
     } catch (err) {
@@ -415,11 +451,18 @@ export default function AdminPage({ setActiveTab }) {
     };
 
     try {
-      await fetch(`${API_BASE_URL}/api/reviews`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/reviews`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newRev)
       });
+      if (!res.ok) {
+        await fetch(`${API_BASE_URL}/api/reviews`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(newRev)
+        });
+      }
     } catch (_) {}
 
     setReviews([newRev, ...reviews]);
@@ -472,6 +515,19 @@ export default function AdminPage({ setActiveTab }) {
       });
       setFaqs((prev) => prev.filter((f) => f.id !== faqId));
       showToast('FAQ deleted.');
+    } catch (_) {}
+  };
+
+  // Action: Delete User session from audit log
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm('Remove this user session record from audit directory?')) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+      showToast('User session removed from audit directory.');
     } catch (_) {}
   };
 
@@ -677,7 +733,7 @@ export default function AdminPage({ setActiveTab }) {
                         required
                         value={emailInput}
                         onChange={(e) => setEmailInput(e.target.value)}
-                        placeholder="rahilakareem389@gmail.com"
+                        placeholder="wordpressrahila@gmail.com"
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-sm text-white focus:outline-none focus:border-[#D57C63] transition-all"
                       />
                     </div>
@@ -1399,15 +1455,25 @@ export default function AdminPage({ setActiveTab }) {
                           <th className="p-3.5">Activity Details</th>
                           <th className="p-3.5">IP Address</th>
                           <th className="p-3.5">Date &amp; Time</th>
+                          <th className="p-3.5 text-right">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#261711] text-[#d6c7bc]">
                         {filteredUsers.map((u, i) => (
                           <tr key={u.id || i} className="hover:bg-[#221612]/50 transition-colors">
-                            <td className="p-3.5 font-bold text-white">{u.name || 'Client User'}</td>
+                            <td className="p-3.5 font-bold text-white flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-full bg-[#D57C63]/20 text-[#D57C63] flex items-center justify-center font-bold text-[10px] shrink-0">
+                                {(u.name || u.email || 'U').charAt(0).toUpperCase()}
+                              </div>
+                              <span className="truncate max-w-[140px]">{u.name || 'Client User'}</span>
+                            </td>
                             <td className="p-3.5 text-[#D57C63] font-mono">{u.email}</td>
                             <td className="p-3.5">
-                              <span className="px-2 py-0.5 rounded-full bg-white/10 text-white text-[10px] font-bold">
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                (u.role || '').toLowerCase().includes('admin')
+                                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                                  : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                              }`}>
                                 {u.role || 'Client'}
                               </span>
                             </td>
@@ -1415,6 +1481,15 @@ export default function AdminPage({ setActiveTab }) {
                             <td className="p-3.5 text-[#8a7569] font-mono text-[11px]">{u.ip || 'Local/Cloud'}</td>
                             <td className="p-3.5 text-[#8a7569]">
                               {u.date ? new Date(u.date).toLocaleString() : 'Recently'}
+                            </td>
+                            <td className="p-3.5 text-right">
+                              <button
+                                onClick={() => handleDeleteUser(u.id)}
+                                className="p-1 text-[#8a7569] hover:text-rose-400 cursor-pointer transition-colors"
+                                title="Remove session log"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
                             </td>
                           </tr>
                         ))}
