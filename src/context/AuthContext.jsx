@@ -56,9 +56,9 @@ export const mapAuthError = (err) => {
     case 'auth/network-request-failed':
       return 'Network connection error. Please check your internet connection.';
     case 'auth/operation-not-allowed':
-      return 'Email/Password sign-in is not enabled in Firebase Console. Please enable it in the Authentication tab.';
+      return 'Email/Password or Google sign-in is not enabled in Firebase Console. Please enable it in the Authentication tab.';
     case 'auth/unauthorized-domain':
-      return 'This website domain is not authorized in Firebase Console yet. Please add your website domain in Firebase Console -> Authentication -> Settings -> Authorized domains.';
+      return 'Domain not authorized. Please add your Vercel domain in Firebase Console > Authentication > Settings > Authorized domains.';
     default:
       return err.message || 'Authentication error. Please try again.';
   }
