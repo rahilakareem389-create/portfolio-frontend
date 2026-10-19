@@ -27,11 +27,15 @@ import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { defaultFaqs } from '../data/defaultFaqs';
 import { sendWeb3FormsNotification } from '../utils/web3forms';
-
+import { useAuth } from '../context/AuthContext';
+import AuthModal from './AuthModal';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
 export default function Testimonials({ setActiveTab, setSelectedPlan }) {
+  const { currentUser } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authRequiredReason, setAuthRequiredReason] = useState('write_review'); // 'write_review' | 'ask_question'
   // Reviews state (real Google & verified client reviews only)
   const [reviews, setReviews] = useState(() => {
     try {
@@ -169,10 +173,9 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     let isMounted = true;
     async function loadData() {
       try {
-        const [revRes, faqRes, usrRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/admin/reviews`).catch(() => null),
-          fetch(`${API_BASE_URL}/api/admin/faqs`).catch(() => null),
-          fetch(`${API_BASE_URL}/api/admin/users`).catch(() => null)
+        const [revRes, faqRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/reviews`).catch(() => null),
+          fetch(`${API_BASE_URL}/api/faqs`).catch(() => null)
         ]);
 
         if (revRes && revRes.ok) {
@@ -255,23 +258,62 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     } catch (e) {}
   };
 
+  // Authentication & Modal Gate Handlers
+  const handleOpenWriteReview = () => {
+    if (!currentUser) {
+      setAuthRequiredReason('write_review');
+      setAuthModalOpen(true);
+      return;
+    }
+    setReviewForm((prev) => ({
+      ...prev,
+      name: currentUser.name || currentUser.displayName || prev.name || '',
+      email: currentUser.email || prev.email || '',
+      avatar: currentUser.photoURL || prev.avatar || ''
+    }));
+    setIsWriteReviewModalOpen(true);
+  };
+
+  const handleOpenAskQuestion = () => {
+    if (!currentUser) {
+      setAuthRequiredReason('ask_question');
+      setAuthModalOpen(true);
+      return;
+    }
+    setQuestionForm((prev) => ({
+      ...prev,
+      name: currentUser.name || currentUser.displayName || prev.name || '',
+      email: currentUser.email || prev.email || ''
+    }));
+    setIsAskQuestionModalOpen(true);
+  };
+
   // Submit User Review
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!reviewForm.name || !reviewForm.email || !reviewForm.message) return;
+    if (!currentUser) {
+      setAuthRequiredReason('write_review');
+      setAuthModalOpen(true);
+      return;
+    }
+
+    const cleanName = (currentUser.name || currentUser.displayName || reviewForm.name || '').trim();
+    const cleanEmail = (currentUser.email || reviewForm.email || '').trim().toLowerCase();
+    if (!cleanName || !cleanEmail || !reviewForm.message) return;
 
     setReviewSubmitStatus('submitting');
+    const token = localStorage.getItem('rahila_auth_token') || '';
 
     const newRev = {
       id: `rev_${Date.now()}`,
-      name: reviewForm.name.trim(),
-      email: reviewForm.email.trim(),
+      name: cleanName,
+      email: cleanEmail,
       role: (reviewForm.role || 'Verified Client').trim(),
       service: reviewForm.service,
       rating: reviewForm.rating,
       title: (reviewForm.title || 'Great Service & Results').trim(),
       message: reviewForm.message.trim(),
-      avatar: reviewForm.avatar || '',
+      avatar: reviewForm.avatar || currentUser.photoURL || '',
       source: 'Website Submission',
       sourceType: 'submission',
       gmbVerified: false,
@@ -284,7 +326,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/reviews`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(newRev)
       });
     } catch (err) {}
@@ -292,13 +337,13 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     // Dispatch Web3Forms notification directly to wordpressrahila@gmail.com
     sendWeb3FormsNotification({
       type: 'New Client Review',
-      subject: `[New Client Review Submitted] ${reviewForm.rating} Stars by ${reviewForm.name}`,
-      name: reviewForm.name,
-      email: reviewForm.email,
+      subject: `[New Client Review Submitted] ${reviewForm.rating} Stars by ${cleanName}`,
+      name: cleanName,
+      email: cleanEmail,
       message: reviewForm.message,
       details: {
-        clientName: reviewForm.name,
-        clientEmail: reviewForm.email,
+        clientName: cleanName,
+        clientEmail: cleanEmail,
         roleOrCompany: reviewForm.role || 'Verified Client',
         serviceDelivered: reviewForm.service,
         starRating: `${reviewForm.rating} / 5 Stars`,
@@ -310,7 +355,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     });
 
     updateReviews([newRev, ...reviews]);
-    recordUserEngagement(reviewForm.name, reviewForm.email, reviewForm.role, `Submitted ${reviewForm.rating}-Star Review`);
+    recordUserEngagement(cleanName, cleanEmail, reviewForm.role, `Submitted ${reviewForm.rating}-Star Review`);
 
     setReviewSubmitStatus('success');
     setTimeout(() => {
@@ -332,16 +377,25 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   // Submit User Question ("faq b ker sky")
   const handleSubmitQuestion = async (e) => {
     e.preventDefault();
-    if (!questionForm.name || !questionForm.email || !questionForm.question) return;
+    if (!currentUser) {
+      setAuthRequiredReason('ask_question');
+      setAuthModalOpen(true);
+      return;
+    }
+
+    const cleanName = (currentUser.name || currentUser.displayName || questionForm.name || '').trim();
+    const cleanEmail = (currentUser.email || questionForm.email || '').trim().toLowerCase();
+    if (!cleanName || !cleanEmail || !questionForm.question) return;
 
     setQuestionSubmitStatus('submitting');
+    const token = localStorage.getItem('rahila_auth_token') || '';
 
     const newQ = {
       id: `faq_${Date.now()}`,
       question: questionForm.question.trim(),
       answer: '', // Will be answered by Admin
-      askedBy: questionForm.name.trim(),
-      email: questionForm.email.trim(),
+      askedBy: cleanName,
+      email: cleanEmail,
       category: questionForm.category,
       status: 'pending',
       date: 'Just now',
@@ -351,7 +405,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/faqs/ask`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(newQ)
       });
     } catch (err) {}
@@ -606,7 +663,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               <div className="flex">
                 <button
                   type="button"
-                  onClick={() => setIsWriteReviewModalOpen(true)}
+                  onClick={handleOpenWriteReview}
                   className="w-full px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer text-center flex items-center justify-center gap-2"
                 >
                   <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -704,7 +761,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   </a>
                   <button
                     type="button"
-                    onClick={() => setIsWriteReviewModalOpen(true)}
+                    onClick={handleOpenWriteReview}
                     className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
                   >
                     Write Client Review
@@ -889,7 +946,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
               <button
                 type="button"
-                onClick={() => setIsAskQuestionModalOpen(true)}
+                onClick={handleOpenAskQuestion}
                 className="glow-btn px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer whitespace-nowrap shadow-lg shrink-0"
               >
                 <HelpCircle className="w-4 h-4" />
@@ -993,8 +1050,8 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               </div>
             ) : (
               <form onSubmit={handleSubmitReview} className="space-y-3">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-[#D57C63]/10 border border-[#D57C63]/25 text-xs text-[#e29f8c] flex items-start gap-2.5">
-                  <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[#D57C63]" />
+                <div className="dialog-modal-policy-box p-3 rounded-xl flex items-start gap-2.5 text-xs">
+                  <ShieldCheck className="policy-icon w-4 h-4 shrink-0 mt-0.5" />
                   <span>
                     <strong>Authenticity Policy:</strong> Reviews are moderated in the Admin Dashboard to prevent spam.
                   </span>
@@ -1031,14 +1088,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       <label className="modal-label text-xs font-bold block">
                         Your Photo / Avatar
                       </label>
-                      <span className="text-[10px] font-semibold text-[#D57C63] bg-[#D57C63]/10 px-2 py-0.5 rounded-full">
+                      <span className="dialog-modal-pill-badge text-[11px] px-2.5 py-0.5 rounded-full font-bold">
                         Optional
                       </span>
                     </div>
-                    <p className="modal-subtitle text-[11px] mb-2 leading-tight">
+                    <p className="modal-subtitle text-xs mb-2 leading-tight">
                       Upload your photo to display alongside your verified review.
                     </p>
-                    <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#D57C63]/15 hover:bg-[#D57C63]/25 text-[#D57C63] font-bold text-xs cursor-pointer transition-colors border border-[#D57C63]/30">
+                    <label className="dialog-modal-upload-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs cursor-pointer transition-colors">
                       <Upload className="w-3.5 h-3.5" />
                       <span>{reviewForm.avatar ? 'Change Photo' : 'Upload Photo'}</span>
                       <input
@@ -1053,6 +1110,18 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   </div>
                 </div>
 
+                {currentUser && (
+                  <div className="dialog-modal-auth-banner p-3 rounded-xl flex items-center justify-between text-xs mb-3">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span>Posting review as: <strong className="underline underline-offset-2">{currentUser.email}</strong></span>
+                    </div>
+                    <span className="dialog-modal-auth-badge text-[11px] px-2.5 py-1 rounded-md font-bold shrink-0">
+                      Verified Client
+                    </span>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="modal-label text-xs font-bold block mb-1">Your Name *</label>
@@ -1062,7 +1131,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       placeholder="e.g. Jason Blake"
                       value={reviewForm.name}
                       onChange={(e) => setReviewForm({ ...reviewForm, name: e.target.value })}
-                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
                     />
                   </div>
                   <div>
@@ -1070,10 +1139,12 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     <input
                       type="email"
                       required
+                      readOnly={Boolean(currentUser)}
                       placeholder="e.g. jason@business.com"
                       value={reviewForm.email}
                       onChange={(e) => setReviewForm({ ...reviewForm, email: e.target.value })}
-                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
+                      style={currentUser ? { cursor: 'not-allowed' } : {}}
                     />
                   </div>
                 </div>
@@ -1086,7 +1157,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       placeholder="e.g. Director, SolarTech"
                       value={reviewForm.role}
                       onChange={(e) => setReviewForm({ ...reviewForm, role: e.target.value })}
-                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
                     />
                   </div>
                   <div>
@@ -1094,7 +1165,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     <select
                       value={reviewForm.service}
                       onChange={(e) => setReviewForm({ ...reviewForm, service: e.target.value })}
-                      className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                      className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer"
                     >
                       <option>Complete SEO Strategy</option>
                       <option>High DA Guest Posting &amp; GBOB</option>
@@ -1120,7 +1191,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                         ★
                       </button>
                     ))}
-                    <span className="text-xs text-amber-500 ml-2 font-bold">{reviewForm.rating} / 5 Stars</span>
+                    <span className="text-xs font-extrabold text-amber-700 dark:text-amber-400 ml-2">{reviewForm.rating} / 5 Stars</span>
                   </div>
                 </div>
 
@@ -1131,7 +1202,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="e.g. 100% Genuine Backlinks and Great Communication"
                     value={reviewForm.title}
                     onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
                   />
                 </div>
 
@@ -1143,7 +1214,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="Describe your project, results achieved, and feedback..."
                     value={reviewForm.message}
                     onChange={(e) => setReviewForm({ ...reviewForm, message: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs resize-none"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium resize-none transition-all"
                   />
                 </div>
 
@@ -1151,7 +1222,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <button
                     type="button"
                     onClick={() => setIsWriteReviewModalOpen(false)}
-                    className="modal-cancel-btn px-4 py-2 rounded-xl text-xs font-bold"
+                    className="modal-cancel-btn px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -1208,6 +1279,18 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               </div>
             ) : (
               <form onSubmit={handleSubmitQuestion} className="space-y-3">
+                {currentUser && (
+                  <div className="dialog-modal-auth-banner p-3 rounded-xl flex items-center justify-between text-xs mb-3">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span>Asking question as: <strong className="underline underline-offset-2">{currentUser.email}</strong></span>
+                    </div>
+                    <span className="dialog-modal-auth-badge text-[11px] px-2.5 py-1 rounded-md font-bold shrink-0">
+                      Verified User
+                    </span>
+                  </div>
+                )}
+
                 <div>
                   <label className="modal-label text-xs font-bold block mb-1">Your Name *</label>
                   <input
@@ -1216,7 +1299,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="e.g. Sarah Jenkins"
                     value={questionForm.name}
                     onChange={(e) => setQuestionForm({ ...questionForm, name: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
                   />
                 </div>
 
@@ -1225,10 +1308,12 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <input
                     type="email"
                     required
+                    readOnly={Boolean(currentUser)}
                     placeholder="e.g. sarah@elevatebrands.com"
                     value={questionForm.email}
                     onChange={(e) => setQuestionForm({ ...questionForm, email: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
+                    style={currentUser ? { cursor: 'not-allowed' } : {}}
                   />
                 </div>
 
@@ -1237,7 +1322,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <select
                     value={questionForm.category}
                     onChange={(e) => setQuestionForm({ ...questionForm, category: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer"
                   >
                     <option>SEO &amp; Guest Posting</option>
                     <option>Full Stack Web Apps</option>
@@ -1255,7 +1340,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     placeholder="Ask anything about SEO, backlinks, web development, or consultations..."
                     value={questionForm.question}
                     onChange={(e) => setQuestionForm({ ...questionForm, question: e.target.value })}
-                    className="modal-input w-full px-3 py-2 rounded-xl text-xs resize-none"
+                    className="modal-input w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium resize-none transition-all"
                   />
                 </div>
 
@@ -1263,7 +1348,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   <button
                     type="button"
                     onClick={() => setIsAskQuestionModalOpen(false)}
-                    className="modal-cancel-btn px-4 py-2 rounded-xl text-xs font-bold"
+                    className="modal-cancel-btn px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -1280,7 +1365,30 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         </div>
       )}
 
-
+      {/* Authentication Modal Triggered When Writing Review or Asking FAQ */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        initialMode="signin"
+        onAuthSuccess={(user) => {
+          if (authRequiredReason === 'write_review') {
+            setReviewForm((prev) => ({
+              ...prev,
+              name: user.name || user.displayName || '',
+              email: user.email || '',
+              avatar: user.photoURL || prev.avatar || ''
+            }));
+            setIsWriteReviewModalOpen(true);
+          } else if (authRequiredReason === 'ask_question') {
+            setQuestionForm((prev) => ({
+              ...prev,
+              name: user.name || user.displayName || '',
+              email: user.email || ''
+            }));
+            setIsAskQuestionModalOpen(true);
+          }
+        }}
+      />
 
     </section>
   );

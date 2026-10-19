@@ -245,7 +245,7 @@ export default function AdminDashboardModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto">
-      <div className="w-full max-w-5xl rounded-[28px] bg-[#160e0a] border-2 border-[#D57C63]/50 shadow-2xl relative overflow-hidden flex flex-col my-auto max-h-[92vh]">
+      <div className="admin-portal w-full max-w-5xl rounded-[28px] bg-[#160e0a] border-2 border-[#D57C63]/50 shadow-2xl relative overflow-hidden flex flex-col my-auto max-h-[92vh]">
 
         {/* Modal Header */}
         <div className="p-5 sm:p-6 border-b border-[#332219] flex items-center justify-between bg-gradient-to-r from-[#1d120d] to-[#251610] shrink-0">
@@ -314,7 +314,7 @@ export default function AdminDashboardModal({
                   required
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder="wordpressrahila@gmail.com"
+                  placeholder=""
                   className="w-full px-4 py-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-sm text-white focus:outline-none focus:border-[#D57C63]"
                 />
               </div>

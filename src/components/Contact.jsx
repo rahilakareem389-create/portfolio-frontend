@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { sendWeb3FormsNotification } from '../utils/web3forms';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-omega-tan.vercel.app';
 
 const Contact = ({ setActiveTab, selectedPlan }) => {
   const { t } = useLanguage();
+  const { currentUser } = useAuth();
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: currentUser ? (currentUser.name || currentUser.displayName || '') : '',
+    email: currentUser ? (currentUser.email || '') : '',
     phone: '',
     plan: selectedPlan || 'Standard ($180)',
     message: '',
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || currentUser.name || currentUser.displayName || '',
+        email: currentUser.email || prev.email || '',
+      }));
+    }
+  }, [currentUser]);
 
   const [status, setStatus] = useState({
     submitting: false,
@@ -102,16 +114,20 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
 
     try {
       // 1. Backend /api/contact endpoint (saves to MongoDB Atlas / JSON)
+      const token = localStorage.getItem('rahila_auth_token') || '';
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
+          name: cleanName,
+          email: cleanEmail,
+          phone: cleanPhone,
           plan: formData.plan,
-          message: formData.message,
-          subject: `New Project Inquiry from ${formData.name} (${formData.plan})`,
+          message: cleanMessage,
+          subject: `New Project Inquiry from ${cleanName} (${formData.plan})`,
         }),
       });
 

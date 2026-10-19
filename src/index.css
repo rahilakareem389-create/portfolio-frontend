@@ -1052,89 +1052,260 @@ p, span, a, input, select, textarea, button, li, small {
 
 .dialog-modal-box .modal-title {
   color: #ffffff !important;
+  font-weight: 800 !important;
 }
 
 .dialog-modal-box .modal-subtitle {
   color: #d6c7bc !important;
+  font-weight: 500 !important;
 }
 
 .dialog-modal-box .modal-label {
-  color: #f3e9e2 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: -0.01em;
 }
 
 .dialog-modal-box .modal-input {
-  background-color: #221612 !important;
+  background-color: #1e130d !important;
   color: #ffffff !important;
-  border: 1px solid #3e2c22 !important;
+  border: 1.5px solid #4a3022 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+}
+
+.dialog-modal-box .modal-input:focus {
+  border-color: #ff7a1a !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.25) !important;
 }
 
 .dialog-modal-box .modal-input::placeholder {
-  color: #9c8a7e !important;
+  color: #a89587 !important;
+  opacity: 1 !important;
+  font-weight: 500 !important;
 }
 
-.dialog-modal-box .modal-box-card {
-  background-color: #221612 !important;
-  border: 1px solid #3e2c22 !important;
-}
-
-.dialog-modal-box .modal-cancel-btn {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.dialog-modal-box .modal-cancel-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
-}
-
-/* Light Mode Overrides for Dialog Modals */
-:root[data-theme="light"] .dialog-modal-box {
-  background-color: #ffffff !important;
-  color: #140d07 !important;
-  border: 2px solid #decbb8 !important;
-  border-top: 5px solid #cf5208 !important;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(207, 82, 8, 0.15) !important;
-}
-
-:root[data-theme="light"] .dialog-modal-box .modal-title {
-  color: #140d07 !important;
-}
-
-:root[data-theme="light"] .dialog-modal-box .modal-subtitle {
-  color: #59473b !important;
-}
-
-:root[data-theme="light"] .dialog-modal-box .modal-label {
-  color: #1f140d !important;
+.dialog-modal-box .modal-input:read-only,
+.dialog-modal-box .modal-input[readonly] {
+  background-color: #140d08 !important;
+  color: #ff9a7b !important;
+  border: 1.5px solid #38241a !important;
   font-weight: 700 !important;
 }
 
+.dialog-modal-box .modal-box-card {
+  background-color: #1e130d !important;
+  border: 1.5px solid #3e281d !important;
+}
+
+.dialog-modal-box .modal-cancel-btn {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  font-weight: 700 !important;
+}
+
+.dialog-modal-box .modal-cancel-btn:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+/* Auth Banner in Dialog Modals (Dark Mode) */
+.dialog-modal-auth-banner {
+  background-color: rgba(6, 78, 59, 0.55) !important;
+  border: 1.5px solid rgba(52, 211, 153, 0.6) !important;
+  color: #ecfdf5 !important;
+}
+
+.dialog-modal-auth-banner span {
+  color: #d1fae5 !important;
+  font-weight: 600 !important;
+}
+
+.dialog-modal-auth-banner strong {
+  color: #6ee7b7 !important;
+  font-weight: 800 !important;
+}
+
+.dialog-modal-auth-badge {
+  background-color: rgba(16, 185, 129, 0.3) !important;
+  color: #a7f3d0 !important;
+  border: 1px solid rgba(52, 211, 153, 0.5) !important;
+  font-weight: 700 !important;
+}
+
+.dialog-modal-policy-box {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fef3c7 !important;
+}
+
+.dialog-modal-policy-box strong {
+  color: #fbbf24 !important;
+  font-weight: 800 !important;
+}
+
+.dialog-modal-policy-box .policy-icon {
+  color: #f59e0b !important;
+}
+
+.dialog-modal-pill-badge {
+  background-color: rgba(213, 124, 99, 0.2) !important;
+  color: #ff9a7b !important;
+  border: 1px solid rgba(213, 124, 99, 0.4) !important;
+}
+
+.dialog-modal-upload-btn {
+  background-color: rgba(213, 124, 99, 0.18) !important;
+  color: #ff9a7b !important;
+  border: 1.5px solid rgba(213, 124, 99, 0.45) !important;
+}
+
+.dialog-modal-upload-btn:hover {
+  background-color: rgba(213, 124, 99, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Light Mode Overrides for Dialog Modals (100% High Contrast & Crisp Visibility) */
+:root[data-theme="light"] .dialog-modal-box {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #cbd5e1 !important;
+  border-top: 5px solid #cf5208 !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22), 0 10px 30px rgba(207, 82, 8, 0.15) !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-subtitle {
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-label {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+}
+
 :root[data-theme="light"] .dialog-modal-box .modal-input {
-  background-color: #fbf7f2 !important;
-  color: #140d07 !important;
-  border: 1.5px solid #d8c7b4 !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-input:focus {
+  border-color: #ea580c !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22) !important;
 }
 
 :root[data-theme="light"] .dialog-modal-box .modal-input::placeholder {
-  color: #8b7768 !important;
+  color: #475569 !important;
+  opacity: 1 !important;
+  font-weight: 500 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .modal-input:read-only,
+:root[data-theme="light"] .dialog-modal-box .modal-input[readonly] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-weight: 700 !important;
 }
 
 :root[data-theme="light"] .dialog-modal-box .modal-box-card {
-  background-color: #fbf7f2 !important;
-  border: 1.5px solid #d8c7b4 !important;
+  background-color: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
 }
 
 :root[data-theme="light"] .dialog-modal-box .modal-cancel-btn {
-  background-color: #ede2d7 !important;
-  color: #1f140d !important;
-  border: 1px solid #d8c7b4 !important;
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
 }
 
 :root[data-theme="light"] .dialog-modal-box .modal-cancel-btn:hover {
-  background-color: #e0d1c3 !important;
+  background-color: #e2e8f0 !important;
   color: #000000 !important;
+}
+
+/* Auth Banner in Dialog Modals (Light Mode - Ultra High Contrast Green) */
+:root[data-theme="light"] .dialog-modal-auth-banner {
+  background-color: #ecfdf5 !important;
+  border: 1.5px solid #10b981 !important;
+  color: #064e3b !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12) !important;
+}
+
+:root[data-theme="light"] .dialog-modal-auth-banner span {
+  color: #064e3b !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-auth-banner strong {
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-auth-badge {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-policy-box {
+  background-color: #fffbeb !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #78350f !important;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.08) !important;
+}
+
+:root[data-theme="light"] .dialog-modal-policy-box strong {
+  color: #78350f !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-policy-box .policy-icon {
+  color: #d97706 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-pill-badge {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-upload-btn {
+  background-color: #ffedd5 !important;
+  color: #c2410c !important;
+  border: 1.5px solid #fdba74 !important;
+  font-weight: 700 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-upload-btn:hover {
+  background-color: #fed7aa !important;
+  color: #9a3412 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .text-\[\#D57C63\] {
+  color: #cf5208 !important;
+}
+
+:root[data-theme="light"] .dialog-modal-box .text-\[\#e29f8c\] {
+  color: #334155 !important;
 }
 
 /* Active Category Pill Styling */
@@ -1688,9 +1859,36 @@ p, span, a, input, select, textarea, button, li, small {
 /* ==========================================================================
    Admin Portal Dedicated High-Contrast Styling (100% Text Visibility)
    ========================================================================== */
-.admin-portal {
+.admin-portal,
+:root[data-theme="light"] .admin-portal {
   background-color: #0e0805 !important;
-  color: #f7ede3 !important;
+  color: #ffffff !important;
+}
+
+/* Neutralize and override all light theme background overrides inside admin-portal */
+:root[data-theme="light"] .admin-portal .bg-\[\#221612\],
+:root[data-theme="light"] .admin-portal .bg-\[\#241712\],
+:root[data-theme="light"] .admin-portal .bg-\[\#170e0a\],
+:root[data-theme="light"] .admin-portal .bg-\[\#1d120d\],
+:root[data-theme="light"] .admin-portal .bg-\[\#140c08\],
+:root[data-theme="light"] .admin-portal .bg-\[\#1b100b\],
+:root[data-theme="light"] .admin-portal .bg-\[\#1e130d\],
+:root[data-theme="light"] .admin-portal .bg-\[\#1a120e\],
+:root[data-theme="light"] .admin-portal .bg-\[\#18110d\],
+:root[data-theme="light"] .admin-portal .bg-\[\#140e0b\],
+:root[data-theme="light"] .admin-portal .bg-\[\#100906\],
+:root[data-theme="light"] .admin-portal .bg-\[\#251610\],
+:root[data-theme="light"] .admin-portal .bg-\[\#20120b\] {
+  background-color: #1a100b !important;
+}
+
+:root[data-theme="light"] .admin-portal .border-\[\#3e2c22\],
+:root[data-theme="light"] .admin-portal .border-\[\#2d1b14\],
+:root[data-theme="light"] .admin-portal .border-\[\#332219\],
+:root[data-theme="light"] .admin-portal .border-\[\#261711\],
+:root[data-theme="light"] .admin-portal .border-\[\#33271f\],
+:root[data-theme="light"] .admin-portal .border-\[\#38261b\] {
+  border-color: #3e281d !important;
 }
 
 .admin-portal h1,
@@ -1701,10 +1899,7 @@ p, span, a, input, select, textarea, button, li, small {
 .admin-portal h6,
 .admin-portal .font-heading,
 .admin-portal .admin-title,
-.admin-portal .admin-stat-num {
-  color: #ffffff !important;
-}
-
+.admin-portal .admin-stat-num,
 :root[data-theme="light"] .admin-portal h1,
 :root[data-theme="light"] .admin-portal h2,
 :root[data-theme="light"] .admin-portal h3,
@@ -1732,7 +1927,8 @@ p, span, a, input, select, textarea, button, li, small {
 .admin-portal textarea::placeholder,
 :root[data-theme="light"] .admin-portal input::placeholder,
 :root[data-theme="light"] .admin-portal textarea::placeholder {
-  color: #9d897b !important;
+  color: #c4b5a8 !important;
+  opacity: 1 !important;
 }
 
 .admin-portal .text-white,
@@ -1742,17 +1938,27 @@ p, span, a, input, select, textarea, button, li, small {
 
 .admin-portal .text-\[\#8a7569\],
 :root[data-theme="light"] .admin-portal .text-\[\#8a7569\] {
-  color: #d1c2b5 !important;
+  color: #ff9a7b !important;
 }
 
 .admin-portal .text-\[\#bcab9e\],
 :root[data-theme="light"] .admin-portal .text-\[\#bcab9e\] {
-  color: #e2d6cc !important;
+  color: #f0e6dd !important;
 }
 
 .admin-portal .text-\[\#d6c7bc\],
 :root[data-theme="light"] .admin-portal .text-\[\#d6c7bc\] {
-  color: #ebe2d9 !important;
+  color: #ffffff !important;
+}
+
+.admin-portal .text-\[\#e2d5cb\],
+:root[data-theme="light"] .admin-portal .text-\[\#e2d5cb\] {
+  color: #ffffff !important;
+}
+
+.admin-portal .text-\[\#D57C63\],
+:root[data-theme="light"] .admin-portal .text-\[\#D57C63\] {
+  color: #ff7a1a !important;
 }
 
 /* ==========================================================

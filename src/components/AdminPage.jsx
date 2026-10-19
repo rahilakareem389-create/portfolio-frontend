@@ -758,7 +758,7 @@ export default function AdminPage({ setActiveTab }) {
                         required
                         value={emailInput}
                         onChange={(e) => setEmailInput(e.target.value)}
-                        placeholder="wordpressrahila@gmail.com"
+                        placeholder=""
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-sm text-white focus:outline-none focus:border-[#D57C63] transition-all"
                       />
                     </div>
@@ -863,9 +863,12 @@ export default function AdminPage({ setActiveTab }) {
               </span>
             </div>
           </div>
-          <div className="p-2.5 rounded-xl bg-[#221612] border border-[#3e2c22] text-[11px] text-[#e2d5cb] space-y-0.5">
-            <div className="font-bold text-white truncate">Rahila Kareem</div>
-            <div className="text-[#D57C63] font-semibold truncate">{OWNER_EMAIL}</div>
+          <div
+            className="p-3 rounded-2xl border space-y-1 shadow-md"
+            style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}
+          >
+            <div className="font-black text-sm text-white" style={{ color: '#ffffff' }}>Rahila Kareem</div>
+            <div className="font-bold text-xs" style={{ color: '#ff9a7b' }}>{OWNER_EMAIL}</div>
           </div>
         </div>
 
@@ -1066,13 +1069,14 @@ export default function AdminPage({ setActiveTab }) {
 
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-[#d6c7bc] absolute left-4 top-3.5" />
+            <Search className="w-4 h-4 text-[#ff7a1a] absolute left-4 top-3.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search across all entries, emails, names, messages..."
-              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#170e0a] border border-[#3e2c22] text-xs sm:text-sm text-white focus:outline-none focus:border-[#D57C63] transition-all"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#ff7a1a] transition-all"
+              style={{ backgroundColor: '#170e0a', border: '1.5px solid #3e2c22', color: '#ffffff' }}
             />
           </div>
 
@@ -1258,24 +1262,27 @@ export default function AdminPage({ setActiveTab }) {
                       </div>
 
                       {/* Review Text */}
-                      <p className="text-xs sm:text-sm text-[#d6c7bc] leading-relaxed bg-[#1d120d] p-3.5 rounded-xl border border-[#332219]">
+                      <p
+                        className="text-sm sm:text-base font-semibold leading-relaxed p-4 rounded-xl shadow-inner select-text"
+                        style={{ backgroundColor: '#140c07', border: '1.5px solid #4a3022', color: '#ffffff' }}
+                      >
                         "{rev.message}"
                       </p>
 
                       {/* Existing Admin Reply */}
                       {rev.adminReply?.message && (
-                        <div className="p-3.5 rounded-xl bg-[#251610] border border-[#D57C63]/30 space-y-1">
-                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#D57C63]">
-                            <ShieldCheck className="w-3.5 h-3.5" />
+                        <div className="p-3.5 rounded-xl border space-y-1" style={{ backgroundColor: '#20120b', borderColor: '#D57C63' }}>
+                          <div className="flex items-center gap-1.5 text-xs font-black text-[#D57C63]">
+                            <ShieldCheck className="w-4 h-4" />
                             <span>Rahila Kareem (Official Owner Reply)</span>
                           </div>
-                          <p className="text-xs text-[#d6c7bc]">{rev.adminReply.message}</p>
+                          <p className="text-xs sm:text-sm text-white font-medium">{rev.adminReply.message}</p>
                         </div>
                       )}
 
                       {/* Admin Direct Reply Box ("admin bt kery ga user s reviews") */}
                       <div className="pt-2 space-y-2">
-                        <label className="text-[11px] font-bold text-[#8a7569] block">
+                        <label className="text-xs font-black block" style={{ color: '#ff9a7b' }}>
                           Reply to this client as Rahila Kareem:
                         </label>
                         <div className="flex gap-2">
@@ -1286,7 +1293,8 @@ export default function AdminPage({ setActiveTab }) {
                               setReplyDrafts({ ...replyDrafts, [rev.id]: e.target.value })
                             }
                             placeholder="Type public response to client..."
-                            className="flex-1 px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-xs text-white focus:outline-none focus:border-[#D57C63]"
+                            className="flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#ff7a1a]"
+                            style={{ backgroundColor: '#1a100b', border: '1.5px solid #4a3022', color: '#ffffff' }}
                           />
                           <button
                             onClick={() => handleSendReviewReply(rev.id)}
@@ -1560,21 +1568,21 @@ export default function AdminPage({ setActiveTab }) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-4 rounded-xl bg-[#221612] border border-[#3e2c22]">
-                  <span className="text-[#8a7569] block mb-1">Business Name</span>
-                  <span className="font-bold text-white text-sm">Rahila Kareem - SEO Specialist &amp; Full Stack Developer</span>
+                <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
+                  <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>Business Name</span>
+                  <span className="font-bold text-sm block" style={{ color: '#ffffff' }}>Rahila Kareem - SEO Specialist &amp; Full Stack Developer</span>
                 </div>
-                <div className="p-4 rounded-xl bg-[#221612] border border-[#3e2c22]">
-                  <span className="text-[#8a7569] block mb-1">GMB Google Account</span>
-                  <span className="font-bold text-[#D57C63] text-sm">{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</span>
+                <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
+                  <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>GMB Google Account</span>
+                  <span className="font-bold text-sm block" style={{ color: '#ff7a1a' }}>{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-[#221612] border border-[#3e2c22]">
-                  <span className="text-[#8a7569] block mb-1">Public Share Link</span>
-                  <span className="font-mono text-white text-[11px] truncate block">{personalInfo.googleBusinessUrl}</span>
+                <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
+                  <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>Public Share Link</span>
+                  <span className="font-mono text-[11px] truncate block" style={{ color: '#ffffff' }}>{personalInfo.googleBusinessUrl}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-[#221612] border border-[#3e2c22]">
-                  <span className="text-[#8a7569] block mb-1">Official GMB Rating</span>
-                  <span className="font-bold text-amber-400 text-sm">5.0 ★ (Verified Client Endorsements)</span>
+                <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
+                  <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>Official GMB Rating</span>
+                  <span className="font-bold text-amber-400 text-sm block">5.0 ★ (Verified Client Endorsements)</span>
                 </div>
               </div>
             </div>
