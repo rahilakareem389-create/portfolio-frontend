@@ -49,10 +49,11 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
     loginWithGoogle,
     resendVerificationEmail,
     checkEmailVerification,
+    sendPasswordReset,
     isConfigured
   } = useAuth();
 
-  // Mode: 'signup' | 'signin' | 'verify'
+  // Mode: 'signup' | 'signin' | 'verify' | 'forgot'
   const [mode, setMode] = useState(initialMode || 'signup');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -308,6 +309,31 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
     }
   };
 
+  // ==========================================================================
+  // 5. SUBMIT PASSWORD RESET (FIREBASE AUTH)
+  // ==========================================================================
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setErrorMsg('');
+    setSuccessMsg('');
+
+    if (!email.trim()) {
+      setErrorMsg('Please enter your email address to receive password reset instructions.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await sendPasswordReset(email.trim());
+      setSuccessMsg(`Password reset link dispatched to ${email.trim()}. Please check your inbox.`);
+    } catch (err) {
+      console.error('Password Reset Error:', err);
+      setErrorMsg(mapAuthError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in py-6">
       <div className="w-full max-w-[400px] my-auto p-5 sm:p-6 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] max-h-[90vh] overflow-y-auto">
@@ -327,6 +353,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           <div className="w-9 h-9 rounded-xl bg-[#D57C63]/15 text-[#D57C63] flex items-center justify-center mb-2 shadow-sm">
             {mode === 'verify' ? (
               <ShieldCheck className="w-5 h-5" />
+            ) : mode === 'forgot' ? (
+              <Lock className="w-5 h-5" />
             ) : mode === 'signin' ? (
               <Lock className="w-5 h-5" />
             ) : (
@@ -336,6 +364,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           <h3 className="font-heading font-extrabold text-2xl text-neutral-900 dark:text-white tracking-tight">
             {mode === 'verify'
               ? 'Verify Your Email'
+              : mode === 'forgot'
+              ? 'Reset Password'
               : mode === 'signin'
               ? 'Welcome Back'
               : 'Create Client Account'}
@@ -343,6 +373,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {mode === 'verify'
               ? 'A verification link was dispatched to your inbox'
+              : mode === 'forgot'
+              ? 'Enter your registered email to receive a password reset link'
               : mode === 'signin'
               ? 'Sign in to access your client dashboard & deliverables'
               : 'Sign up to track your projects & deliverables'}
@@ -350,7 +382,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         </div>
 
         {/* Mode Switcher Tabs (Segmented Control) */}
-        {mode !== 'verify' && (
+        {mode !== 'verify' && mode !== 'forgot' && (
           <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-[#251812] border border-neutral-200 dark:border-[#38261e] mb-3.5">
             <button
               type="button"
@@ -401,7 +433,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
         )}
 
         {/* GOOGLE SIGN-IN BUTTON & DIVIDER (For Sign Up & Sign In) */}
-        {mode !== 'verify' && (
+        {mode !== 'verify' && mode !== 'forgot' && (
           <div className="space-y-2.5 mb-3">
             <button
               type="button"
@@ -531,9 +563,22 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode('forgot');
+                    setErrorMsg('');
+                    setSuccessMsg('');
+                  }}
+                  className="text-[11px] text-[#D57C63] hover:underline font-semibold cursor-pointer"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
                 <input
@@ -575,6 +620,56 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
                 className="text-[#D57C63] font-bold hover:underline cursor-pointer"
               >
                 Create Account
+              </button>
+            </p>
+          </form>
+        )}
+
+        {/* STEP 1C: FORGOT PASSWORD */}
+        {mode === 'forgot' && (
+          <form onSubmit={handlePasswordReset} className="space-y-3">
+            <div>
+              <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
+                Account Email
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-neutral-400 absolute left-3.5 top-2.5" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-neutral-200 dark:border-[#38261e] bg-neutral-50/70 dark:bg-[#20140e] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#D57C63]/30 focus:border-[#D57C63] transition-all"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2.5 rounded-xl bg-[#D57C63] hover:bg-[#c2674e] text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-1.5"
+            >
+              {loading ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <ArrowRight className="w-4 h-4" />
+              )}
+              <span>Send Reset Link</span>
+            </button>
+
+            <p className="text-center text-xs text-neutral-500 dark:text-neutral-400 pt-0.5">
+              Remember your password?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('signin');
+                  setErrorMsg('');
+                  setSuccessMsg('');
+                }}
+                className="text-[#D57C63] font-bold hover:underline cursor-pointer"
+              >
+                Sign In
               </button>
             </p>
           </form>

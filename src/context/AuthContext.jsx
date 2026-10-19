@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   signOut,
   sendEmailVerification,
+  sendPasswordResetEmail,
   updateProfile,
   onAuthStateChanged
 } from 'firebase/auth';
@@ -322,6 +323,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
+   * Send Password Reset Email via Firebase Auth
+   */
+  const sendPasswordReset = async (email) => {
+    if (!auth) {
+      throw new Error('Firebase Authentication is not available. Please verify your connection.');
+    }
+    const cleanEmail = (email || '').trim().toLowerCase();
+    if (!cleanEmail) {
+      throw new Error('Please enter your registered email address.');
+    }
+    await sendPasswordResetEmail(auth, cleanEmail);
+    return true;
+  };
+
+  /**
    * Check Verification Status
    */
   const checkEmailVerification = async () => {
@@ -363,6 +379,7 @@ export const AuthProvider = ({ children }) => {
     loginWithGoogle,
     resendVerificationEmail,
     checkEmailVerification,
+    sendPasswordReset,
     logout
   };
 
