@@ -255,16 +255,21 @@ export default function AdminPage({ setActiveTab }) {
 
       sessionStorage.setItem('rahila_admin_authenticated', 'true');
       localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
-      localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
       setIsAdminSessionUnlocked(true);
 
-      // Attempt backend auth record
+      // Attempt backend auth record and obtain signed JWT
       try {
-        await fetch(`${API_BASE_URL}/api/admin/login`, {
+        const authRes = await fetch(`${API_BASE_URL}/api/admin/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: cleanEmail, password: cleanPass })
         });
+        if (authRes.ok) {
+          const authData = await authRes.json();
+          if (authData.token) {
+            localStorage.setItem('rahila_auth_token', authData.token);
+          }
+        }
       } catch (_) {}
 
       showToast('Welcome to Master Console, Rahila!');
@@ -284,18 +289,24 @@ export default function AdminPage({ setActiveTab }) {
 
     try {
       const loggedUser = await loginWithGoogle();
-      const userEmail = (loggedUser?.email || '').toLowerCase();
+      const userEmail = (loggedUser?.email || '').toLowerCase().trim();
 
-      if (isConfigured && !authorizedAdminEmails.includes(userEmail)) {
+      if (!authorizedAdminEmails.includes(userEmail)) {
         await logout();
-        setAuthError(`Access Denied: ${userEmail} is not authorized for the Admin Console.`);
+        setAuthError(`Access Denied: Only Rahila Kareem's verified account (${OWNER_EMAIL}) is authorized for the Admin Console.`);
         return;
       }
 
+      // Obtain real cryptographically signed Firebase ID Token
+      let firebaseToken = null;
+      try {
+        firebaseToken = await loggedUser.getIdToken(true);
+      } catch (_) {}
+
       const adminUser = {
-        uid: 'admin-rahila-rk',
-        id: 'admin-rahila-rk',
-        email: userEmail || 'rahilakareem389@gmail.com',
+        uid: loggedUser.uid || 'admin-rahila-rk',
+        id: loggedUser.uid || 'admin-rahila-rk',
+        email: userEmail,
         displayName: 'Rahila Kareem',
         name: 'Rahila Kareem',
         emailVerified: true,
@@ -305,17 +316,22 @@ export default function AdminPage({ setActiveTab }) {
 
       sessionStorage.setItem('rahila_admin_authenticated', 'true');
       localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
-      localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
+      if (firebaseToken) {
+        localStorage.setItem('rahila_auth_token', firebaseToken);
+      }
       setIsAdminSessionUnlocked(true);
 
       // Record admin Google session in backend audit
       try {
         await fetch(`${API_BASE_URL}/api/user/auth`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(firebaseToken ? { Authorization: `Bearer ${firebaseToken}` } : {})
+          },
           body: JSON.stringify({
             name: 'Rahila Kareem',
-            email: userEmail || 'rahilakareem389@gmail.com',
+            email: userEmail,
             role: 'Owner & Admin',
             mode: 'admin_google_login'
           })
@@ -333,7 +349,16 @@ export default function AdminPage({ setActiveTab }) {
   };
 
   const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/logout`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      }).catch(() => {});
+    } catch (_) {}
+
     sessionStorage.removeItem('rahila_admin_authenticated');
+    localStorage.removeItem('rahila_auth_token');
+    localStorage.removeItem('rahila_auth_user');
     setIsAdminSessionUnlocked(false);
     await logout();
     setActiveTab('home');
