@@ -227,16 +227,22 @@ export default function AdminPage({ setActiveTab }) {
       return;
     }
 
-    // Verify authorized admin password
+    // Verify authorized admin password with Firebase first, with fallback
     const validAdminPasswords = ['rahila556688', 'rahila2026', 'admin123'];
-    if (!validAdminPasswords.includes(cleanPass)) {
-      setAuthLoading(false);
-      setAuthError('Invalid admin password. Access denied.');
-      return;
+    let authenticatedUser = null;
+
+    try {
+      authenticatedUser = await loginWithEmail(cleanEmail, cleanPass);
+    } catch (fbErr) {
+      if (!validAdminPasswords.includes(cleanPass)) {
+        setAuthLoading(false);
+        setAuthError(mapAuthError(fbErr) || 'Invalid admin password. Access denied.');
+        return;
+      }
     }
 
     try {
-      const adminUser = {
+      const adminUser = authenticatedUser || {
         uid: 'admin-rahila-rk',
         id: 'admin-rahila-rk',
         email: cleanEmail,
@@ -246,12 +252,6 @@ export default function AdminPage({ setActiveTab }) {
         role: 'Admin',
         isAdmin: true
       };
-
-      try {
-        await loginWithEmail(cleanEmail, cleanPass);
-      } catch (_) {
-        // Fallback succeeds even if Firebase is unconfigured
-      }
 
       sessionStorage.setItem('rahila_admin_authenticated', 'true');
       localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));

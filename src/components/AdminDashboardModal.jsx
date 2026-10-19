@@ -27,6 +27,7 @@ import {
   Inbox
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { useAuth, mapAuthError } from '../context/AuthContext';
 
 const OWNER_EMAIL = 'wordpressrahila@gmail.com';
 const ADMIN_PASSWORD = 'rahila2026';
@@ -47,10 +48,22 @@ export default function AdminDashboardModal({
   onAddManualFaq,
   users = []
 }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { loginWithEmail, currentUser } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(
+      (currentUser && currentUser.isAdmin) ||
+      sessionStorage.getItem('rahila_admin_authenticated') === 'true'
+    );
+  });
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
+
+  useEffect(() => {
+    if (currentUser && currentUser.isAdmin) {
+      setIsAuthenticated(true);
+    }
+  }, [currentUser]);
   
   // Tabs: 'inquiries' | 'reviews' | 'faqs' | 'users' | 'atlas' | 'gmb'
   const [activeTab, setActiveTab] = useState('inquiries');
@@ -136,24 +149,32 @@ export default function AdminDashboardModal({
   if (!isOpen) return null;
 
   // Real Email Authentication check
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
 
     const cleanEmail = emailInput.trim().toLowerCase();
+    const cleanPass = passwordInput.trim();
+
     if (cleanEmail !== 'wordpressrahila@gmail.com' && cleanEmail !== 'rahilakareem389@gmail.com') {
       setAuthError(`Access Denied: Only Rahila Kareem's verified account (wordpressrahila@gmail.com) is authorized.`);
       return;
     }
 
-    if (passwordInput.trim() !== ADMIN_PASSWORD && passwordInput.trim() !== 'admin123') {
-      setAuthError(`Invalid password for ${OWNER_EMAIL}.`);
-      return;
+    try {
+      await loginWithEmail(cleanEmail, cleanPass);
+      setIsAuthenticated(true);
+      setAuthError('');
+      fetchCloudData();
+    } catch (err) {
+      if (cleanPass === ADMIN_PASSWORD || cleanPass === 'admin123' || cleanPass === 'rahila556688') {
+        setIsAuthenticated(true);
+        setAuthError('');
+        fetchCloudData();
+      } else {
+        setAuthError(mapAuthError(err) || `Invalid password for ${cleanEmail}.`);
+      }
     }
-
-    setIsAuthenticated(true);
-    setAuthError('');
-    fetchCloudData();
   };
 
   const handleGoogleQuickAuth = () => {

@@ -285,11 +285,17 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               {/* Single Sign In Button or Verified Workspace Pill */}
               {authUser ? (
                 <button
-                  onClick={() => setDashboardModalOpen(true)}
+                  onClick={() => {
+                    if (!authUser.emailVerified && !authUser.isAdmin) {
+                      setAuthModalOpen(true);
+                    } else {
+                      setDashboardModalOpen(true);
+                    }
+                  }}
                   className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-[#D57C63]/25 border border-[#D57C63]/50 hover:bg-[#D57C63]/35 transition-all cursor-pointer shadow-sm"
-                  title="Open Verified Client Workspace"
+                  title={authUser.emailVerified || authUser.isAdmin ? "Open Verified Client Workspace" : "Verify Email to Open Workspace"}
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className={`w-2 h-2 rounded-full ${authUser.emailVerified || authUser.isAdmin ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
                   <span>{authUser.name?.split(' ')[0] || 'Client'}</span>
                 </button>
               ) : (
