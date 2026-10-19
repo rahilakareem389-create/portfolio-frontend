@@ -57,6 +57,8 @@ export const mapAuthError = (err) => {
       return 'Network connection error. Please check your internet connection.';
     case 'auth/operation-not-allowed':
       return 'Email/Password sign-in is not enabled in Firebase Console. Please enable it in the Authentication tab.';
+    case 'auth/unauthorized-domain':
+      return 'This website domain is not authorized in Firebase Console yet. Please add your website domain in Firebase Console -> Authentication -> Settings -> Authorized domains.';
     default:
       return err.message || 'Authentication error. Please try again.';
   }
