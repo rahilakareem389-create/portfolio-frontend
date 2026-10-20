@@ -98,9 +98,19 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isAskQuestionModalOpen, setIsAskQuestionModalOpen] = useState(false);
   const [expandedReplies, setExpandedReplies] = useState({});
+  const [expandedMessages, setExpandedMessages] = useState({});
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showAllFaqs, setShowAllFaqs] = useState(false);
 
   const toggleReply = (id) => {
     setExpandedReplies((prev) => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const toggleMessage = (id) => {
+    setExpandedMessages((prev) => ({
       ...prev,
       [id]: !prev[id]
     }));
@@ -222,8 +232,56 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       }
     }
     loadData();
+
+    // Real-time synchronization when Admin approves/replies
+    const handleSync = (e) => {
+      if (!e.detail) return;
+      if (e.detail.type === 'review_status' && e.detail.id) {
+        setReviews((prev) => {
+          const updated = prev.map((r) =>
+            r.id === e.detail.id ? { ...r, status: e.detail.status } : r
+          );
+          try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+          return updated;
+        });
+      }
+      if (e.detail.type === 'review_reply' && e.detail.id) {
+        setReviews((prev) => {
+          const updated = prev.map((r) =>
+            r.id === e.detail.id
+              ? {
+                  ...r,
+                  status: 'approved',
+                  adminReply: {
+                    message: e.detail.reply,
+                    repliedAt: new Date().toISOString(),
+                    adminEmail: 'wordpressrahila@gmail.com'
+                  }
+                }
+              : r
+          );
+          try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+          return updated;
+        });
+      }
+      if (e.detail.type === 'faq_answered' && e.detail.id) {
+        setFaqs((prev) => {
+          const updated = prev.map((f) =>
+            f.id === e.detail.id
+              ? { ...f, answer: e.detail.answer, status: 'approved', adminEmail: 'wordpressrahila@gmail.com' }
+              : f
+          );
+          try { localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(updated)); } catch (_) {}
+          return updated;
+        });
+      }
+    };
+
+    window.addEventListener('portfolio_data_sync', handleSync);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('portfolio_data_sync', handleSync);
     };
   }, []);
 
@@ -338,7 +396,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       sourceType: 'submission',
       gmbVerified: false,
       date: 'Just now',
-      status: 'approved', // Published live onsite immediately!
+      status: 'pending', // Strictly pending until approved by Admin in Dashboard
       helpfulCount: 0,
       createdAt: new Date().toISOString()
     };
@@ -421,7 +479,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       askedBy: cleanName,
       email: cleanEmail,
       category: questionForm.category,
-      status: 'approved', // Live on site immediately!
+      status: 'pending', // Strictly pending until answered/approved by Admin in Dashboard
       date: 'Just now',
       createdAt: new Date().toISOString()
     };
@@ -616,6 +674,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     if (activeCategory === 'wordpress') return r.service?.toLowerCase().includes('wordpress') || r.service?.toLowerCase().includes('woo');
     return true;
   });
+
+  // Compact initial display: 3 items, with "See More" expansion toggle
+  const displayedReviews = showAllReviews ? filteredReviews : filteredReviews.slice(0, 3);
+  const displayedFaqs = showAllFaqs ? publicApprovedFaqs : publicApprovedFaqs.slice(0, 3);
 
   return (
     <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden">
@@ -813,141 +875,179 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-3">
-                {filteredReviews.map((rev, idx) => {
-                  const isReplyExpanded = Boolean(expandedReplies[rev.id]);
-                  return (
-                    <div
-                      key={rev.id}
-                      className="reveal-up relative pt-4 sm:pt-5"
-                      style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
-                    >
-                      {/* 1. Offset Backdrop Shape (Compact & sleek) */}
-                      <div 
-                        className="absolute -left-1.5 sm:-left-2 top-6 bottom-3 w-[88%] rounded-2xl bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-90 shadow-md transform -rotate-1 pointer-events-none" 
-                      />
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-3">
+                  {displayedReviews.map((rev, idx) => {
+                    const isReplyExpanded = Boolean(expandedReplies[rev.id]);
+                    const isMsgExpanded = Boolean(expandedMessages[rev.id]);
+                    return (
+                      <div
+                        key={rev.id}
+                        className="reveal-up relative pt-4 sm:pt-5"
+                        style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
+                      >
+                        {/* 1. Offset Backdrop Shape (Compact & sleek) */}
+                        <div 
+                          className="absolute -left-1.5 sm:-left-2 top-6 bottom-3 w-[88%] rounded-2xl bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-90 shadow-md transform -rotate-1 pointer-events-none" 
+                        />
 
-                      {/* 2. Main Quotation Frame (Compact size with crisp border) */}
-                      <div className="relative rounded-[24px] bg-[#1a120e] border-2 border-[#eedfd5]/90 p-5 sm:p-6 pt-7 pb-5 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-[#ff7a1a] group">
-                        
-                        {/* Top Quotation Mark “ (Sleek size) */}
-                        <div className="absolute -top-3.5 left-6 sm:left-8 px-2 bg-[#1a120e] z-10 flex items-center justify-center">
-                          <span className="font-serif text-3xl sm:text-4xl font-black text-[#ff7a1a] leading-none select-none">
-                            “
-                          </span>
-                        </div>
-
-                        {/* Bottom Quotation Mark ” (Sleek size) */}
-                        <div className="absolute -bottom-4 right-8 sm:right-10 px-2 bg-[#1a120e] z-10 flex items-center justify-center">
-                          <span className="font-serif text-3xl sm:text-4xl font-black text-[#ff7a1a] leading-none select-none">
-                            ”
-                          </span>
-                        </div>
-
-                        {/* 3. Tilted Polaroid Photo Card at Top Right with Paperclip (Compact) */}
-                        <div className="absolute -top-5 -right-1 sm:-top-6 sm:-right-2 z-20 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
-                          {/* Paperclip Graphic 📎 */}
-                          <svg 
-                            className="w-4 h-6 text-neutral-900 drop-shadow -rotate-12 absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 pointer-events-none" 
-                            viewBox="0 0 24 36" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            strokeWidth="2.5" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round"
-                          >
-                            <path d="M16 8v16a6 6 0 0 1-12 0V9a4 4 0 0 1 8 0v14a2 2 0 0 1-4 0V9" />
-                          </svg>
-
-                          {/* Polaroid Frame */}
-                          <div className="bg-white p-1 pb-3 sm:pb-3.5 rounded-sm shadow-md border border-neutral-200 rotate-6 sm:rotate-8 group-hover:rotate-0 transition-transform">
-                            {rev.avatar ? (
-                              <img
-                                src={rev.avatar}
-                                alt={rev.name}
-                                className="w-11 h-11 sm:w-13 sm:h-13 object-cover rounded-xs"
-                              />
-                            ) : (
-                              <div className="w-11 h-11 sm:w-13 sm:h-13 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-sm text-white">
-                                {rev.name?.charAt(0) || 'U'}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Review Content */}
-                        <div>
-                          {/* Testimonial Quote Message (Bright visible text, clamped to 2-3 lines) */}
-                          <div className="mb-3 pr-9 sm:pr-11">
-                            {rev.title && (
-                              <h5 className="font-heading font-extrabold text-[14px] sm:text-[15px] text-white mb-1 leading-snug line-clamp-1">
-                                {rev.title}
-                              </h5>
-                            )}
-                            <p className="text-[13px] sm:text-[13.5px] text-white font-medium leading-relaxed line-clamp-3">
-                              "{rev.message}"
-                            </p>
+                        {/* 2. Main Quotation Frame (Compact size with crisp border) */}
+                        <div className="relative rounded-[22px] bg-[#1a120e] dark:bg-[#1a120e] border-2 border-[#eedfd5]/90 p-4 sm:p-5 pt-6 pb-4 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-[#ff7a1a] group">
+                          
+                          {/* Top Quotation Mark “ (Sleek size) */}
+                          <div className="absolute -top-3 left-6 sm:left-7 px-2 bg-[#1a120e] dark:bg-[#1a120e] z-10 flex items-center justify-center">
+                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
+                              “
+                            </span>
                           </div>
 
-                          {/* 5 Rating Stars (Clean & bright) */}
-                          <div className="flex items-center gap-1 mb-2.5 text-amber-400 text-base drop-shadow-sm">
-                            {Array.from({ length: rev.rating || 5 }).map((_, s) => (
-                              <span key={s}>★</span>
-                            ))}
+                          {/* Bottom Quotation Mark ” (Sleek size) */}
+                          <div className="absolute -bottom-3.5 right-7 sm:right-8 px-2 bg-[#1a120e] dark:bg-[#1a120e] z-10 flex items-center justify-center">
+                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
+                              ”
+                            </span>
                           </div>
 
-                          {/* Client Name & Role */}
-                          <div className="pt-2 border-t border-[#33271f]/80 flex items-center justify-between gap-2 flex-wrap">
-                            <div>
-                              <h4 className="font-heading font-extrabold text-[14px] text-white leading-tight">
-                                {rev.name}
-                              </h4>
-                              <p className="text-[11px] text-neutral-300 mt-0.5">
-                                {rev.role || 'Verified Client'}
-                              </p>
-                            </div>
+                          {/* 3. Tilted Polaroid Photo Card at Top Right with Paperclip (Compact) */}
+                          <div className="absolute -top-4 -right-1 sm:-top-5 sm:-right-2 z-20 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                            {/* Paperclip Graphic 📎 */}
+                            <svg 
+                              className="w-3.5 h-5 text-neutral-900 drop-shadow -rotate-12 absolute -top-2 left-1/2 -translate-x-1/2 z-30 pointer-events-none" 
+                              viewBox="0 0 24 36" 
+                              fill="none" 
+                              stroke="currentColor" 
+                              strokeWidth="2.5" 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round"
+                            >
+                              <path d="M16 8v16a6 6 0 0 1-12 0V9a4 4 0 0 1 8 0v14a2 2 0 0 1-4 0V9" />
+                            </svg>
 
-                            {/* Service Tag */}
-                            {rev.service && (
-                              <span className="text-[10px] font-bold text-[#ff7a1a] bg-[#ff7a1a]/15 border border-[#ff7a1a]/30 px-2 py-0.5 rounded-full truncate max-w-[130px]">
-                                {rev.service}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Admin Reply - Prominently Displayed to User */}
-                          {rev.adminReply && rev.adminReply.message && (
-                            <div className="mt-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#D57C63]/15 to-orange-500/10 border border-[#D57C63]/35 shadow-sm space-y-1.5 animate-fadeIn">
-                              <div className="flex items-center gap-1.5 text-xs font-bold text-[#ff9a7b]">
-                                <div className="w-5 h-5 rounded-full bg-[#D57C63] flex items-center justify-center text-black text-[10px] font-black">
-                                  RK
+                            {/* Polaroid Frame */}
+                            <div className="bg-white p-1 pb-2.5 sm:pb-3 rounded-sm shadow-md border border-neutral-200 rotate-6 sm:rotate-8 group-hover:rotate-0 transition-transform">
+                              {rev.avatar ? (
+                                <img
+                                  src={rev.avatar}
+                                  alt={rev.name}
+                                  className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-xs"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-xs text-white">
+                                  {rev.name?.charAt(0) || 'U'}
                                 </div>
-                                <span>Official Reply from Rahila Kareem:</span>
-                              </div>
-                              <p className="text-xs text-neutral-100 leading-relaxed italic pl-6">
-                                "{rev.adminReply.message}"
-                              </p>
+                              )}
                             </div>
-                          )}
-                        </div>
+                          </div>
 
-                        {/* Card Footer: Date & Helpful button */}
-                        <div className="mt-3 pt-2.5 border-t border-[#33271f]/80 flex items-center justify-between text-[11px] text-neutral-400">
-                          <span>{rev.date || 'Recent'}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleLikeReview(rev.id)}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-[#ff7a1a]/20 hover:text-[#ff7a1a] transition-colors cursor-pointer text-[10.5px]"
-                          >
-                            <ThumbsUp className="w-2.5 h-2.5" />
-                            <span>Helpful ({rev.helpfulCount || 0})</span>
-                          </button>
-                        </div>
+                          {/* Review Content */}
+                          <div>
+                            {/* Testimonial Quote Message (High-contrast, compact & readable) */}
+                            <div className="mb-2.5 pr-8 sm:pr-10">
+                              {rev.title && (
+                                <h5 className="font-heading font-extrabold text-[13.5px] sm:text-[14px] text-neutral-900 dark:text-white mb-1 leading-snug line-clamp-1">
+                                  {rev.title}
+                                </h5>
+                              )}
+                              <p className={`text-[12.5px] sm:text-[13px] text-neutral-800 dark:text-neutral-100 font-medium leading-relaxed ${isMsgExpanded ? '' : 'line-clamp-2'}`}>
+                                "{rev.message}"
+                              </p>
+                              {rev.message && rev.message.length > 85 && (
+                                <button
+                                  type="button"
+                                  onClick={() => toggleMessage(rev.id)}
+                                  className="text-[10.5px] font-bold text-[#b84a2c] dark:text-[#ff9a7b] hover:underline cursor-pointer mt-0.5 inline-block"
+                                >
+                                  {isMsgExpanded ? 'Less' : 'See more...'}
+                                </button>
+                              )}
+                            </div>
 
+                            {/* 5 Rating Stars (Clean & bright) */}
+                            <div className="flex items-center gap-1 mb-2 text-amber-400 text-sm drop-shadow-sm">
+                              {Array.from({ length: rev.rating || 5 }).map((_, s) => (
+                                <span key={s}>★</span>
+                              ))}
+                            </div>
+
+                            {/* Client Name & Role */}
+                            <div className="pt-2 border-t border-[#33271f]/80 flex items-center justify-between gap-2 flex-wrap">
+                              <div>
+                                <h4 className="font-heading font-extrabold text-[13.5px] text-neutral-900 dark:text-white leading-tight">
+                                  {rev.name}
+                                </h4>
+                                <p className="text-[11px] text-neutral-500 dark:text-neutral-300 mt-0.5">
+                                  {rev.role || 'Verified Client'}
+                                </p>
+                              </div>
+
+                              {/* Service Tag */}
+                              {rev.service && (
+                                <span className="text-[10px] font-bold text-[#ff7a1a] bg-[#ff7a1a]/15 border border-[#ff7a1a]/30 px-2 py-0.5 rounded-full truncate max-w-[125px]">
+                                  {rev.service}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Admin Reply - High contrast & compact with inline See more */}
+                            {rev.adminReply && rev.adminReply.message && (
+                              <div className="admin-reply-box mt-2.5 p-2.5 sm:p-3 rounded-xl border space-y-1 transition-all shadow-xs">
+                                <div className="flex items-center justify-between gap-1">
+                                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold">
+                                    <div className="w-4 h-4 rounded-full bg-[#D57C63] flex items-center justify-center text-white text-[9px] font-black shrink-0 shadow-xs">
+                                      RK
+                                    </div>
+                                    <span className="admin-reply-title font-bold">Official Reply from Rahila:</span>
+                                  </div>
+                                  {rev.adminReply.message.length > 70 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => toggleReply(rev.id)}
+                                      className="text-[10px] font-bold text-[#b84a2c] dark:text-[#ff9a7b] hover:underline cursor-pointer shrink-0 ml-1"
+                                    >
+                                      {isReplyExpanded ? 'Less' : 'See more'}
+                                    </button>
+                                  )}
+                                </div>
+                                <p className={`text-[12px] sm:text-[12.5px] leading-relaxed italic font-medium pl-5 text-[#1a0f09] dark:text-[#f7eee9] ${isReplyExpanded ? '' : 'line-clamp-2'}`}>
+                                  "{rev.adminReply.message}"
+                                </p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Card Footer: Date & Helpful button */}
+                          <div className="mt-2.5 pt-2 border-t border-[#33271f]/80 flex items-center justify-between text-[10.5px] text-neutral-500 dark:text-neutral-400">
+                            <span>{rev.date || 'Recent'}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleLikeReview(rev.id)}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-[#ff7a1a]/20 hover:text-[#ff7a1a] transition-colors cursor-pointer text-[10.5px]"
+                            >
+                              <ThumbsUp className="w-2.5 h-2.5" />
+                              <span>Helpful ({rev.helpfulCount || 0})</span>
+                            </button>
+                          </div>
+
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+
+                {/* See More / Show Less Reviews Button */}
+                {filteredReviews.length > 3 && (
+                  <div className="flex justify-center pt-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllReviews(!showAllReviews)}
+                      className="glow-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 transition-all"
+                    >
+                      <span>
+                        {showAllReviews ? 'Show Less Reviews ↑' : `See More Reviews (${filteredReviews.length - 3} More) ↓`}
+                      </span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -979,9 +1079,9 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               </button>
             </div>
 
-            {/* Accordion List of Approved FAQs */}
-            <div className="space-y-4">
-              {publicApprovedFaqs.map((faq, idx) => {
+            {/* Accordion List of Approved FAQs (Compact: 3 initial items with See More toggle) */}
+            <div className="space-y-3.5">
+              {displayedFaqs.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
 
                 return (
@@ -992,50 +1092,50 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     <button
                       type="button"
                       onClick={() => setOpenFaqIndex(isOpen ? -1 : idx)}
-                      className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/5 transition-colors"
+                      className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/5 transition-colors"
                     >
                       <div className="flex-1">
-                        <span className="text-[11px] font-bold text-[#D57C63] uppercase tracking-wider block mb-1">
-                          {faq.category}
+                        <span className="text-[10.5px] font-bold text-[#D57C63] uppercase tracking-wider block mb-0.5">
+                          {faq.category || 'General Inquiries'}
                         </span>
-                        <span className="font-heading font-extrabold text-base sm:text-lg text-white">
+                        <span className="font-heading font-extrabold text-[14px] sm:text-[16px] text-neutral-900 dark:text-white">
                           Q: {faq.question}
                         </span>
                       </div>
                       <div
-                        className={`w-8 h-8 rounded-full bg-[#D57C63]/15 flex items-center justify-center text-[#D57C63] shrink-0 transition-transform duration-300 ${
+                        className={`w-7 h-7 rounded-full bg-[#D57C63]/15 flex items-center justify-center text-[#D57C63] shrink-0 transition-transform duration-300 ${
                           isOpen ? 'rotate-180 bg-[#D57C63] text-black' : ''
                         }`}
                       >
-                        <ChevronDown className="w-4 h-4" />
+                        <ChevronDown className="w-3.5 h-3.5" />
                       </div>
                     </button>
 
                     {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-3 border-t border-[#33271f] space-y-2.5 animate-fadeIn">
-                        <div className="flex items-center justify-between">
-                          <div className="text-xs font-bold text-[#ff9a7b] flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-[#33271f]/60 space-y-2.5 animate-fadeIn">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          <div className="text-xs font-bold text-[#b84a2c] dark:text-[#ff9a7b] flex items-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                             <span>Official Answer from Rahila Kareem:</span>
                           </div>
                           {faq.answer ? (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/30">
                               Answered by Admin
                             </span>
                           ) : (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/30">
                               Awaiting Reply
                             </span>
                           )}
                         </div>
-                        <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
-                          <p className="text-xs sm:text-[14px] text-neutral-200 leading-relaxed font-medium">
+                        <div className="faq-answer-box p-3.5 rounded-xl border shadow-xs">
+                          <p className="text-xs sm:text-[13.5px] leading-relaxed font-medium">
                             {faq.answer || "Thank you for asking! Rahila Kareem is reviewing this question and will post an answer here shortly."}
                           </p>
                         </div>
                         {faq.askedBy && (
-                          <div className="text-[11px] text-[#a9988d] pt-1 flex items-center justify-between">
-                            <span>Asked by: {faq.askedBy}</span>
+                          <div className="text-[10.5px] text-neutral-500 dark:text-[#a9988d] pt-0.5 flex items-center justify-between">
+                            <span>Asked by: {faq.askedBy || faq.author || 'Visitor'}</span>
                             <span>{faq.date || 'Recently'}</span>
                           </div>
                         )}
@@ -1045,6 +1145,21 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 );
               })}
             </div>
+
+            {/* See More / Show Less FAQs Button */}
+            {publicApprovedFaqs.length > 3 && (
+              <div className="flex justify-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAllFaqs(!showAllFaqs)}
+                  className="glow-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 transition-all"
+                >
+                  <span>
+                    {showAllFaqs ? 'Show Less FAQs ↑' : `See More Questions (${publicApprovedFaqs.length - 3} More) ↓`}
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 

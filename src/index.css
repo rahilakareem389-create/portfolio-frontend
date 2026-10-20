@@ -278,6 +278,58 @@ body {
   stroke: #a84105 !important;
 }
 
+/* ==============================================================
+   HIGH-CONTRAST OVERRIDES FOR ADMIN REPLY BOX & FAQ ANSWER BOX
+   Prevents text bleaching in both Light & Dark modes
+   ============================================================== */
+.admin-reply-box {
+  background: #fbf2eb !important;
+  border: 1px solid #e5b9aa !important;
+  color: #1a0f09 !important;
+}
+.admin-reply-box p,
+.admin-reply-box span,
+.admin-reply-box div {
+  color: #1a0f09 !important;
+}
+.admin-reply-box .admin-reply-title {
+  color: #c24b2b !important;
+  font-weight: 700 !important;
+}
+:root[data-theme="dark"] .admin-reply-box {
+  background: #25150d !important;
+  border: 1px solid #522b1c !important;
+  color: #f7eee9 !important;
+}
+:root[data-theme="dark"] .admin-reply-box p,
+:root[data-theme="dark"] .admin-reply-box span,
+:root[data-theme="dark"] .admin-reply-box div {
+  color: #f7eee9 !important;
+}
+:root[data-theme="dark"] .admin-reply-box .admin-reply-title {
+  color: #ff9a7b !important;
+  font-weight: 700 !important;
+}
+
+.faq-answer-box {
+  background: #f8f3ef !important;
+  border: 1px solid #e5d8cf !important;
+  color: #170e09 !important;
+}
+.faq-answer-box p,
+.faq-answer-box span {
+  color: #170e09 !important;
+}
+:root[data-theme="dark"] .faq-answer-box {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f5ece5 !important;
+}
+:root[data-theme="dark"] .faq-answer-box p,
+:root[data-theme="dark"] .faq-answer-box span {
+  color: #f5ece5 !important;
+}
+
 /* Day Mode Hero Overrides */
 :root[data-theme="light"] .hero-hello-badge {
   background: #ffffff !important;
