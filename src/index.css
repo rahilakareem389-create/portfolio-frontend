@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
 :root {
   --bg: #0e0a08;
   --panel: #1b1411;
@@ -328,6 +330,291 @@ body {
 :root[data-theme="dark"] .faq-answer-box p,
 :root[data-theme="dark"] .faq-answer-box span {
   color: #f5ece5 !important;
+}
+
+/* ==============================================================
+   FOOTER HIGH-CONTRAST THEME ADAPTATION (MOON / DARK & SUN / LIGHT)
+   Ensures seamless background continuity and 100% visible text
+   ============================================================== */
+.site-footer {
+  background-color: var(--bg) !important;
+  border-top-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+.footer-cta-card {
+  background-color: #1b1411 !important;
+  border-color: #33271f !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+.footer-status-badge {
+  background-color: rgba(213, 124, 99, 0.15) !important;
+  border-color: rgba(213, 124, 99, 0.35) !important;
+  color: #ff9a7b !important;
+}
+
+.footer-cta-title {
+  color: #ffffff !important;
+}
+
+.footer-cta-desc {
+  color: #d6c7bc !important;
+}
+
+.footer-cta-btn-alt {
+  background-color: #160f0c !important;
+  border-color: #38261e !important;
+  color: #ffffff !important;
+}
+
+.footer-cta-btn-alt:hover {
+  background-color: #241610 !important;
+  border-color: #D57C63 !important;
+  color: #D57C63 !important;
+}
+
+.footer-grid-divider {
+  border-bottom-color: #33271f !important;
+}
+
+.footer-tagline {
+  color: #bcab9e !important;
+}
+
+.footer-subheading {
+  color: #ffffff !important;
+}
+
+.social-badge-whatsapp {
+  background-color: rgba(6, 78, 59, 0.45) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #25D366 !important;
+}
+
+.social-badge-whatsapp:hover {
+  background-color: #25D366 !important;
+  border-color: #25D366 !important;
+  color: #ffffff !important;
+}
+
+.social-badge-linkedin {
+  background-color: rgba(30, 58, 138, 0.45) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  color: #38bdf8 !important;
+}
+
+.social-badge-linkedin:hover {
+  background-color: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+  color: #ffffff !important;
+}
+
+.social-badge-facebook {
+  background-color: rgba(49, 46, 129, 0.45) !important;
+  border-color: rgba(129, 140, 248, 0.4) !important;
+  color: #818cf8 !important;
+}
+
+.social-badge-facebook:hover {
+  background-color: #1877F2 !important;
+  border-color: #1877F2 !important;
+  color: #ffffff !important;
+}
+
+.footer-heading {
+  color: #ffffff !important;
+}
+
+.footer-link {
+  color: #bcab9e !important;
+}
+
+.footer-link:hover {
+  color: #D57C63 !important;
+}
+
+.footer-contact-item {
+  color: #f7ede3 !important;
+}
+
+.footer-contact-item:hover {
+  color: #D57C63 !important;
+}
+
+.footer-clock-item {
+  color: #bcab9e !important;
+}
+
+.footer-contact-icon {
+  background-color: #1b1411 !important;
+  border-color: #33271f !important;
+}
+
+.footer-bottom-bar {
+  background-color: #1b1411 !important;
+  border-color: #33271f !important;
+}
+
+.footer-copyright {
+  color: #bcab9e !important;
+}
+
+.footer-copyright:hover {
+  color: #ffffff !important;
+}
+
+.footer-top-btn {
+  background-color: #160f0c !important;
+  border-color: #38261e !important;
+  color: #ffffff !important;
+}
+
+.footer-top-btn:hover {
+  background-color: #241610 !important;
+  border-color: #D57C63 !important;
+  color: #D57C63 !important;
+}
+
+/* Light Theme (Sun) Overrides for Footer */
+:root[data-theme="light"] .site-footer {
+  background-color: #fbf7f2 !important;
+  border-top-color: #e5d6c5 !important;
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-cta-card {
+  background-color: #ffffff !important;
+  border-color: #e5d6c5 !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06) !important;
+}
+
+:root[data-theme="light"] .footer-status-badge {
+  background-color: rgba(207, 82, 8, 0.1) !important;
+  border-color: rgba(207, 82, 8, 0.3) !important;
+  color: #c24a06 !important;
+}
+
+:root[data-theme="light"] .footer-cta-title {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-cta-desc {
+  color: #4a382c !important;
+}
+
+:root[data-theme="light"] .footer-cta-btn-alt {
+  background-color: #fdfaf6 !important;
+  border-color: #d8c4b2 !important;
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-cta-btn-alt:hover {
+  background-color: #f5ebe0 !important;
+  border-color: #cf5208 !important;
+  color: #cf5208 !important;
+}
+
+:root[data-theme="light"] .footer-grid-divider {
+  border-bottom-color: #e5d6c5 !important;
+}
+
+:root[data-theme="light"] .footer-tagline {
+  color: #4a382c !important;
+}
+
+:root[data-theme="light"] .footer-subheading {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .social-badge-whatsapp {
+  background-color: #ecfdf5 !important;
+  border-color: #6ee7b7 !important;
+  color: #059669 !important;
+}
+
+:root[data-theme="light"] .social-badge-whatsapp:hover {
+  background-color: #25D366 !important;
+  border-color: #25D366 !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .social-badge-linkedin {
+  background-color: #eff6ff !important;
+  border-color: #93c5fd !important;
+  color: #0284c7 !important;
+}
+
+:root[data-theme="light"] .social-badge-linkedin:hover {
+  background-color: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .social-badge-facebook {
+  background-color: #eef2ff !important;
+  border-color: #a5b4fc !important;
+  color: #4f46e5 !important;
+}
+
+:root[data-theme="light"] .social-badge-facebook:hover {
+  background-color: #1877F2 !important;
+  border-color: #1877F2 !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .footer-heading {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-link {
+  color: #4a382c !important;
+}
+
+:root[data-theme="light"] .footer-link:hover {
+  color: #cf5208 !important;
+}
+
+:root[data-theme="light"] .footer-contact-item {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-contact-item:hover {
+  color: #cf5208 !important;
+}
+
+:root[data-theme="light"] .footer-clock-item {
+  color: #4a382c !important;
+}
+
+:root[data-theme="light"] .footer-contact-icon {
+  background-color: #fdfaf6 !important;
+  border-color: #e5d6c5 !important;
+}
+
+:root[data-theme="light"] .footer-bottom-bar {
+  background-color: #f5ebe0 !important;
+  border-color: #e5d6c5 !important;
+}
+
+:root[data-theme="light"] .footer-copyright {
+  color: #4a382c !important;
+}
+
+:root[data-theme="light"] .footer-copyright:hover {
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-top-btn {
+  background-color: #ffffff !important;
+  border-color: #d8c4b2 !important;
+  color: #140d07 !important;
+}
+
+:root[data-theme="light"] .footer-top-btn:hover {
+  background-color: #f5ebe0 !important;
+  border-color: #cf5208 !important;
+  color: #cf5208 !important;
 }
 
 /* Day Mode Hero Overrides */

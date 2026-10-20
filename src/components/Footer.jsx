@@ -62,27 +62,27 @@ const Footer = ({ setActiveTab }) => {
       name: 'WhatsApp',
       url: personalInfo.whatsappUrl,
       icon: <WhatsAppIcon />,
-      badgeStyle: 'bg-emerald-50 hover:bg-[#25D366] text-[#25D366] hover:text-white border-emerald-300 dark:bg-emerald-950/50 dark:border-emerald-700',
+      badgeStyle: 'social-badge-whatsapp',
       label: 'Direct WhatsApp Chat'
     },
     {
       name: 'LinkedIn',
       url: personalInfo.linkedinUrl,
       icon: <LinkedInIcon />,
-      badgeStyle: 'bg-blue-50 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white border-blue-300 dark:bg-blue-950/50 dark:border-blue-700',
+      badgeStyle: 'social-badge-linkedin',
       label: 'Professional LinkedIn Profile'
     },
     {
       name: 'Facebook',
       url: personalInfo.facebookUrl,
       icon: <FacebookIcon />,
-      badgeStyle: 'bg-indigo-50 hover:bg-[#1877F2] text-[#1877F2] hover:text-white border-indigo-300 dark:bg-indigo-950/50 dark:border-indigo-700',
+      badgeStyle: 'social-badge-facebook',
       label: 'Official Facebook Page'
     }
   ];
 
   return (
-    <footer className="border-t border-neutral-200 dark:border-[#332219] pt-12 pb-8 bg-white dark:bg-[#120c09] text-neutral-900 dark:text-neutral-100 relative overflow-hidden transition-colors">
+    <footer className="site-footer border-t pt-12 pb-8 relative overflow-hidden transition-colors">
       
       {/* Background Subtle Gradient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-28 bg-gradient-to-b from-[#D57C63]/10 to-transparent pointer-events-none blur-3xl" />
@@ -90,16 +90,16 @@ const Footer = ({ setActiveTab }) => {
       <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
 
         {/* 1. Pre-Footer Call-to-Action Card */}
-        <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-neutral-50 dark:bg-[#1b130e] border border-neutral-200 dark:border-[#38261e] shadow-lg relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div className="footer-cta-card mb-12 p-6 sm:p-8 rounded-3xl border shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center lg:text-left max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#D57C63]/15 text-[#c24a06] dark:text-[#ff9a7b] border border-[#D57C63]/30 mb-1">
+            <div className="footer-status-badge inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border mb-1">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Open for New Projects & Consultations</span>
             </div>
-            <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight">
+            <h3 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight footer-cta-title">
               Ready to elevate your online presence?
             </h3>
-            <p className="text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-xs sm:text-sm font-medium leading-relaxed footer-cta-desc">
               Let's craft a fast, responsive WordPress website or full-stack web application tailored precisely to your brand.
             </p>
           </div>
@@ -109,14 +109,14 @@ const Footer = ({ setActiveTab }) => {
               href={personalInfo.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#D57C63] hover:bg-[#c2674e] transition-all shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center gap-2 cursor-pointer"
+              className="px-5 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#D57C63] hover:bg-[#c2674e] transition-all shadow-md hover:shadow-lg hover:shadow-[#D57C63]/25 flex items-center gap-2 cursor-pointer keep-white"
             >
               <WhatsAppIcon />
               <span>Chat on WhatsApp</span>
             </a>
             <button
               onClick={() => handleNav('contact')}
-              className="px-5 py-3 rounded-full text-xs sm:text-sm font-bold text-neutral-900 dark:text-white bg-white dark:bg-[#261a14] hover:bg-neutral-100 dark:hover:bg-[#32221a] border border-neutral-300 dark:border-[#3d271e] hover:border-[#D57C63] transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+              className="footer-cta-btn-alt px-5 py-3 rounded-full text-xs sm:text-sm font-bold border transition-all flex items-center gap-2 cursor-pointer shadow-sm"
             >
               <span>Get a Free Quote</span>
               <ArrowRight className="w-4 h-4 text-[#D57C63]" />
@@ -125,7 +125,7 @@ const Footer = ({ setActiveTab }) => {
         </div>
         
         {/* 2. Main 4-Column Footer Grid - Proportional 12-Col Balance */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 pb-12 border-b border-neutral-200 dark:border-[#2d1e17]">
+        <div className="footer-grid-divider grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 pb-12 border-b">
           
           {/* Section 1: Brand, Tagline & Social Links (4 Cols) */}
           <div className="lg:col-span-4 space-y-4">
@@ -146,19 +146,19 @@ const Footer = ({ setActiveTab }) => {
               />
             </button>
 
-            <p className="text-xs sm:text-sm font-medium text-neutral-800 dark:text-neutral-300 leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm font-medium leading-relaxed max-w-sm footer-tagline">
               {t('footer.tagline')}
             </p>
 
-            {/* Active Working Status Badge (Matching Orange Pill) */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#D57C63]/15 text-[#c24a06] dark:text-[#ff9a7b] border border-[#D57C63]/30 shadow-sm">
+            {/* Active Working Status Badge */}
+            <div className="footer-status-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border shadow-sm">
               <span className="w-2.5 h-2.5 rounded-full bg-[#D57C63] animate-pulse" />
               <span>Available for Worldwide Remote Projects</span>
             </div>
 
             {/* Social Media Links & Platforms */}
             <div className="pt-2">
-              <span className="block text-xs font-extrabold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider mb-2.5">
+              <span className="block text-xs font-extrabold uppercase tracking-wider mb-2.5 footer-subheading">
                 Connect on Social Channels
               </span>
               <div className="flex flex-wrap items-center gap-2">
@@ -181,37 +181,37 @@ const Footer = ({ setActiveTab }) => {
 
           {/* Section 2: Quick Links (2 Cols, Centered) */}
           <div className="lg:col-span-2 space-y-4 lg:mx-auto">
-            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight pb-1">
+            <h4 className="font-heading font-extrabold text-base tracking-tight pb-1 footer-heading">
               {t('footer.quickLinks')}
             </h4>
             <ul className="space-y-3 text-xs sm:text-sm font-semibold">
               <li>
-                <button onClick={() => handleNav('home')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('home')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.home')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('about')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('about')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.about')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('services')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.services')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('portfolio')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('portfolio')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.portfolio')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('pricing')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('pricing')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.pricing')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('contact')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('contact')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   {t('nav.contact')}
                 </button>
               </li>
@@ -220,32 +220,32 @@ const Footer = ({ setActiveTab }) => {
 
           {/* Section 3: Specializations (3 Cols, Centered) */}
           <div className="lg:col-span-3 space-y-4 lg:mx-auto">
-            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight pb-1">
+            <h4 className="font-heading font-extrabold text-base tracking-tight pb-1 footer-heading">
               Specializations
             </h4>
             <ul className="space-y-3.5 text-xs sm:text-sm font-semibold">
               <li>
-                <button onClick={() => handleNav('wordpress')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('wordpress')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   WordPress & WooCommerce
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('fullstack')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('fullstack')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   MERN Web Applications
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('seo')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('seo')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   Technical & On-Page SEO
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('services')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   Speed Tuning & Core Vitals
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
+                <button onClick={() => handleNav('services')} className="footer-link py-1 transition-colors cursor-pointer text-left block">
                   UI/UX Responsive Redesign
                 </button>
               </li>
@@ -254,16 +254,16 @@ const Footer = ({ setActiveTab }) => {
 
           {/* Section 4: Direct Contact Info (3 Cols, Right-aligned) */}
           <div className="lg:col-span-3 space-y-3 lg:ml-auto">
-            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight">
+            <h4 className="font-heading font-extrabold text-base tracking-tight footer-heading">
               {t('footer.contactInfo')}
             </h4>
             <div className="space-y-3 text-xs sm:text-sm">
               
               <a
                 href={`mailto:${personalInfo.email}`}
-                className="flex items-center gap-2.5 py-1 text-neutral-800 dark:text-neutral-200 hover:text-[#D57C63] transition-colors group cursor-pointer"
+                className="footer-contact-item flex items-center gap-2.5 py-1 transition-colors group cursor-pointer"
               >
-                <div className="w-8 h-8 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900/50 flex items-center justify-center shrink-0 group-hover:border-[#D57C63]">
+                <div className="footer-contact-icon w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 group-hover:border-[#D57C63]">
                   <Mail className="w-4 h-4 text-[#D57C63]" />
                 </div>
                 <span className="truncate font-semibold">{personalInfo.email}</span>
@@ -273,23 +273,23 @@ const Footer = ({ setActiveTab }) => {
                 href={personalInfo.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 py-1 text-neutral-800 dark:text-neutral-200 hover:text-[#D57C63] transition-colors group cursor-pointer"
+                className="footer-contact-item flex items-center gap-2.5 py-1 transition-colors group cursor-pointer"
               >
-                <div className="w-8 h-8 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900/50 flex items-center justify-center shrink-0 group-hover:border-[#D57C63] text-[#D57C63]">
+                <div className="footer-contact-icon w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 group-hover:border-[#D57C63] text-[#D57C63]">
                   <WhatsAppIcon />
                 </div>
                 <span className="font-semibold">WhatsApp: {personalInfo.phone}</span>
               </a>
 
-              <div className="flex items-center gap-2.5 py-1 text-neutral-800 dark:text-neutral-200">
-                <div className="w-8 h-8 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center shrink-0">
+              <div className="footer-contact-item flex items-center gap-2.5 py-1">
+                <div className="footer-contact-icon w-8 h-8 rounded-xl border flex items-center justify-center shrink-0">
                   <MapPin className="w-4 h-4 text-[#D57C63]" />
                 </div>
                 <span className="font-semibold">{personalInfo.location}</span>
               </div>
 
-              <div className="flex items-center gap-2.5 py-1 text-neutral-800 dark:text-neutral-200 text-xs">
-                <div className="w-8 h-8 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center shrink-0">
+              <div className="footer-contact-item footer-clock-item flex items-center gap-2.5 py-1 text-xs">
+                <div className="footer-contact-icon w-8 h-8 rounded-xl border flex items-center justify-center shrink-0">
                   <Clock className="w-4 h-4 text-[#D57C63]" />
                 </div>
                 <span className="font-semibold">24/7 Available • All Days</span>
@@ -301,10 +301,10 @@ const Footer = ({ setActiveTab }) => {
         </div>
 
         {/* 3. Bottom Sleek Bar: Centered Copyright & Back-to-Top */}
-        <div className="mt-8 mb-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full bg-neutral-50 dark:bg-[#1a120d] border border-neutral-200/90 dark:border-[#332219] shadow-sm relative flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0">
+        <div className="footer-bottom-bar mt-8 mb-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full border shadow-sm relative flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0">
           <p
             onClick={handleSecretAdminTrigger}
-            className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 text-center cursor-default select-none hover:text-neutral-900 dark:hover:text-white transition-colors"
+            className="footer-copyright text-xs font-semibold text-center cursor-default select-none transition-colors"
             title="Unity Space by Rahila Kareem"
           >
             © {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}
@@ -312,7 +312,7 @@ const Footer = ({ setActiveTab }) => {
 
           <button
             onClick={scrollToTop}
-            className="sm:absolute sm:right-3 flex items-center gap-1.5 py-1 px-3 rounded-full bg-white dark:bg-[#251811] border border-neutral-200 dark:border-[#3d271e] text-neutral-800 dark:text-neutral-200 hover:border-[#D57C63] hover:text-[#D57C63] transition-all cursor-pointer shadow-xs text-xs font-bold"
+            className="footer-top-btn sm:absolute sm:right-3 flex items-center gap-1.5 py-1 px-3 rounded-full border transition-all cursor-pointer shadow-xs text-xs font-bold"
             aria-label="Back to top"
           >
             <span>Back to Top</span>
