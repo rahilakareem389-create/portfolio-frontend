@@ -118,7 +118,6 @@ export default function AdminDashboardModal({
     const headers = {
       'Content-Type': 'application/json',
       'x-admin-email': OWNER_EMAIL,
-      'x-admin-auth': 'true',
       Authorization: `Bearer ${adminToken}`
     };
     try {

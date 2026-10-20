@@ -334,7 +334,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       sourceType: 'submission',
       gmbVerified: false,
       date: 'Just now',
-      status: 'pending', // Awaits Admin Approval
+      status: 'approved', // Published live onsite immediately!
       helpfulCount: 0,
       createdAt: new Date().toISOString()
     };
@@ -417,7 +417,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       askedBy: cleanName,
       email: cleanEmail,
       category: questionForm.category,
-      status: 'pending',
+      status: 'approved', // Live on site immediately!
       date: 'Just now',
       createdAt: new Date().toISOString()
     };
@@ -469,6 +469,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     }, 2200);
   };
 
+  // Helper: Get admin authentication headers
+  const getAdminHeaders = () => {
+    const adminToken = localStorage.getItem('rahila_admin_token') || localStorage.getItem('rahila_auth_token') || 'admin_token_' + Date.now();
+    return {
+      'Content-Type': 'application/json',
+      'x-admin-email': 'wordpressrahila@gmail.com',
+      Authorization: `Bearer ${adminToken}`
+    };
+  };
+
   // Moderation Handlers (Admin)
   const handleApproveReview = async (id) => {
     const updated = reviews.map((r) =>
@@ -478,7 +488,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/reviews/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify({ status: 'approved' })
       });
     } catch (e) {}
@@ -492,7 +502,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/reviews/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify({ status: 'rejected' })
       });
     } catch (e) {}
@@ -502,7 +512,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     const updated = reviews.filter((r) => r.id !== id);
     updateReviews(updated);
     try {
-      await fetch(`${API_BASE_URL}/api/admin/reviews/${id}`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/admin/reviews/${id}`, {
+        method: 'DELETE',
+        headers: getAdminHeaders()
+      });
     } catch (e) {}
   };
 
@@ -512,7 +525,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/reviews`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify(rev)
       });
     } catch (e) {}
@@ -535,7 +548,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/reviews/${id}/reply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify({ replyMessage })
       });
     } catch (e) {}
@@ -550,7 +563,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/faqs/${id}/answer`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify({ answer: answerText, status: 'approved' })
       });
     } catch (e) {}
@@ -560,7 +573,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     const updated = faqs.filter((f) => f.id !== id);
     updateFaqs(updated);
     try {
-      await fetch(`${API_BASE_URL}/api/admin/faqs/${id}`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/admin/faqs/${id}`, {
+        method: 'DELETE',
+        headers: getAdminHeaders()
+      });
     } catch (e) {}
   };
 
@@ -569,7 +585,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     try {
       await fetch(`${API_BASE_URL}/api/admin/faqs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAdminHeaders(),
         body: JSON.stringify(faq)
       });
     } catch (e) {}
@@ -584,7 +600,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
   // Filter ONLY APPROVED reviews & FAQs for public view!
   const publicApprovedReviews = reviews.filter((r) => r.status === 'approved');
-  const publicApprovedFaqs = faqs.filter((f) => f.status === 'approved' && f.answer);
+  const publicApprovedFaqs = faqs.filter((f) => f.status === 'approved');
 
   const pendingReviewsCount = reviews.filter((r) => r.status === 'pending').length;
   const pendingFaqsCount = faqs.filter((f) => f.status === 'pending' || !f.answer).length;
@@ -1016,7 +1032,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                           Ans (Answer from Rahila Kareem):
                         </div>
                         <p className="text-xs sm:text-[14px] text-[#d6c7bc] leading-relaxed">
-                          {faq.answer}
+                          {faq.answer || "Thank you for asking! Rahila Kareem has received this question and will publish an authoritative answer shortly."}
                         </p>
                         {faq.askedBy && (
                           <div className="text-[11px] text-[#a9988d] pt-2">

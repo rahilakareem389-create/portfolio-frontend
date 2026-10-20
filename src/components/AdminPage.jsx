@@ -243,7 +243,6 @@ export default function AdminPage({ setActiveTab }) {
     return {
       'Content-Type': 'application/json',
       'x-admin-email': OWNER_EMAIL,
-      'x-admin-auth': 'true',
       Authorization: `Bearer ${adminToken}`
     };
   };
