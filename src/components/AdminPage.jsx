@@ -179,9 +179,13 @@ export default function AdminPage({ setActiveTab }) {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const hasOwner = parsed.some(u => (u.email || '').toLowerCase() === 'rahilakareem389@gmail.com');
-          const hasSupport = parsed.some(u => (u.email || '').toLowerCase() === 'wordpressrahila@gmail.com');
-          const merged = [...parsed];
+          const filtered = parsed.filter(u => u && u.email &&
+            !/^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com)/i.test(u.email) &&
+            !['fake', 'jhon'].includes((u.name || '').toLowerCase().trim())
+          );
+          const hasOwner = filtered.some(u => (u.email || '').toLowerCase() === 'rahilakareem389@gmail.com');
+          const hasSupport = filtered.some(u => (u.email || '').toLowerCase() === 'wordpressrahila@gmail.com');
+          const merged = [...filtered];
           if (!hasSupport) merged.unshift(defaultMasterUsers[1]);
           if (!hasOwner) merged.unshift(defaultMasterUsers[0]);
           return merged;
@@ -328,20 +332,15 @@ export default function AdminPage({ setActiveTab }) {
       if (usrRes && usrRes.ok) {
         const u = await usrRes.json();
         if (u && Array.isArray(u.users)) {
-          let localU = [];
-          try { localU = JSON.parse(localStorage.getItem('rahila_portfolio_users') || '[]'); } catch (_) {}
           const cleanUsr = u.users.filter(
-            (item) => !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller'].includes(item.name)
+            (item) => item && item.email &&
+              !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller'].includes(item.name) &&
+              !/^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com)/i.test(item.email) &&
+              !['fake', 'jhon'].includes((item.name || '').toLowerCase().trim())
           );
-          const mergedU = [...cleanUsr];
-          (Array.isArray(localU) ? localU : []).forEach(item => {
-            if (item && item.email && !mergedU.some(x => (x.email || '').toLowerCase() === item.email.toLowerCase())) {
-              mergedU.push(item);
-            }
-          });
-          setUsers(mergedU);
+          setUsers(cleanUsr);
           try {
-            localStorage.setItem('rahila_portfolio_users', JSON.stringify(mergedU));
+            localStorage.setItem('rahila_portfolio_users', JSON.stringify(cleanUsr));
           } catch (_) {}
         }
       }
@@ -396,10 +395,15 @@ export default function AdminPage({ setActiveTab }) {
           setReviews((prev) => [e.detail.review, ...prev.filter(r => r.id !== e.detail.review.id)]);
         }
         if (e.detail.type === 'user_login' && e.detail.user) {
-          setUsers((prev) => {
-            const filtered = prev.filter(u => (u.email || '').toLowerCase() !== (e.detail.user.email || '').toLowerCase());
-            return [e.detail.user, ...filtered];
-          });
+          const newUser = e.detail.user;
+          const isFake = /^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com)/i.test(newUser.email || '') ||
+            ['fake', 'jhon'].includes((newUser.name || '').toLowerCase().trim());
+          if (!isFake) {
+            setUsers((prev) => {
+              const filtered = prev.filter(u => (u.email || '').toLowerCase() !== (newUser.email || '').toLowerCase());
+              return [newUser, ...filtered];
+            });
+          }
         }
       };
 

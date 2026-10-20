@@ -22,20 +22,33 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-
 
 /**
  * Synchronizes user session and login activity with the backend audit log ("kon login huwa")
+ * STRICT SECURITY: Only verified users or admins are synced to the audit directory.
+ * Fake or unverified users are strictly discarded.
  */
 export const syncUserSessionToBackend = async (userData, mode = 'login') => {
   if (!userData || !userData.email) return;
   const adminEmails = getAdminEmails();
   const cleanEmail = userData.email.trim().toLowerCase();
   const isAdmin = adminEmails.includes(cleanEmail);
+
+  // Reject fake, test, or dummy emails
+  if (/^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com|tempmail|mailinator|throwaway|yopmail)/i.test(cleanEmail)) {
+    return;
+  }
+
+  // Strictly enforce that unverified clients are NOT recorded in the live audit directory
+  if (!isAdmin && !userData.emailVerified && mode !== 'google_login') {
+    return;
+  }
+
   const role = userData.role || (isAdmin ? (cleanEmail === 'rahilakareem389@gmail.com' ? 'Owner & Master Admin' : 'Support & Lead Admin') : 'Verified Client');
   const name = userData.displayName || userData.name || (isAdmin ? 'Rahila Kareem' : cleanEmail.split('@')[0]);
 
   const activityText = mode === 'signup' 
-    ? 'New Account Created (Signed Up)' 
+    ? 'New Account Created & Verified' 
     : (isAdmin ? 'Master Console Verified Active' : 'Logged In to Client Workspace');
 
-  // Immediately persist to local audit directory cache
+  // Immediately persist to local audit directory cache ONLY for authentic verified users
   try {
     const rawUsers = localStorage.getItem('rahila_portfolio_users');
     let userList = rawUsers ? JSON.parse(rawUsers) : [];
@@ -71,7 +84,8 @@ export const syncUserSessionToBackend = async (userData, mode = 'login') => {
         name,
         email: cleanEmail,
         role,
-        mode
+        mode,
+        isVerified: true
       })
     });
   } catch (_) {
@@ -160,6 +174,15 @@ export const AuthProvider = ({ children }) => {
         const userEmail = (firebaseUser.email || '').toLowerCase();
         const isAdmin = adminEmails.includes(userEmail);
 
+        // SECURITY: If this is an unverified client user, DO NOT grant active session and DO NOT sync to backend!
+        if (!isAdmin && !firebaseUser.emailVerified) {
+          setCurrentUser(null);
+          localStorage.removeItem('rahila_auth_user');
+          localStorage.removeItem('rahila_auth_token');
+          setAuthLoading(false);
+          return;
+        }
+
         const formattedUser = {
           uid: firebaseUser.uid,
           id: firebaseUser.uid,
@@ -180,7 +203,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('rahila_auth_token', token);
         } catch (_) {}
 
-        // Automatically sync active session to live backend audit log
+        // Automatically sync active session to live backend audit log ONLY for authentic verified sessions
         syncUserSessionToBackend(formattedUser, 'active_session');
       } else {
         // If not master admin session, clear user when Firebase user is null
@@ -208,6 +231,11 @@ export const AuthProvider = ({ children }) => {
     const cleanEmail = email.trim().toLowerCase();
     const cleanPass = password.trim();
 
+    // Reject fake / disposable email domains
+    if (/^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com|tempmail|mailinator|throwaway|yopmail)/i.test(cleanEmail)) {
+      throw new Error('Fake or temporary email addresses are strictly prohibited. Please use your authentic personal or business email address.');
+    }
+
     const credential = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
 
     if (name && name.trim()) {
@@ -217,7 +245,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     await sendEmailVerification(credential.user);
-    syncUserSessionToBackend({ email: cleanEmail, displayName: name, role: 'Client' }, 'signup');
+    // STRICT SECURITY: Do NOT sync unverified account to backend audit directory!
     return credential.user;
   };
 
@@ -274,13 +302,22 @@ export const AuthProvider = ({ children }) => {
 
     // 4. Firebase sign-in successful
     const firebaseUser = credential.user;
+
+    // Check verification before accepting session
+    if (!firebaseUser.emailVerified && !isAdmin) {
+      const unverifiedError = new Error('Your email address is not verified yet. Please check your inbox for the verification link before logging in.');
+      unverifiedError.code = 'auth/unverified-email';
+      unverifiedError.user = firebaseUser;
+      throw unverifiedError;
+    }
+
     const formattedUser = {
       uid: firebaseUser.uid,
       id: firebaseUser.uid,
       email: firebaseUser.email,
       name: firebaseUser.displayName || (isAdmin ? 'Rahila Kareem' : firebaseUser.email?.split('@')[0] || 'Client'),
       displayName: firebaseUser.displayName || (isAdmin ? 'Rahila Kareem' : firebaseUser.email?.split('@')[0] || 'Client'),
-      emailVerified: firebaseUser.emailVerified || (isAdmin && true),
+      emailVerified: true,
       role: isAdmin ? 'Admin' : 'Client',
       isAdmin,
       photoURL: firebaseUser.photoURL || null

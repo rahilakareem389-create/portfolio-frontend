@@ -159,6 +159,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       return;
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+    const FAKE_EMAIL_REGEX = /^(fake|test|dummy|tester|sample)@|@(example\.com|test\.com|fake\.com|tempmail\.com|mailinator\.com|throwaway\.com|yopmail\.com|sharklasers\.com|guerrillamail\.com)/i;
+    if (FAKE_EMAIL_REGEX.test(cleanEmail)) {
+      setErrorMsg('Fake or temporary email addresses are strictly prohibited. Please provide your authentic personal or business email address.');
+      return;
+    }
+
     if (password.length < 6) {
       setErrorMsg('Password must be at least 6 characters.');
       return;
@@ -166,7 +173,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
 
     setLoading(true);
     try {
-      const createdUser = await registerWithEmail(name.trim(), email.trim(), password);
+      const createdUser = await registerWithEmail(name.trim(), cleanEmail, password);
 
       // Web3Forms notification for admin awareness
       sendWeb3FormsNotification({
