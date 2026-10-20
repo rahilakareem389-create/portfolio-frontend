@@ -209,12 +209,13 @@ export default function AdminPage({ setActiveTab }) {
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState('');
   const [messageFilter, setMessageFilter] = useState('all'); // 'all' | 'new' | 'replied'
-  const [reviewFilter, setReviewFilter] = useState('pending'); // 'pending' | 'approved' | 'rejected' | 'all'
-  const [faqFilter, setFaqFilter] = useState('unanswered'); // 'unanswered' | 'answered' | 'all'
+  const [reviewFilter, setReviewFilter] = useState('all'); // 'all' | 'pending' | 'approved' | 'rejected'
+  const [faqFilter, setFaqFilter] = useState('all'); // 'all' | 'unanswered' | 'answered'
 
   // Interactive Form States
   const [replyDrafts, setReplyDrafts] = useState({});
   const [faqAnswerDrafts, setFaqAnswerDrafts] = useState({});
+  const [inquiryReplyDrafts, setInquiryReplyDrafts] = useState({});
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
   const [showAddFaqModal, setShowAddFaqModal] = useState(false);
 
@@ -239,10 +240,14 @@ export default function AdminPage({ setActiveTab }) {
 
   // Helper: Retrieve authorization headers containing Admin credentials & Token
   const getAuthHeaders = () => {
-    const adminToken = localStorage.getItem('rahila_admin_token') || 'admin_token_' + Date.now();
+    const adminToken =
+      localStorage.getItem('rahila_auth_token') ||
+      localStorage.getItem('rahila_admin_token') ||
+      'admin_token_' + Date.now();
     return {
       'Content-Type': 'application/json',
       'x-admin-email': OWNER_EMAIL,
+      'x-admin-auth': 'true',
       Authorization: `Bearer ${adminToken}`
     };
   };
@@ -573,11 +578,42 @@ export default function AdminPage({ setActiveTab }) {
         headers: getAuthHeaders(),
         body: JSON.stringify({ status: newStatus })
       });
-      setMessages((prev) =>
-        prev.map((m) => (m.id === msgId ? { ...m, status: newStatus } : m))
-      );
+      setMessages((prev) => {
+        const updated = prev.map((m) => (m.id === msgId ? { ...m, status: newStatus } : m));
+        try { localStorage.setItem('rahila_portfolio_messages', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'message_status', id: msgId, status: newStatus } }));
       showToast(`Message marked as ${newStatus}`);
     } catch (_) {}
+  };
+
+  // Action: Direct In-Dashboard Reply to Inquiry (Saves notes & emails user)
+  const handleSendInquiryReply = async (msgId) => {
+    const text = (inquiryReplyDrafts[msgId] || '').trim();
+    if (!text) return;
+
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/messages/${msgId}/reply`, {
+        method: 'PATCH',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ adminNotes: text, status: 'replied' })
+      });
+
+      setMessages((prev) => {
+        const updated = prev.map((m) =>
+          m.id === msgId ? { ...m, adminNotes: text, status: 'replied' } : m
+        );
+        try { localStorage.setItem('rahila_portfolio_messages', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
+
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'message_reply', id: msgId, adminNotes: text } }));
+      setInquiryReplyDrafts((prev) => ({ ...prev, [msgId]: '' }));
+      showToast('Official response saved & email notification dispatched to user!');
+    } catch (_) {
+      showToast('Error updating reply. Please try again.');
+    }
   };
 
   // Action: Delete Message
@@ -588,7 +624,11 @@ export default function AdminPage({ setActiveTab }) {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      setMessages((prev) => prev.filter((m) => m.id !== msgId));
+      setMessages((prev) => {
+        const updated = prev.filter((m) => m.id !== msgId);
+        try { localStorage.setItem('rahila_portfolio_messages', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
       showToast('Inquiry deleted successfully.');
     } catch (_) {}
   };
@@ -601,10 +641,13 @@ export default function AdminPage({ setActiveTab }) {
         headers: getAuthHeaders(),
         body: JSON.stringify({ status })
       });
-      setReviews((prev) =>
-        prev.map((r) => (r.id === revId ? { ...r, status } : r))
-      );
-      showToast(`Review ${status === 'approved' ? 'approved & published live' : status}.`);
+      setReviews((prev) => {
+        const updated = prev.map((r) => (r.id === revId ? { ...r, status } : r));
+        try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'review_status', id: revId, status } }));
+      showToast(`Review ${status === 'approved' ? 'approved & published live on website' : status}.`);
     } catch (_) {}
   };
 
@@ -620,8 +663,8 @@ export default function AdminPage({ setActiveTab }) {
         body: JSON.stringify({ replyMessage: text })
       });
 
-      setReviews((prev) =>
-        prev.map((r) =>
+      setReviews((prev) => {
+        const updated = prev.map((r) =>
           r.id === revId
             ? {
                 ...r,
@@ -633,11 +676,14 @@ export default function AdminPage({ setActiveTab }) {
                 }
               }
             : r
-        )
-      );
+        );
+        try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
 
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'review_reply', id: revId, reply: text } }));
       setReplyDrafts({ ...replyDrafts, [revId]: '' });
-      showToast('Official admin response published live to review!');
+      showToast('Official admin response published live & notification emailed to client!');
     } catch (_) {}
   };
 
@@ -649,7 +695,11 @@ export default function AdminPage({ setActiveTab }) {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      setReviews((prev) => prev.filter((r) => r.id !== revId));
+      setReviews((prev) => {
+        const updated = prev.filter((r) => r.id !== revId);
+        try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
       showToast('Review deleted.');
     } catch (_) {}
   };
@@ -718,16 +768,19 @@ export default function AdminPage({ setActiveTab }) {
         body: JSON.stringify({ answer: text, status: 'approved' })
       });
 
-      setFaqs((prev) =>
-        prev.map((f) =>
+      setFaqs((prev) => {
+        const updated = prev.map((f) =>
           f.id === faqId
             ? { ...f, answer: text, status: 'approved', adminEmail: OWNER_EMAIL }
             : f
-        )
-      );
+        );
+        try { localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
 
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'faq_answered', id: faqId, answer: text } }));
       setFaqAnswerDrafts({ ...faqAnswerDrafts, [faqId]: '' });
-      showToast('Answer published to FAQ section live!');
+      showToast('Answer published to FAQ section live & notification emailed to user!');
     } catch (_) {}
   };
 
@@ -739,7 +792,11 @@ export default function AdminPage({ setActiveTab }) {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      setFaqs((prev) => prev.filter((f) => f.id !== faqId));
+      setFaqs((prev) => {
+        const updated = prev.filter((f) => f.id !== faqId);
+        try { localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(updated)); } catch (_) {}
+        return updated;
+      });
       showToast('FAQ deleted.');
     } catch (_) {}
   };
@@ -1377,6 +1434,53 @@ export default function AdminPage({ setActiveTab }) {
                       <p className="text-xs sm:text-sm text-[#d6c7bc] leading-relaxed whitespace-pre-wrap bg-[#1d120d] p-3.5 rounded-xl border border-[#332219]">
                         {msg.message}
                       </p>
+
+                      {/* Rahila's Official Response if replied */}
+                      {msg.adminNotes && (
+                        <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30 text-xs space-y-1">
+                          <div className="flex items-center gap-1.5 font-bold text-[#ff9a7b]">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Rahila's Official Reply (Dispatched to User):</span>
+                          </div>
+                          <p className="text-neutral-200 leading-relaxed font-medium">
+                            {msg.adminNotes}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Direct Reply & Email User */}
+                      <div className="p-3 rounded-xl bg-[#140b07] border border-[#2b1911] space-y-2">
+                        <div className="flex items-center justify-between text-xs text-[#a9988d]">
+                          <span className="font-semibold text-[#D57C63] flex items-center gap-1">
+                            <Send className="w-3 h-3" />
+                            <span>Reply directly to {msg.name} (Sends Automated Email Notification):</span>
+                          </span>
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder={`Type your reply to ${msg.name}...`}
+                            value={inquiryReplyDrafts[msg.id] || ''}
+                            onChange={(e) =>
+                              setInquiryReplyDrafts({
+                                ...inquiryReplyDrafts,
+                                [msg.id]: e.target.value
+                              })
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSendInquiryReply(msg.id);
+                            }}
+                            className="flex-1 bg-[#0e0805] border border-[#332219] rounded-xl px-3 py-2 text-xs text-white placeholder-[#6d5b50] focus:outline-none focus:border-[#D57C63]"
+                          />
+                          <button
+                            onClick={() => handleSendInquiryReply(msg.id)}
+                            className="glow-btn px-4 py-2 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer shrink-0 shadow-md"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Reply &amp; Email</span>
+                          </button>
+                        </div>
+                      </div>
 
                       {/* Actions */}
                       <div className="flex items-center justify-between pt-1">

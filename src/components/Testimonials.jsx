@@ -185,14 +185,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               (r) =>
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
             );
-            // Retain locally submitted pending reviews so refresh never wipes them
+            // Server data is authoritative for approved reviews. Only retain un-synced local pending items.
             let stored = [];
             try { stored = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]'); } catch (_) {}
-            const pendingReviews = (Array.isArray(stored) ? stored : []).filter(r => r && r.status === 'pending');
-            const merged = [...pendingReviews, ...cleanReviews.filter(cr => !pendingReviews.some(p => p.id === cr.id))];
+            const localOnlyPending = (Array.isArray(stored) ? stored : []).filter(
+              r => r && r.status === 'pending' && !cleanReviews.some(cr => cr.id === r.id)
+            );
+            const merged = [...cleanReviews, ...localOnlyPending];
             const finalReviews = merged.length > 0 ? merged : defaultReviews;
             setReviews(finalReviews);
-            localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalReviews));
+            try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalReviews)); } catch (_) {}
           }
         }
 
@@ -203,14 +205,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               (f) =>
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Tariq Mehmood', 'Sarah Jenkins'].includes(f.askedBy)
             );
-            // Retain locally submitted pending FAQs so refresh never wipes them
+            // Server data is authoritative for approved FAQs. Only retain un-synced local pending items.
             let stored = [];
             try { stored = JSON.parse(localStorage.getItem('rahila_portfolio_faqs') || '[]'); } catch (_) {}
-            const pendingFaqs = (Array.isArray(stored) ? stored : []).filter(f => f && f.status === 'pending');
-            const mergedFaqs = [...pendingFaqs, ...cleanFaqs.filter(cf => !pendingFaqs.some(p => p.id === cf.id))];
+            const localOnlyPendingFaqs = (Array.isArray(stored) ? stored : []).filter(
+              f => f && f.status === 'pending' && !cleanFaqs.some(cf => cf.id === f.id)
+            );
+            const mergedFaqs = [...cleanFaqs, ...localOnlyPendingFaqs];
             const finalFaqs = mergedFaqs.length > 0 ? mergedFaqs : defaultFaqs;
             setFaqs(finalFaqs);
-            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(finalFaqs));
+            try { localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(finalFaqs)); } catch (_) {}
           }
         }
       } catch (e) {

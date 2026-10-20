@@ -114,10 +114,14 @@ export default function AdminDashboardModal({
   // Fetch live messages & cloud stats
   const fetchCloudData = async () => {
     setLoadingMessages(true);
-    const adminToken = localStorage.getItem('rahila_admin_token') || 'admin_token_' + Date.now();
+    const adminToken =
+      localStorage.getItem('rahila_auth_token') ||
+      localStorage.getItem('rahila_admin_token') ||
+      'admin_token_' + Date.now();
     const headers = {
       'Content-Type': 'application/json',
       'x-admin-email': OWNER_EMAIL,
+      'x-admin-auth': 'true',
       Authorization: `Bearer ${adminToken}`
     };
     try {
