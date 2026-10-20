@@ -12,7 +12,10 @@ import {
   ExternalLink,
   MessageSquare,
   Sparkles,
-  RefreshCw
+  RefreshCw,
+  Star,
+  HelpCircle,
+  Check
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
@@ -22,6 +25,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
   const [dashboardData, setDashboardData] = useState({
     inquiries: [],
     reviews: [],
+    faqs: [],
     securityStatus: {
       emailVerified: true,
       accountType: 'Client',
@@ -38,6 +42,21 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
 
   const fetchDashboard = async () => {
     setLoading(true);
+    const userEmail = (user?.email || '').toLowerCase().trim();
+
+    // Check local caches
+    let localMsgs = [];
+    let localRevs = [];
+    let localFaqs = [];
+    try {
+      const storedM = JSON.parse(localStorage.getItem('rahila_portfolio_messages') || '[]');
+      if (Array.isArray(storedM)) localMsgs = storedM.filter(m => (m.email || '').toLowerCase().trim() === userEmail);
+      const storedR = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]');
+      if (Array.isArray(storedR)) localRevs = storedR.filter(r => (r.email || '').toLowerCase().trim() === userEmail);
+      const storedF = JSON.parse(localStorage.getItem('rahila_portfolio_faqs') || '[]');
+      if (Array.isArray(storedF)) localFaqs = storedF.filter(f => (f.email || '').toLowerCase().trim() === userEmail);
+    } catch (_) {}
+
     try {
       const token = localStorage.getItem('rahila_auth_token');
       const res = await fetch(`${API_BASE_URL}/api/auth/dashboard`, {
@@ -51,7 +70,35 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
       if (res.ok) {
         const data = await res.json();
         if (data && data.success) {
-          setDashboardData(data);
+          const sInq = Array.isArray(data.inquiries) ? data.inquiries : [];
+          const mergedInq = [...sInq];
+          localMsgs.forEach(lm => {
+            const idx = mergedInq.findIndex(sm => sm.id === lm.id);
+            if (idx === -1) mergedInq.push(lm);
+            else if (mergedInq[idx].adminNotes) lm.adminNotes = mergedInq[idx].adminNotes;
+          });
+
+          const sRev = Array.isArray(data.reviews) ? data.reviews : [];
+          const mergedRev = [...sRev];
+          localRevs.forEach(lr => {
+            const idx = mergedRev.findIndex(sr => sr.id === lr.id);
+            if (idx === -1) mergedRev.push(lr);
+          });
+
+          const sFaq = Array.isArray(data.faqs) ? data.faqs : [];
+          const mergedFaq = [...sFaq];
+          localFaqs.forEach(lf => {
+            const idx = mergedFaq.findIndex(sf => sf.id === lf.id);
+            if (idx === -1) mergedFaq.push(lf);
+          });
+
+          setDashboardData({
+            ...data,
+            inquiries: mergedInq,
+            reviews: mergedRev,
+            faqs: mergedFaq
+          });
+          return;
         }
       }
     } catch (err) {
@@ -59,6 +106,13 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
     } finally {
       setLoading(false);
     }
+
+    setDashboardData(prev => ({
+      ...prev,
+      inquiries: localMsgs,
+      reviews: localRevs,
+      faqs: localFaqs
+    }));
   };
 
   if (!isOpen || !user || !user.emailVerified) return null;
@@ -91,7 +145,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
               </span>
             </div>
             <p className="modal-subtitle text-xs mt-0.5 font-medium leading-relaxed">
-              Secure client dashboard authenticated via Firebase Authentication &amp; email verification
+              Track project inquiries, client reviews, community FAQs, and Rahila Kareem's replies.
             </p>
           </div>
         </div>
@@ -131,43 +185,50 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
           </div>
         </div>
 
-        {/* Verification Status Banner */}
-        <div className="dialog-modal-auth-banner p-4 rounded-2xl mb-6 flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold text-emerald-900 dark:text-emerald-200">Email Ownership Confirmed</h4>
-            <p className="text-[11px] text-emerald-800 dark:text-emerald-100 font-medium leading-relaxed mt-0.5">
-              Your inbox was verified via a cryptographically secure single-use code. All project communications and quotes are sent to <strong className="underline underline-offset-2 font-bold text-emerald-950 dark:text-emerald-300">{user.email}</strong>.
-            </p>
-          </div>
-        </div>
-
-        {/* Private Inquiries Section */}
+        {/* Section 1: Private Inquiries & Admin Replies */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-center justify-between">
-            <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
-              <FolderOpen className="w-4 h-4 text-[#ff7a1a]" />
-              <span>Your Project Inquiries ({dashboardData.inquiries?.length || 0})</span>
-            </h3>
-          </div>
+          <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
+            <FolderOpen className="w-4 h-4 text-[#ff7a1a]" />
+            <span>Your Project Inquiries ({dashboardData.inquiries?.length || 0})</span>
+          </h3>
 
           {dashboardData.inquiries && dashboardData.inquiries.length > 0 ? (
-            <div className="space-y-2.5 max-h-52 overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
               {dashboardData.inquiries.map((inq) => (
                 <div
                   key={inq.id || inq._id}
-                  className="modal-box-card p-3.5 rounded-xl space-y-1.5"
+                  className="modal-box-card p-4 rounded-2xl space-y-2 border border-neutral-200 dark:border-[#38261e]"
                 >
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold modal-title">{inq.subject || inq.plan || 'Project Inquiry'}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold uppercase border border-amber-500/30">
-                      {inq.status || 'Received'}
+                    <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase border ${
+                      inq.adminNotes
+                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
+                        : 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/30'
+                    }`}>
+                      {inq.adminNotes ? 'Admin Replied' : (inq.status || 'Received')}
                     </span>
                   </div>
-                  <p className="text-xs modal-subtitle line-clamp-2">{inq.message}</p>
-                  <div className="text-[10px] modal-subtitle flex items-center gap-1 font-semibold">
+                  <p className="text-xs modal-subtitle leading-relaxed">{inq.message}</p>
+                  
+                  {/* Dedicated Admin Reply Card */}
+                  {inq.adminNotes ? (
+                    <div className="mt-2.5 p-3.5 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/30 text-xs space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-orange-700 dark:text-orange-400">
+                        <Sparkles className="w-3.5 h-3.5 text-[#ff7a1a]" />
+                        <span>Reply from Rahila Kareem (Admin):</span>
+                      </div>
+                      <p className="text-neutral-800 dark:text-neutral-100 leading-relaxed font-semibold">
+                        {inq.adminNotes}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-neutral-500 dark:text-neutral-400 italic pt-1">
+                      Rahila Kareem will review your inquiry and reply here shortly.
+                    </div>
+                  )}
+
+                  <div className="text-[10px] modal-subtitle flex items-center gap-1 font-semibold pt-1 border-t border-neutral-100 dark:border-neutral-800">
                     <Clock className="w-3 h-3 text-[#ff7a1a]" />
                     <span>{inq.date ? new Date(inq.date).toLocaleDateString() : 'Recently'}</span>
                   </div>
@@ -182,6 +243,73 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
             </div>
           )}
         </div>
+
+        {/* Section 2: User Submitted Reviews & Admin Replies */}
+        {dashboardData.reviews && dashboardData.reviews.length > 0 && (
+          <div className="space-y-3 mb-6">
+            <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <span>Your Client Reviews ({dashboardData.reviews.length})</span>
+            </h3>
+            <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+              {dashboardData.reviews.map((rev) => (
+                <div key={rev.id || rev._id} className="modal-box-card p-4 rounded-2xl space-y-2 border border-neutral-200 dark:border-[#38261e]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold modal-title">{rev.title || rev.service || 'Client Review'}</span>
+                    <span className="text-amber-500 font-bold">★ {rev.rating}/5</span>
+                  </div>
+                  <p className="text-xs modal-subtitle leading-relaxed italic">"{rev.message}"</p>
+
+                  {/* Admin Reply on Review */}
+                  {rev.adminReply && rev.adminReply.message && (
+                    <div className="mt-2.5 p-3 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/30 text-xs space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-orange-700 dark:text-orange-400">
+                        <Sparkles className="w-3.5 h-3.5 text-[#ff7a1a]" />
+                        <span>Rahila Kareem (Owner &amp; Admin) Replied:</span>
+                      </div>
+                      <p className="text-neutral-800 dark:text-neutral-100 italic leading-relaxed">
+                        "{rev.adminReply.message}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Section 3: User Community FAQs & Admin Answers */}
+        {dashboardData.faqs && dashboardData.faqs.length > 0 && (
+          <div className="space-y-3 mb-6">
+            <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
+              <HelpCircle className="w-4 h-4 text-[#ff7a1a]" />
+              <span>Your Community Questions ({dashboardData.faqs.length})</span>
+            </h3>
+            <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+              {dashboardData.faqs.map((faq) => (
+                <div key={faq.id || faq._id} className="modal-box-card p-4 rounded-2xl space-y-2 border border-neutral-200 dark:border-[#38261e]">
+                  <span className="font-bold modal-title text-xs block">Q: {faq.question}</span>
+
+                  {faq.answer ? (
+                    <div className="mt-2 p-3 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-xs space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>Official Answer from Rahila Kareem:</span>
+                      </div>
+                      <p className="text-neutral-800 dark:text-neutral-100 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-amber-600 dark:text-amber-400 italic">
+                      Awaiting response from Rahila Kareem.
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Quick Action Footer */}
         <div className="pt-4 border-t border-neutral-200 dark:border-[#38261e] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">

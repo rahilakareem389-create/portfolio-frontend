@@ -911,37 +911,18 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                             )}
                           </div>
 
-                          {/* Admin Reply (Collapsible See More) */}
+                          {/* Admin Reply - Prominently Displayed to User */}
                           {rev.adminReply && rev.adminReply.message && (
-                            <div className="mt-2 pt-2 border-t border-[#33271f]/80">
-                              <button
-                                type="button"
-                                onClick={() => toggleReply(rev.id)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff7a1a] hover:text-[#ff9240] transition-colors py-0.5 cursor-pointer select-none"
-                              >
-                                <MessageSquare className="w-3 h-3" />
-                                <span>
-                                  {isReplyExpanded ? 'Hide Reply' : 'See Owner Reply (See More)'}
-                                </span>
-                                <ChevronDown
-                                  className={`w-3 h-3 transition-transform duration-300 ${
-                                    isReplyExpanded ? 'rotate-180' : ''
-                                  }`}
-                                />
-                              </button>
-
-                              {/* Collapsible Admin Reply Container */}
-                              {isReplyExpanded && (
-                                <div className="mt-2 p-2.5 rounded-xl bg-[#281a14] border border-[#ff7a1a]/30 shadow-inner space-y-1 animate-fadeIn">
-                                  <div className="flex items-center gap-1 text-[10.5px] font-bold text-[#e5937d]">
-                                    <ShieldCheck className="w-3 h-3 text-[#ff7a1a]" />
-                                    <span>Response from Rahila Kareem:</span>
-                                  </div>
-                                  <p className="text-xs text-white leading-relaxed italic line-clamp-3">
-                                    "{rev.adminReply.message}"
-                                  </p>
+                            <div className="mt-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#D57C63]/15 to-orange-500/10 border border-[#D57C63]/35 shadow-sm space-y-1.5 animate-fadeIn">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-[#ff9a7b]">
+                                <div className="w-5 h-5 rounded-full bg-[#D57C63] flex items-center justify-center text-black text-[10px] font-black">
+                                  RK
                                 </div>
-                              )}
+                                <span>Official Reply from Rahila Kareem:</span>
+                              </div>
+                              <p className="text-xs text-neutral-100 leading-relaxed italic pl-6">
+                                "{rev.adminReply.message}"
+                              </p>
                             </div>
                           )}
                         </div>
@@ -1027,16 +1008,31 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     </button>
 
                     {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-[#33271f] space-y-2">
-                        <div className="text-xs font-bold text-[#D57C63]">
-                          Ans (Answer from Rahila Kareem):
+                      <div className="px-5 sm:px-6 pb-6 pt-3 border-t border-[#33271f] space-y-2.5 animate-fadeIn">
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs font-bold text-[#ff9a7b] flex items-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                            <span>Official Answer from Rahila Kareem:</span>
+                          </div>
+                          {faq.answer ? (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                              Answered by Admin
+                            </span>
+                          ) : (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">
+                              Awaiting Reply
+                            </span>
+                          )}
                         </div>
-                        <p className="text-xs sm:text-[14px] text-[#d6c7bc] leading-relaxed">
-                          {faq.answer || "Thank you for asking! Rahila Kareem has received this question and will publish an authoritative answer shortly."}
-                        </p>
+                        <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
+                          <p className="text-xs sm:text-[14px] text-neutral-200 leading-relaxed font-medium">
+                            {faq.answer || "Thank you for asking! Rahila Kareem is reviewing this question and will post an answer here shortly."}
+                          </p>
+                        </div>
                         {faq.askedBy && (
-                          <div className="text-[11px] text-[#a9988d] pt-2">
-                            Asked by: {faq.askedBy} • {faq.date}
+                          <div className="text-[11px] text-[#a9988d] pt-1 flex items-center justify-between">
+                            <span>Asked by: {faq.askedBy}</span>
+                            <span>{faq.date || 'Recently'}</span>
                           </div>
                         )}
                       </div>
