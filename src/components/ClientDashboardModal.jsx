@@ -37,8 +37,19 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
   useEffect(() => {
     if (isOpen && user) {
       fetchDashboard();
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') onClose();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
     }
-  }, [isOpen, user]);
+  }, [isOpen, user, onClose]);
 
   const fetchDashboard = async () => {
     setLoading(true);
@@ -118,18 +129,29 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
   if (!isOpen || !user || !user.emailVerified) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto">
-      <div className="dialog-modal-box relative w-full max-w-2xl my-auto p-6 sm:p-8 rounded-[28px] shadow-2xl max-h-[90vh] overflow-y-auto">
-        
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="modal-cancel-btn absolute top-5 right-5 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer"
-          aria-label="Close"
+    <div
+      className="fixed inset-0 z-[99999] overflow-y-auto bg-black/85 backdrop-blur-md animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-8 sm:py-12">
+        <div
+          className="dialog-modal-box relative w-full max-w-2xl p-6 sm:p-8 rounded-[28px] shadow-2xl mx-auto"
+          onClick={(e) => e.stopPropagation()}
         >
-          <X className="w-4 h-4" />
-        </button>
+          {/* Prominent Cross (Close) Button */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-neutral-100 hover:bg-neutral-200 dark:bg-[#281a13] dark:hover:bg-[#3d271d] text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white border border-neutral-300 dark:border-[#4a2e22] shadow-sm transition-all duration-200 cursor-pointer z-30 group"
+            aria-label="Close dashboard"
+            title="Close (Esc)"
+          >
+            <X className="w-5 h-5 group-hover:scale-110 transition-transform text-neutral-700 dark:text-neutral-200" strokeWidth={2.5} />
+          </button>
 
         {/* Header */}
         <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-neutral-200 dark:border-[#38261e]">
@@ -332,6 +354,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
           </button>
         </div>
 
+        </div>
       </div>
     </div>
   );

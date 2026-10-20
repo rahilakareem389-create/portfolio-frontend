@@ -74,8 +74,20 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
       setMode(initialMode || 'signup');
       setErrorMsg('');
       setSuccessMsg('');
+      document.body.style.overflow = 'hidden';
+
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') onClose();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
     }
-  }, [isOpen, initialMode]);
+  }, [isOpen, initialMode, onClose]);
 
   // Resend cooldown countdown
   useEffect(() => {
@@ -342,18 +354,29 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in py-6">
-      <div className="w-full max-w-[400px] my-auto p-5 sm:p-6 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] max-h-[90vh] overflow-y-auto">
-        
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full text-neutral-400 hover:text-neutral-700 dark:text-neutral-500 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
-          aria-label="Close"
+    <div
+      className="fixed inset-0 z-[99999] overflow-y-auto bg-black/80 backdrop-blur-md animate-fade-in"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-8 sm:py-12">
+        <div
+          className="w-full max-w-[440px] p-5 sm:p-7 rounded-3xl relative shadow-2xl transition-all border border-[#e5d6c5] dark:border-[#332219] bg-white dark:bg-[#18110d] text-[#140d07] dark:text-[#f7ede3] mx-auto"
+          onClick={(e) => e.stopPropagation()}
         >
-          <X className="w-5 h-5" />
-        </button>
+          {/* Prominent Cross (Close) Button */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-neutral-100 hover:bg-neutral-200 dark:bg-[#281a13] dark:hover:bg-[#3d271d] text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white border border-neutral-300 dark:border-[#4a2e22] shadow-sm transition-all duration-200 cursor-pointer z-30 group"
+            aria-label="Close modal"
+            title="Close (Esc)"
+          >
+            <X className="w-5 h-5 group-hover:scale-110 transition-transform text-neutral-700 dark:text-neutral-200" strokeWidth={2.5} />
+          </button>
 
         {/* Header */}
         <div className="mb-4 pr-6">
@@ -740,6 +763,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signup', onAuthSuccess }) =
           </div>
         )}
 
+        </div>
       </div>
     </div>
   );

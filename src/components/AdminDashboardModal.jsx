@@ -290,8 +290,18 @@ export default function AdminDashboardModal({
       : messages;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto">
-      <div className="admin-portal w-full max-w-5xl rounded-[28px] bg-[#160e0a] border-2 border-[#D57C63]/50 shadow-2xl relative overflow-hidden flex flex-col my-auto max-h-[92vh]">
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="admin-portal w-full max-w-5xl rounded-[28px] bg-[#160e0a] border-2 border-[#D57C63]/50 shadow-2xl relative overflow-hidden flex flex-col my-auto max-h-[92vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         {/* Modal Header */}
         <div className="p-5 sm:p-6 border-b border-[#332219] flex items-center justify-between bg-gradient-to-r from-[#1d120d] to-[#251610] shrink-0">
