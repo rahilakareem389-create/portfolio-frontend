@@ -39,12 +39,17 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   // Reviews state (real Google & verified client reviews only)
   const [reviews, setReviews] = useState(() => {
     try {
+      let deletedIds = [];
+      try { deletedIds = JSON.parse(localStorage.getItem('rahila_deleted_reviews') || '[]'); } catch (_) {}
       const stored = localStorage.getItem('rahila_portfolio_reviews');
       if (stored) {
         const parsed = JSON.parse(stored);
-        // Wipe legacy mock dummy entries
+        // Wipe legacy mock dummy entries & deleted entries
         const clean = (parsed || []).filter(
           (r) =>
+            r && r.id &&
+            !deletedIds.includes(r.id) &&
+            !deletedIds.includes(String(r._id)) &&
             !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
         );
         if (clean && clean.length > 0) {
@@ -191,18 +196,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         if (revRes && revRes.ok) {
           const rData = await revRes.json();
           if (rData && rData.reviews && isMounted) {
+            let deletedIds = [];
+            try { deletedIds = JSON.parse(localStorage.getItem('rahila_deleted_reviews') || '[]'); } catch (_) {}
             const cleanReviews = (rData.reviews || []).filter(
               (r) =>
+                r && r.id &&
+                !deletedIds.includes(r.id) &&
+                !deletedIds.includes(String(r._id)) &&
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
             );
-            // Server data is authoritative for approved reviews. Only retain un-synced local pending items.
-            let stored = [];
-            try { stored = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]'); } catch (_) {}
-            const localOnlyPending = (Array.isArray(stored) ? stored : []).filter(
-              r => r && r.status === 'pending' && !cleanReviews.some(cr => cr.id === r.id)
-            );
-            const merged = [...cleanReviews, ...localOnlyPending];
-            const finalReviews = merged.length > 0 ? merged : defaultReviews;
+            const finalReviews = cleanReviews.length > 0 ? cleanReviews : defaultReviews.filter(d => !deletedIds.includes(d.id));
             setReviews(finalReviews);
             try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalReviews)); } catch (_) {}
           }
@@ -260,6 +263,13 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                 }
               : r
           );
+          try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
+          return updated;
+        });
+      }
+      if (e.detail.type === 'review_deleted' && e.detail.id) {
+        setReviews((prev) => {
+          const updated = prev.filter((r) => r.id !== e.detail.id && String(r._id) !== e.detail.id);
           try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
           return updated;
         });
@@ -377,7 +387,31 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
     const cleanName = (currentUser.name || currentUser.displayName || reviewForm.name || '').trim();
     const cleanEmail = (currentUser.email || reviewForm.email || '').trim().toLowerCase();
-    if (!cleanName || !cleanEmail || !reviewForm.message) return;
+    const cleanMsg = (reviewForm.message || '').trim();
+    const cleanTitle = (reviewForm.title || '').trim();
+
+    // 1. Strict Authenticity & Name Policy
+    if (cleanName.length < 3) {
+      alert('Review Policy: Please enter your authentic full name (at least 3 characters).');
+      return;
+    }
+    if (/^\d+$/.test(cleanName) || /^(fake|test|dummy|tester)/i.test(cleanName)) {
+      alert('Review Policy: Fake or dummy names are not allowed.');
+      return;
+    }
+
+    // 2. Strict Meaningful Content Policy (min 25 chars)
+    if (cleanMsg.length < 25) {
+      alert('Review Policy: Your review must be at least 25 characters long describing the services received.');
+      return;
+    }
+
+    // 3. Strict Anti-Spam / Anti-Gibberish Check (No repeating char smash or long consonant blocks)
+    const gibberishRegex = /(.)\1{4,}|[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]{8,}/;
+    if (gibberishRegex.test(cleanMsg) || gibberishRegex.test(cleanName)) {
+      alert('Review Policy: Random key-mash or spam submissions are strictly rejected. Please write meaningful feedback.');
+      return;
+    }
 
     setReviewSubmitStatus('submitting');
     const token = localStorage.getItem('rahila_auth_token') || '';
@@ -389,8 +423,8 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       role: (reviewForm.role || 'Verified Client').trim(),
       service: reviewForm.service,
       rating: reviewForm.rating,
-      title: (reviewForm.title || 'Great Service & Results').trim(),
-      message: reviewForm.message.trim(),
+      title: (cleanTitle || 'Great Service & Results').trim(),
+      message: cleanMsg,
       avatar: reviewForm.avatar || currentUser.photoURL || '',
       source: 'Website Submission',
       sourceType: 'submission',
@@ -418,21 +452,20 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
       subject: `[New Client Review Submitted] ${reviewForm.rating} Stars by ${cleanName}`,
       name: cleanName,
       email: cleanEmail,
-      message: reviewForm.message,
+      message: cleanMsg,
       details: {
         clientName: cleanName,
         clientEmail: cleanEmail,
         roleOrCompany: reviewForm.role || 'Verified Client',
         serviceDelivered: reviewForm.service,
         starRating: `${reviewForm.rating} / 5 Stars`,
-        headline: reviewForm.title || 'No Headline',
-        reviewMessage: reviewForm.message,
+        headline: cleanTitle || 'No Headline',
+        reviewMessage: cleanMsg,
         hasUploadedAvatar: Boolean(reviewForm.avatar),
         moderationStatus: 'Pending Admin Approval in Dashboard'
       }
     });
 
-    updateReviews([newRev, ...reviews]);
     recordUserEngagement(cleanName, cleanEmail, reviewForm.role, `Submitted ${reviewForm.rating}-Star Review`);
 
     if (typeof window !== 'undefined') {
@@ -699,6 +732,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
           <p className="text-[16px] sm:text-[18px] leading-relaxed seo-body">
             Authentic feedback from client deliverables, project engagements, and community Q&amp;A answered directly by Rahila Kareem.
           </p>
+          <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 text-xs text-[#bcab9e]">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Strict Anti-Spam Moderation Policy</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D57C63]/10 text-[#D57C63] border border-[#D57C63]/20 font-semibold">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>100% Genuine Client Deliverable Reviews</span>
+            </span>
+          </div>
         </div>
 
         {/* ======================================================== */}
@@ -1195,11 +1238,16 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               </div>
             ) : (
               <form onSubmit={handleSubmitReview} className="space-y-3">
-                <div className="dialog-modal-policy-box p-3 rounded-xl flex items-start gap-2.5 text-xs">
-                  <ShieldCheck className="policy-icon w-4 h-4 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Authenticity Policy:</strong> Reviews are moderated in the Admin Dashboard to prevent spam.
-                  </span>
+                <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs space-y-1.5 text-[#d6c7bc]">
+                  <div className="flex items-center gap-2 font-bold text-amber-300">
+                    <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>Client Review Authenticity &amp; Anti-Spam Policy</span>
+                  </div>
+                  <ul className="text-[11px] leading-relaxed list-disc list-inside space-y-0.5 text-[#bcab9e]">
+                    <li><strong>100% Genuine:</strong> Only authentic reviews from clients who have collaborated with Rahila Kareem are accepted.</li>
+                    <li><strong>Admin Moderation:</strong> All submissions start as <em>Pending</em> and must be approved in the Admin Dashboard before appearing on-site.</li>
+                    <li><strong>Strict Spam Policy:</strong> Random key-mash, fake names, or spam are permanently deleted and blocked.</li>
+                  </ul>
                 </div>
 
                 {/* Photo / Avatar Upload */}

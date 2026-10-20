@@ -291,22 +291,18 @@ export default function AdminPage({ setActiveTab }) {
       if (revRes && revRes.ok) {
         const r = await revRes.json();
         if (r && Array.isArray(r.reviews)) {
-          let localR = [];
-          try { localR = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]'); } catch (_) {}
+          let deletedIds = [];
+          try { deletedIds = JSON.parse(localStorage.getItem('rahila_deleted_reviews') || '[]'); } catch (_) {}
           const cleanRev = r.reviews.filter(
             (item) =>
+              item && item.id &&
+              !deletedIds.includes(item.id) &&
+              !deletedIds.includes(String(item._id)) &&
               !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(item.name)
           );
-          const mergedR = [...cleanRev];
-          (Array.isArray(localR) ? localR : []).forEach(item => {
-            if (item && item.id && !mergedR.some(x => x.id === item.id)) {
-              mergedR.push(item);
-            }
-          });
-          const finalRev = mergedR.length > 0 ? mergedR : defaultReviews;
-          setReviews(finalRev);
+          setReviews(cleanRev);
           try {
-            localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalRev));
+            localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(cleanRev));
           } catch (_) {}
         }
       }
@@ -314,17 +310,17 @@ export default function AdminPage({ setActiveTab }) {
       if (faqRes && faqRes.ok) {
         const f = await faqRes.json();
         if (f && Array.isArray(f.faqs)) {
-          let localF = [];
-          try { localF = JSON.parse(localStorage.getItem('rahila_portfolio_faqs') || '[]'); } catch (_) {}
-          const mergedF = [...f.faqs];
-          (Array.isArray(localF) ? localF : []).forEach(item => {
-            if (item && item.id && !mergedF.some(x => x.id === item.id)) {
-              mergedF.push(item);
-            }
-          });
-          setFaqs(mergedF);
+          let deletedFaqIds = [];
+          try { deletedFaqIds = JSON.parse(localStorage.getItem('rahila_deleted_faqs') || '[]'); } catch (_) {}
+          const cleanFaqs = f.faqs.filter(
+            (item) =>
+              item && item.id &&
+              !deletedFaqIds.includes(item.id) &&
+              !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Tariq Mehmood', 'Sarah Jenkins'].includes(item.askedBy)
+          );
+          setFaqs(cleanFaqs);
           try {
-            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(mergedF));
+            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(cleanFaqs));
           } catch (_) {}
         }
       }
@@ -393,6 +389,9 @@ export default function AdminPage({ setActiveTab }) {
         }
         if (e.detail.type === 'new_review' && e.detail.review) {
           setReviews((prev) => [e.detail.review, ...prev.filter(r => r.id !== e.detail.review.id)]);
+        }
+        if (e.detail.type === 'review_deleted' && e.detail.id) {
+          setReviews((prev) => prev.filter(r => r.id !== e.detail.id && String(r._id) !== e.detail.id));
         }
         if (e.detail.type === 'user_login' && e.detail.user) {
           const newUser = e.detail.user;
@@ -691,21 +690,41 @@ export default function AdminPage({ setActiveTab }) {
     } catch (_) {}
   };
 
-  // Action: Delete Review
+  // Action: Delete Review (Permanently from MongoDB & Website)
   const handleDeleteReview = async (revId) => {
-    if (!window.confirm('Delete this review permanently?')) return;
+    if (!window.confirm('Are you sure you want to delete this review permanently? It will be removed immediately from the live website.')) return;
     try {
-      await fetch(`${API_BASE_URL}/api/admin/reviews/${revId}`, { 
-        method: 'DELETE',
-        headers: getAuthHeaders()
-      });
+      // 1. Immediately track in local deleted list
+      let deletedIds = [];
+      try { deletedIds = JSON.parse(localStorage.getItem('rahila_deleted_reviews') || '[]'); } catch (_) {}
+      if (!deletedIds.includes(revId)) deletedIds.push(revId);
+      try { localStorage.setItem('rahila_deleted_reviews', JSON.stringify(deletedIds)); } catch (_) {}
+
+      // 2. Immediately remove from local reviews state & cache
       setReviews((prev) => {
-        const updated = prev.filter((r) => r.id !== revId);
+        const updated = prev.filter((r) => r.id !== revId && String(r._id) !== revId);
         try { localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(updated)); } catch (_) {}
         return updated;
       });
-      showToast('Review deleted.');
-    } catch (_) {}
+
+      // 3. Dispatch real-time sync event so Testimonials and other open tabs instantly drop it
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'review_deleted', id: revId } }));
+
+      // 4. Send delete request to backend API
+      const res = await fetch(`${API_BASE_URL}/api/admin/reviews/${revId}`, { 
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.warn('Backend delete review warning:', errData.message);
+      }
+
+      showToast('Review permanently deleted.');
+    } catch (err) {
+      console.warn('Error deleting review:', err);
+    }
   };
 
   // Action: Add Manual Client Review
