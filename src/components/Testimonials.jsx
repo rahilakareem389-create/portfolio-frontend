@@ -432,6 +432,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     updateFaqs([newQ, ...faqs]);
     recordUserEngagement(questionForm.name, questionForm.email, 'Prospective Client', `Asked Question: "${questionForm.question.substring(0, 35)}..."`);
 
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'new_faq', faq: newQ } }));
+    }
+
     setQuestionSubmitStatus('success');
     setTimeout(() => {
       setIsAskQuestionModalOpen(false);

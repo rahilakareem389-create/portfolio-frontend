@@ -25,13 +25,45 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-
  */
 export const syncUserSessionToBackend = async (userData, mode = 'login') => {
   if (!userData || !userData.email) return;
-  try {
-    const adminEmails = getAdminEmails();
-    const cleanEmail = userData.email.trim().toLowerCase();
-    const isAdmin = adminEmails.includes(cleanEmail);
-    const role = userData.role || (isAdmin ? 'Admin' : 'Client');
-    const name = userData.displayName || userData.name || cleanEmail.split('@')[0];
+  const adminEmails = getAdminEmails();
+  const cleanEmail = userData.email.trim().toLowerCase();
+  const isAdmin = adminEmails.includes(cleanEmail);
+  const role = userData.role || (isAdmin ? (cleanEmail === 'rahilakareem389@gmail.com' ? 'Owner & Master Admin' : 'Support & Lead Admin') : 'Verified Client');
+  const name = userData.displayName || userData.name || (isAdmin ? 'Rahila Kareem' : cleanEmail.split('@')[0]);
 
+  const activityText = mode === 'signup' 
+    ? 'New Account Created (Signed Up)' 
+    : (isAdmin ? 'Master Console Verified Active' : 'Logged In to Client Workspace');
+
+  // Immediately persist to local audit directory cache
+  try {
+    const rawUsers = localStorage.getItem('rahila_portfolio_users');
+    let userList = rawUsers ? JSON.parse(rawUsers) : [];
+    if (!Array.isArray(userList)) userList = [];
+
+    const existingIdx = userList.findIndex(u => (u.email || '').toLowerCase() === cleanEmail);
+    const userObj = {
+      id: userData.uid || userData.id || (existingIdx !== -1 ? userList[existingIdx].id : `usr_${Date.now()}`),
+      name: name,
+      email: cleanEmail,
+      role: role,
+      source: 'Website Auth',
+      activity: activityText,
+      ip: 'Client Workspace',
+      date: new Date().toISOString()
+    };
+
+    if (existingIdx !== -1) {
+      userList.splice(existingIdx, 1);
+    }
+    userList.unshift(userObj);
+    localStorage.setItem('rahila_portfolio_users', JSON.stringify(userList));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'user_login', user: userObj } }));
+    }
+  } catch (_) {}
+
+  try {
     await fetch(`${API_BASE_URL}/api/user/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

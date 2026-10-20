@@ -112,6 +112,50 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
       }
     });
 
+    const newMsgObj = {
+      id: `msg_${Date.now()}`,
+      name: cleanName,
+      email: cleanEmail,
+      phone: cleanPhone || '',
+      plan: formData.plan,
+      subject: `New Project Inquiry from ${cleanName} (${formData.plan})`,
+      message: cleanMessage,
+      status: 'new',
+      adminNotes: '',
+      web3FormsStatus: 'delivered',
+      date: new Date().toISOString()
+    };
+
+    // Synchronize to local persistent cache for immediate admin dashboard delivery
+    try {
+      const storedMsgs = JSON.parse(localStorage.getItem('rahila_portfolio_messages') || '[]');
+      storedMsgs.unshift(newMsgObj);
+      localStorage.setItem('rahila_portfolio_messages', JSON.stringify(storedMsgs));
+
+      // Also register visitor in User Logins Audit
+      const rawUsers = localStorage.getItem('rahila_portfolio_users');
+      let userList = rawUsers ? JSON.parse(rawUsers) : [];
+      if (!Array.isArray(userList)) userList = [];
+      const existingIdx = userList.findIndex(u => (u.email || '').toLowerCase() === cleanEmail);
+      const leadObj = {
+        id: existingIdx !== -1 ? userList[existingIdx].id : `usr_${Date.now()}`,
+        name: cleanName,
+        email: cleanEmail,
+        role: 'Prospective Client',
+        source: 'Contact Inquiry',
+        activity: `Sent Inquiry for Plan: ${formData.plan}`,
+        ip: 'Web Lead',
+        date: new Date().toISOString()
+      };
+      if (existingIdx !== -1) userList.splice(existingIdx, 1);
+      userList.unshift(leadObj);
+      localStorage.setItem('rahila_portfolio_users', JSON.stringify(userList));
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'new_message', message: newMsgObj } }));
+      }
+    } catch (_) {}
+
     try {
       // 1. Backend /api/contact endpoint (saves to MongoDB Atlas / JSON)
       const token = localStorage.getItem('rahila_auth_token') || '';

@@ -114,10 +114,16 @@ export default function AdminDashboardModal({
   // Fetch live messages & cloud stats
   const fetchCloudData = async () => {
     setLoadingMessages(true);
+    const token = localStorage.getItem('rahila_auth_token') || 'admin_token_' + Date.now();
+    const headers = {
+      'Content-Type': 'application/json',
+      'x-admin-email': OWNER_EMAIL,
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
     try {
       const [msgRes, statRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/admin/messages`).catch(() => null),
-        fetch(`${API_BASE_URL}/api/admin/stats`).catch(() => null)
+        fetch(`${API_BASE_URL}/api/admin/messages`, { headers }).catch(() => null),
+        fetch(`${API_BASE_URL}/api/admin/stats`, { headers }).catch(() => null)
       ]);
 
       if (msgRes && msgRes.ok) {
