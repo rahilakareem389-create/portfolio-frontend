@@ -185,12 +185,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               (r) =>
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(r.name)
             );
-            if (cleanReviews.length > 0) {
-              setReviews(cleanReviews);
-              localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(cleanReviews));
-            } else if (defaultReviews.length > 0) {
-              setReviews(defaultReviews);
-            }
+            // Retain locally submitted pending reviews so refresh never wipes them
+            let stored = [];
+            try { stored = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]'); } catch (_) {}
+            const pendingReviews = (Array.isArray(stored) ? stored : []).filter(r => r && r.status === 'pending');
+            const merged = [...pendingReviews, ...cleanReviews.filter(cr => !pendingReviews.some(p => p.id === cr.id))];
+            const finalReviews = merged.length > 0 ? merged : defaultReviews;
+            setReviews(finalReviews);
+            localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalReviews));
           }
         }
 
@@ -201,16 +203,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               (f) =>
                 !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Tariq Mehmood', 'Sarah Jenkins'].includes(f.askedBy)
             );
-            setFaqs(cleanFaqs);
-            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(cleanFaqs));
-          }
-        }
-
-        if (usrRes && usrRes.ok) {
-          const uData = await usrRes.json();
-          if (uData && uData.users && isMounted) {
-            setUsers(uData.users);
-            localStorage.setItem('rahila_portfolio_users', JSON.stringify(uData.users));
+            // Retain locally submitted pending FAQs so refresh never wipes them
+            let stored = [];
+            try { stored = JSON.parse(localStorage.getItem('rahila_portfolio_faqs') || '[]'); } catch (_) {}
+            const pendingFaqs = (Array.isArray(stored) ? stored : []).filter(f => f && f.status === 'pending');
+            const mergedFaqs = [...pendingFaqs, ...cleanFaqs.filter(cf => !pendingFaqs.some(p => p.id === cf.id))];
+            const finalFaqs = mergedFaqs.length > 0 ? mergedFaqs : defaultFaqs;
+            setFaqs(finalFaqs);
+            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(finalFaqs));
           }
         }
       } catch (e) {
@@ -240,22 +240,38 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
   const recordUserEngagement = (name, email, role, activity) => {
     if (!email) return;
-    const existing = users.filter((u) => u.email.toLowerCase() !== email.toLowerCase());
-    const updatedUsers = [
-      {
-        id: `usr_${Date.now()}`,
-        name: name || 'Visitor',
-        email: email.trim(),
-        role: role || 'Client',
-        activity: activity,
-        date: new Date().toISOString()
-      },
-      ...existing
-    ];
+    const cleanEmail = email.trim().toLowerCase();
+    const existing = users.filter((u) => (u.email || '').toLowerCase() !== cleanEmail);
+    const userObj = {
+      id: `usr_${Date.now()}`,
+      name: name || 'Visitor',
+      email: cleanEmail,
+      role: role || 'Client',
+      activity: activity,
+      date: new Date().toISOString()
+    };
+    const updatedUsers = [userObj, ...existing];
     setUsers(updatedUsers);
     try {
       localStorage.setItem('rahila_portfolio_users', JSON.stringify(updatedUsers));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'user_login', user: userObj } }));
+      }
     } catch (e) {}
+
+    // Async record to backend audit
+    try {
+      fetch(`${API_BASE_URL}/api/user/auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name || 'Visitor',
+          email: cleanEmail,
+          role: role || 'Client',
+          mode: 'engagement'
+        })
+      }).catch(() => {});
+    } catch (_) {}
   };
 
   // Authentication & Modal Gate Handlers
@@ -356,6 +372,10 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
     updateReviews([newRev, ...reviews]);
     recordUserEngagement(cleanName, cleanEmail, reviewForm.role, `Submitted ${reviewForm.rating}-Star Review`);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('portfolio_data_sync', { detail: { type: 'new_review', review: newRev } }));
+    }
 
     setReviewSubmitStatus('success');
     setTimeout(() => {

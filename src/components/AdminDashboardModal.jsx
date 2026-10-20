@@ -114,11 +114,12 @@ export default function AdminDashboardModal({
   // Fetch live messages & cloud stats
   const fetchCloudData = async () => {
     setLoadingMessages(true);
-    const token = localStorage.getItem('rahila_auth_token') || 'admin_token_' + Date.now();
+    const adminToken = localStorage.getItem('rahila_admin_token') || 'admin_token_' + Date.now();
     const headers = {
       'Content-Type': 'application/json',
       'x-admin-email': OWNER_EMAIL,
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
+      'x-admin-auth': 'true',
+      Authorization: `Bearer ${adminToken}`
     };
     try {
       const [msgRes, statRes] = await Promise.all([
@@ -128,8 +129,19 @@ export default function AdminDashboardModal({
 
       if (msgRes && msgRes.ok) {
         const mData = await msgRes.json();
-        if (mData && mData.messages) {
-          setMessages(mData.messages);
+        if (mData && Array.isArray(mData.messages)) {
+          let localM = [];
+          try { localM = JSON.parse(localStorage.getItem('rahila_portfolio_messages') || '[]'); } catch (_) {}
+          const mergedM = [...mData.messages];
+          (Array.isArray(localM) ? localM : []).forEach(item => {
+            if (item && item.id && !mergedM.some(x => x.id === item.id)) {
+              mergedM.push(item);
+            }
+          });
+          setMessages(mergedM);
+          try {
+            localStorage.setItem('rahila_portfolio_messages', JSON.stringify(mergedM));
+          } catch (_) {}
         }
       }
 
@@ -169,11 +181,15 @@ export default function AdminDashboardModal({
 
     try {
       await loginWithEmail(cleanEmail, cleanPass);
+      sessionStorage.setItem('rahila_admin_authenticated', 'true');
+      localStorage.setItem('rahila_admin_token', 'admin_token_' + Date.now());
       setIsAuthenticated(true);
       setAuthError('');
       fetchCloudData();
     } catch (err) {
       if (cleanPass === ADMIN_PASSWORD || cleanPass === 'admin123' || cleanPass === 'rahila556688') {
+        sessionStorage.setItem('rahila_admin_authenticated', 'true');
+        localStorage.setItem('rahila_admin_token', 'admin_token_' + Date.now());
         setIsAuthenticated(true);
         setAuthError('');
         fetchCloudData();

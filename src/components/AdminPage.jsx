@@ -237,19 +237,14 @@ export default function AdminPage({ setActiveTab }) {
     category: 'SEO & Web Development'
   });
 
-  // Helper: Retrieve authorization headers containing Firebase Bearer token & Admin Email
+  // Helper: Retrieve authorization headers containing Admin credentials & Token
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('rahila_auth_token') || 'admin_token_' + Date.now();
-    let email = OWNER_EMAIL;
-    try {
-      const savedUser = JSON.parse(localStorage.getItem('rahila_auth_user') || '{}');
-      if (savedUser && savedUser.email) email = savedUser.email;
-    } catch (_) {}
-
+    const adminToken = localStorage.getItem('rahila_admin_token') || 'admin_token_' + Date.now();
     return {
       'Content-Type': 'application/json',
-      'x-admin-email': email,
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
+      'x-admin-email': OWNER_EMAIL,
+      'x-admin-auth': 'true',
+      Authorization: `Bearer ${adminToken}`
     };
   };
 
@@ -269,23 +264,38 @@ export default function AdminPage({ setActiveTab }) {
 
       if (msgRes && msgRes.ok) {
         const m = await msgRes.json();
-        if (m && m.messages && m.messages.length > 0) {
-          setMessages(m.messages);
+        if (m && Array.isArray(m.messages)) {
+          let localM = [];
+          try { localM = JSON.parse(localStorage.getItem('rahila_portfolio_messages') || '[]'); } catch (_) {}
+          const mergedM = [...m.messages];
+          (Array.isArray(localM) ? localM : []).forEach(item => {
+            if (item && item.id && !mergedM.some(x => x.id === item.id)) {
+              mergedM.push(item);
+            }
+          });
+          setMessages(mergedM);
           try {
-            localStorage.setItem('rahila_portfolio_messages', JSON.stringify(m.messages));
+            localStorage.setItem('rahila_portfolio_messages', JSON.stringify(mergedM));
           } catch (_) {}
         }
       }
 
       if (revRes && revRes.ok) {
         const r = await revRes.json();
-        if (r && r.reviews) {
-          // Strictly purge any legacy dummy reviews
-          const cleanRev = (r.reviews || []).filter(
+        if (r && Array.isArray(r.reviews)) {
+          let localR = [];
+          try { localR = JSON.parse(localStorage.getItem('rahila_portfolio_reviews') || '[]'); } catch (_) {}
+          const cleanRev = r.reviews.filter(
             (item) =>
               !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller', 'Elena Rostova', 'Tariq Mehmood', 'Sarah Jenkins', 'Alexander Wright'].includes(item.name)
           );
-          const finalRev = cleanRev.length > 0 ? cleanRev : defaultReviews;
+          const mergedR = [...cleanRev];
+          (Array.isArray(localR) ? localR : []).forEach(item => {
+            if (item && item.id && !mergedR.some(x => x.id === item.id)) {
+              mergedR.push(item);
+            }
+          });
+          const finalRev = mergedR.length > 0 ? mergedR : defaultReviews;
           setReviews(finalRev);
           try {
             localStorage.setItem('rahila_portfolio_reviews', JSON.stringify(finalRev));
@@ -295,30 +305,39 @@ export default function AdminPage({ setActiveTab }) {
 
       if (faqRes && faqRes.ok) {
         const f = await faqRes.json();
-        if (f && f.faqs && f.faqs.length > 0) {
-          setFaqs(f.faqs);
+        if (f && Array.isArray(f.faqs)) {
+          let localF = [];
+          try { localF = JSON.parse(localStorage.getItem('rahila_portfolio_faqs') || '[]'); } catch (_) {}
+          const mergedF = [...f.faqs];
+          (Array.isArray(localF) ? localF : []).forEach(item => {
+            if (item && item.id && !mergedF.some(x => x.id === item.id)) {
+              mergedF.push(item);
+            }
+          });
+          setFaqs(mergedF);
           try {
-            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(f.faqs));
+            localStorage.setItem('rahila_portfolio_faqs', JSON.stringify(mergedF));
           } catch (_) {}
         }
       }
 
       if (usrRes && usrRes.ok) {
         const u = await usrRes.json();
-        if (u && u.users && u.users.length > 0) {
-          // Strictly purge any legacy mock users
-          const cleanUsr = (u.users || []).filter(
+        if (u && Array.isArray(u.users)) {
+          let localU = [];
+          try { localU = JSON.parse(localStorage.getItem('rahila_portfolio_users') || '[]'); } catch (_) {}
+          const cleanUsr = u.users.filter(
             (item) => !['Marcus Vance', 'Sophia Al-Mansoor', 'David Miller'].includes(item.name)
           );
-          // Strictly guarantee both Admins are retained at top
-          const hasOwner = cleanUsr.some(x => (x.email || '').toLowerCase() === 'rahilakareem389@gmail.com');
-          const hasSupport = cleanUsr.some(x => (x.email || '').toLowerCase() === 'wordpressrahila@gmail.com');
-          const finalUsers = [...cleanUsr];
-          if (!hasSupport) finalUsers.unshift(defaultMasterUsers[1]);
-          if (!hasOwner) finalUsers.unshift(defaultMasterUsers[0]);
-          setUsers(finalUsers);
+          const mergedU = [...cleanUsr];
+          (Array.isArray(localU) ? localU : []).forEach(item => {
+            if (item && item.email && !mergedU.some(x => (x.email || '').toLowerCase() === item.email.toLowerCase())) {
+              mergedU.push(item);
+            }
+          });
+          setUsers(mergedU);
           try {
-            localStorage.setItem('rahila_portfolio_users', JSON.stringify(finalUsers));
+            localStorage.setItem('rahila_portfolio_users', JSON.stringify(mergedU));
           } catch (_) {}
         }
       }
