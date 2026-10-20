@@ -675,9 +675,9 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     return true;
   });
 
-  // Compact initial display: 3 items, with "See More" expansion toggle
-  const displayedReviews = showAllReviews ? filteredReviews : filteredReviews.slice(0, 3);
-  const displayedFaqs = showAllFaqs ? publicApprovedFaqs : publicApprovedFaqs.slice(0, 3);
+  // All approved filtered reviews & FAQs displayed directly
+  const displayedReviews = filteredReviews;
+  const displayedFaqs = publicApprovedFaqs;
 
   return (
     <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden">
@@ -876,41 +876,41 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               </div>
             ) : (
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-2">
                   {displayedReviews.map((rev, idx) => {
                     const isReplyExpanded = Boolean(expandedReplies[rev.id]);
                     const isMsgExpanded = Boolean(expandedMessages[rev.id]);
                     return (
                       <div
                         key={rev.id}
-                        className="reveal-up relative pt-4 sm:pt-5"
-                        style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
+                        className="reveal-up relative pt-3 sm:pt-4"
+                        style={{ transitionDelay: `${(idx % 3) * 80}ms` }}
                       >
-                        {/* 1. Offset Backdrop Shape (Compact & sleek) */}
+                        {/* 1. Pinned Offset Backdrop Shape */}
                         <div 
-                          className="absolute -left-1.5 sm:-left-2 top-6 bottom-3 w-[88%] rounded-2xl bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-90 shadow-md transform -rotate-1 pointer-events-none" 
+                          className="absolute inset-0 top-1.5 -left-1.5 rounded-[22px] bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-85 shadow-md -rotate-1 pointer-events-none -z-10" 
                         />
 
                         {/* 2. Main Quotation Frame (Compact size with crisp border) */}
-                        <div className="relative rounded-[22px] bg-[#1a120e] dark:bg-[#1a120e] border-2 border-[#eedfd5]/90 p-4 sm:p-5 pt-6 pb-4 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-[#ff7a1a] group">
+                        <div className="testimonial-quote-card relative rounded-[22px] p-3.5 sm:p-4 pt-5 pb-3 shadow-xl flex flex-col justify-between transition-all duration-300 group">
                           
-                          {/* Top Quotation Mark “ (Sleek size) */}
-                          <div className="absolute -top-3 left-6 sm:left-7 px-2 bg-[#1a120e] dark:bg-[#1a120e] z-10 flex items-center justify-center">
+                          {/* Top Quotation Mark */}
+                          <div className="quote-mark-badge quote-mark-top absolute -top-3 left-5 sm:left-6 px-1.5 z-10 flex items-center justify-center rounded-sm">
                             <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
                               “
                             </span>
                           </div>
 
-                          {/* Bottom Quotation Mark ” (Sleek size) */}
-                          <div className="absolute -bottom-3.5 right-7 sm:right-8 px-2 bg-[#1a120e] dark:bg-[#1a120e] z-10 flex items-center justify-center">
+                          {/* Bottom Quotation Mark */}
+                          <div className="quote-mark-badge quote-mark-bottom absolute -bottom-3.5 right-6 sm:right-7 px-1.5 z-10 flex items-center justify-center rounded-sm">
                             <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
                               ”
                             </span>
                           </div>
 
-                          {/* 3. Tilted Polaroid Photo Card at Top Right with Paperclip (Compact) */}
-                          <div className="absolute -top-4 -right-1 sm:-top-5 sm:-right-2 z-20 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
-                            {/* Paperclip Graphic 📎 */}
+                          {/* 3. Tilted Polaroid Photo Card at Top Right with Paperclip */}
+                          <div className="absolute -top-3.5 -right-1 sm:-top-4 sm:-right-1.5 z-20 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                            {/* Paperclip Graphic */}
                             <svg 
                               className="w-3.5 h-5 text-neutral-900 drop-shadow -rotate-12 absolute -top-2 left-1/2 -translate-x-1/2 z-30 pointer-events-none" 
                               viewBox="0 0 24 36" 
@@ -918,21 +918,21 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                               stroke="currentColor" 
                               strokeWidth="2.5" 
                               strokeLinecap="round" 
-                              strokeLinejoin="round"
+                              strokeLinejoin="round" 
                             >
                               <path d="M16 8v16a6 6 0 0 1-12 0V9a4 4 0 0 1 8 0v14a2 2 0 0 1-4 0V9" />
                             </svg>
 
                             {/* Polaroid Frame */}
-                            <div className="bg-white p-1 pb-2.5 sm:pb-3 rounded-sm shadow-md border border-neutral-200 rotate-6 sm:rotate-8 group-hover:rotate-0 transition-transform">
+                            <div className="bg-white p-1 pb-2 sm:pb-2.5 rounded-sm shadow-md border border-neutral-200 rotate-6 sm:rotate-8 group-hover:rotate-0 transition-transform">
                               {rev.avatar ? (
                                 <img
                                   src={rev.avatar}
                                   alt={rev.name}
-                                  className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-xs"
+                                  className="w-9 h-9 sm:w-10 sm:h-10 object-cover rounded-xs"
                                 />
                               ) : (
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-xs text-white">
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-xs text-white">
                                   {rev.name?.charAt(0) || 'U'}
                                 </div>
                               )}
@@ -942,40 +942,40 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                           {/* Review Content */}
                           <div>
                             {/* Testimonial Quote Message (High-contrast, compact & readable) */}
-                            <div className="mb-2.5 pr-8 sm:pr-10">
+                            <div className="mb-2 pr-11">
                               {rev.title && (
-                                <h5 className="font-heading font-extrabold text-[13.5px] sm:text-[14px] text-neutral-900 dark:text-white mb-1 leading-snug line-clamp-1">
+                                <h5 className="review-card-title font-heading font-extrabold text-[13.5px] sm:text-[14px] mb-1 leading-snug line-clamp-1">
                                   {rev.title}
                                 </h5>
                               )}
-                              <p className={`text-[12.5px] sm:text-[13px] text-neutral-800 dark:text-neutral-100 font-medium leading-relaxed ${isMsgExpanded ? '' : 'line-clamp-2'}`}>
+                              <p className={`review-card-msg text-[12.5px] sm:text-[13px] font-medium leading-relaxed ${isMsgExpanded ? '' : 'line-clamp-2'}`}>
                                 "{rev.message}"
                               </p>
                               {rev.message && rev.message.length > 85 && (
                                 <button
                                   type="button"
                                   onClick={() => toggleMessage(rev.id)}
-                                  className="text-[10.5px] font-bold text-[#b84a2c] dark:text-[#ff9a7b] hover:underline cursor-pointer mt-0.5 inline-block"
+                                  className="review-see-more-btn text-[11px] font-bold hover:underline cursor-pointer mt-0.5 inline-flex items-center gap-0.5"
                                 >
-                                  {isMsgExpanded ? 'Less' : 'See more...'}
+                                  {isMsgExpanded ? 'Less ↑' : 'See more... ↓'}
                                 </button>
                               )}
                             </div>
 
-                            {/* 5 Rating Stars (Clean & bright) */}
-                            <div className="flex items-center gap-1 mb-2 text-amber-400 text-sm drop-shadow-sm">
+                            {/* 5 Rating Stars */}
+                            <div className="flex items-center gap-1 mb-2 text-amber-400 text-xs sm:text-sm drop-shadow-sm">
                               {Array.from({ length: rev.rating || 5 }).map((_, s) => (
                                 <span key={s}>★</span>
                               ))}
                             </div>
 
                             {/* Client Name & Role */}
-                            <div className="pt-2 border-t border-[#33271f]/80 flex items-center justify-between gap-2 flex-wrap">
+                            <div className="pt-2 border-t border-[var(--line)] flex items-center justify-between gap-2 flex-wrap">
                               <div>
-                                <h4 className="font-heading font-extrabold text-[13.5px] text-neutral-900 dark:text-white leading-tight">
+                                <h4 className="review-card-author font-heading font-extrabold text-[13px] sm:text-[13.5px] leading-tight">
                                   {rev.name}
                                 </h4>
-                                <p className="text-[11px] text-neutral-500 dark:text-neutral-300 mt-0.5">
+                                <p className="review-card-role text-[11px] mt-0.5">
                                   {rev.role || 'Verified Client'}
                                 </p>
                               </div>
@@ -988,42 +988,60 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                               )}
                             </div>
 
-                            {/* Admin Reply - High contrast & compact with inline See more */}
+                            {/* Admin Reply - Compact Collapsible Inside Card ("card k ander kro see more") */}
                             {rev.adminReply && rev.adminReply.message && (
-                              <div className="admin-reply-box mt-2.5 p-2.5 sm:p-3 rounded-xl border space-y-1 transition-all shadow-xs">
-                                <div className="flex items-center justify-between gap-1">
-                                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold">
-                                    <div className="w-4 h-4 rounded-full bg-[#D57C63] flex items-center justify-center text-white text-[9px] font-black shrink-0 shadow-xs">
-                                      RK
+                              <div className="mt-2.5">
+                                {!isReplyExpanded ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleReply(rev.id)}
+                                    className="w-full py-1.5 px-2.5 rounded-lg admin-reply-trigger flex items-center justify-between text-xs font-bold transition-all cursor-pointer hover:opacity-90"
+                                  >
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="w-3.5 h-3.5 rounded-full bg-[#D57C63] text-white text-[8.5px] font-black flex items-center justify-center shrink-0">
+                                        RK
+                                      </span>
+                                      <span className="admin-reply-trigger-text text-[11px]">Official Reply from Rahila</span>
                                     </div>
-                                    <span className="admin-reply-title font-bold">Official Reply from Rahila:</span>
+                                    <span className="text-[10.5px] font-bold text-[#ff7a1a] flex items-center gap-0.5">
+                                      See more ↓
+                                    </span>
+                                  </button>
+                                ) : (
+                                  <div className="admin-reply-box p-2.5 rounded-xl border space-y-1 transition-all shadow-xs">
+                                    <div className="flex items-center justify-between gap-1">
+                                      <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold">
+                                        <span className="w-3.5 h-3.5 rounded-full bg-[#D57C63] text-white text-[8.5px] font-black flex items-center justify-center shrink-0">
+                                          RK
+                                        </span>
+                                        <span className="admin-reply-title font-bold text-[11px] sm:text-xs">Official Reply from Rahila:</span>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => toggleReply(rev.id)}
+                                        className="text-[10px] font-bold text-[#ff7a1a] hover:underline cursor-pointer ml-1"
+                                      >
+                                        Show less ↑
+                                      </button>
+                                    </div>
+                                    <p className="text-[11.5px] sm:text-[12px] leading-relaxed italic font-medium pl-5">
+                                      "{rev.adminReply.message}"
+                                    </p>
                                   </div>
-                                  {rev.adminReply.message.length > 70 && (
-                                    <button
-                                      type="button"
-                                      onClick={() => toggleReply(rev.id)}
-                                      className="text-[10px] font-bold text-[#b84a2c] dark:text-[#ff9a7b] hover:underline cursor-pointer shrink-0 ml-1"
-                                    >
-                                      {isReplyExpanded ? 'Less' : 'See more'}
-                                    </button>
-                                  )}
-                                </div>
-                                <p className={`text-[12px] sm:text-[12.5px] leading-relaxed italic font-medium pl-5 text-[#1a0f09] dark:text-[#f7eee9] ${isReplyExpanded ? '' : 'line-clamp-2'}`}>
-                                  "{rev.adminReply.message}"
-                                </p>
+                                )}
                               </div>
                             )}
                           </div>
 
                           {/* Card Footer: Date & Helpful button */}
-                          <div className="mt-2.5 pt-2 border-t border-[#33271f]/80 flex items-center justify-between text-[10.5px] text-neutral-500 dark:text-neutral-400">
-                            <span>{rev.date || 'Recent'}</span>
+                          <div className="mt-2.5 pt-2 border-t border-[var(--line)] flex items-center justify-between text-[10.5px] review-card-footer">
+                            <span className="review-card-date">{rev.date || 'Recent'}</span>
                             <button
                               type="button"
                               onClick={() => handleLikeReview(rev.id)}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-[#ff7a1a]/20 hover:text-[#ff7a1a] transition-colors cursor-pointer text-[10.5px]"
+                              className="review-helpful-btn inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer text-[10.5px]"
                             >
-                              <ThumbsUp className="w-2.5 h-2.5" />
+                              <ThumbsUp className="w-2.5 h-2.5 text-[#ff7a1a]" />
                               <span>Helpful ({rev.helpfulCount || 0})</span>
                             </button>
                           </div>
@@ -1033,21 +1051,6 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                     );
                   })}
                 </div>
-
-                {/* See More / Show Less Reviews Button */}
-                {filteredReviews.length > 3 && (
-                  <div className="flex justify-center pt-3">
-                    <button
-                      type="button"
-                      onClick={() => setShowAllReviews(!showAllReviews)}
-                      className="glow-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 transition-all"
-                    >
-                      <span>
-                        {showAllReviews ? 'Show Less Reviews ↑' : `See More Reviews (${filteredReviews.length - 3} More) ↓`}
-                      </span>
-                    </button>
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -1146,20 +1149,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
               })}
             </div>
 
-            {/* See More / Show Less FAQs Button */}
-            {publicApprovedFaqs.length > 3 && (
-              <div className="flex justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAllFaqs(!showAllFaqs)}
-                  className="glow-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 transition-all"
-                >
-                  <span>
-                    {showAllFaqs ? 'Show Less FAQs ↑' : `See More Questions (${publicApprovedFaqs.length - 3} More) ↓`}
-                  </span>
-                </button>
-              </div>
-            )}
+
           </div>
         )}
 
