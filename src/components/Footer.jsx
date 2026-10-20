@@ -180,38 +180,38 @@ const Footer = ({ setActiveTab }) => {
           </div>
 
           {/* Section 2: Quick Links (2 Cols, Centered) */}
-          <div className="lg:col-span-2 space-y-3 lg:mx-auto">
-            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight">
+          <div className="lg:col-span-2 space-y-4 lg:mx-auto">
+            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight pb-1">
               {t('footer.quickLinks')}
             </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
+            <ul className="space-y-3 text-xs sm:text-sm font-semibold">
               <li>
-                <button onClick={() => handleNav('home')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('home')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.home')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('about')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('about')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.about')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.services')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('portfolio')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('portfolio')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.portfolio')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('pricing')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('pricing')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.pricing')}
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('contact')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('contact')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   {t('nav.contact')}
                 </button>
               </li>
@@ -219,33 +219,33 @@ const Footer = ({ setActiveTab }) => {
           </div>
 
           {/* Section 3: Specializations (3 Cols, Centered) */}
-          <div className="lg:col-span-3 space-y-3 lg:mx-auto">
-            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight">
+          <div className="lg:col-span-3 space-y-4 lg:mx-auto">
+            <h4 className="font-heading font-extrabold text-base text-neutral-950 dark:text-white tracking-tight pb-1">
               Specializations
             </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm font-semibold">
+            <ul className="space-y-3.5 text-xs sm:text-sm font-semibold">
               <li>
-                <button onClick={() => handleNav('wordpress')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('wordpress')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   WordPress & WooCommerce
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('fullstack')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('fullstack')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   MERN Web Applications
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('seo')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('seo')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   Technical & On-Page SEO
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   Speed Tuning & Core Vitals
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('services')} className="text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left">
+                <button onClick={() => handleNav('services')} className="py-1 text-neutral-700 dark:text-neutral-300 hover:text-[#D57C63] transition-colors cursor-pointer text-left block">
                   UI/UX Responsive Redesign
                 </button>
               </li>
