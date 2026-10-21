@@ -17,6 +17,7 @@ import Testimonials from './components/Testimonials';
 import AdminPage from './components/AdminPage';
 import TerminalPreloader from './components/TerminalPreloader';
 import ErrorBoundary from './components/ErrorBoundary';
+import CookieConsent from './components/CookieConsent';
 import { trackPageView } from './utils/visitorTracker';
 
 function App() {
@@ -217,6 +218,9 @@ function App() {
       {activeTab !== 'admin' && (
         <Footer setActiveTab={handleTabChange} />
       )}
+
+      {/* Authentic GDPR & ePrivacy Compliant Cookie Consent Banner */}
+      <CookieConsent activeTab={activeTab} />
     </div>
   );
 }

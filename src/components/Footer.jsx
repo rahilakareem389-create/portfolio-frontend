@@ -300,19 +300,30 @@ const Footer = ({ setActiveTab }) => {
 
         </div>
 
-        {/* 3. Bottom Sleek Bar: Centered Copyright & Back-to-Top */}
-        <div className="footer-bottom-bar mt-8 mb-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full border shadow-sm relative flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0">
-          <p
-            onClick={handleSecretAdminTrigger}
-            className="footer-copyright text-xs font-semibold text-center cursor-default select-none transition-colors"
-            title="Unity Space by Rahila Kareem"
-          >
-            © {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}
-          </p>
+        {/* 3. Bottom Sleek Bar: Centered Copyright, Cookies, & Back-to-Top */}
+        <div className="footer-bottom-bar mt-8 mb-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full border shadow-sm relative flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 text-xs font-semibold">
+            <p
+              onClick={handleSecretAdminTrigger}
+              className="footer-copyright cursor-default select-none transition-colors"
+              title="Unity Space by Rahila Kareem"
+            >
+              © {new Date().getFullYear()} Rahila Kareem. {t('footer.allRights')}
+            </p>
+            <span className="text-[#382218] hidden sm:inline">•</span>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))}
+              className="footer-cookie-btn text-[#bcab9e] hover:text-[#ff7a1a] transition-colors cursor-pointer underline underline-offset-2"
+              title="Manage Cookie Preferences"
+            >
+              Cookie Settings
+            </button>
+          </div>
 
           <button
             onClick={scrollToTop}
-            className="footer-top-btn sm:absolute sm:right-3 flex items-center gap-1.5 py-1 px-3 rounded-full border transition-all cursor-pointer shadow-xs text-xs font-bold"
+            className="footer-top-btn flex items-center gap-1.5 py-1 px-3 rounded-full border transition-all cursor-pointer shadow-xs text-xs font-bold"
             aria-label="Back to top"
           >
             <span>Back to Top</span>
