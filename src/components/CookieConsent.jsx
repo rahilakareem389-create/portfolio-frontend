@@ -66,13 +66,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
       aria-describedby="cookie-consent-desc"
       className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[99990] max-w-lg w-auto transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-5"
     >
-      <div
-        className="rounded-2xl p-5 sm:p-6 border shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(213,124,99,0.15)] relative overflow-hidden backdrop-blur-xl"
-        style={{
-          backgroundColor: 'rgba(18, 10, 7, 0.96)',
-          borderColor: '#382218',
-        }}
-      >
+      <div className="cookie-card rounded-2xl p-5 sm:p-6 relative overflow-hidden backdrop-blur-xl">
         {/* Ambient Top Glow */}
         <div
           className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-20 rounded-full pointer-events-none filter blur-2xl opacity-25"
@@ -91,13 +85,13 @@ export default function CookieConsent({ activeTab = 'home' }) {
           <div className="flex-1">
             <h3
               id="cookie-consent-title"
-              className="text-base sm:text-lg font-bold text-[#f7ede3] tracking-tight"
+              className="cookie-title text-base sm:text-lg font-bold tracking-tight"
             >
               Cookie & Privacy Preferences
             </h3>
             <p
               id="cookie-consent-desc"
-              className="text-xs sm:text-sm text-[#bcab9e] mt-1 leading-relaxed"
+              className="cookie-desc text-xs sm:text-sm mt-1 leading-relaxed"
             >
               We use essential cookies for security and language settings, and optional analytics cookies to measure anonymous website traffic.
             </p>
@@ -106,12 +100,12 @@ export default function CookieConsent({ activeTab = 'home' }) {
 
         {/* Detailed Preferences Accordion */}
         {showPreferences && (
-          <div className="mt-3 mb-4 space-y-2.5 border-t border-[#332219] pt-3 text-xs">
+          <div className="mt-3 mb-4 space-y-2.5 border-t border-[#332219]/30 pt-3 text-xs">
             {/* Necessary Cookies (Always On) */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#1a110d] border border-[#2e1911]">
+            <div className="cookie-pref-item flex items-center justify-between p-2.5 rounded-xl">
               <div className="pr-3">
-                <span className="font-semibold text-[#f7ede3] block">Essential Cookies</span>
-                <span className="text-[#bcab9e] text-[11px] block mt-0.5">
+                <span className="cookie-pref-title font-semibold block">Essential Cookies</span>
+                <span className="cookie-pref-desc text-[11px] block mt-0.5">
                   Required for core authentication, session security, and language selection.
                 </span>
               </div>
@@ -121,10 +115,10 @@ export default function CookieConsent({ activeTab = 'home' }) {
             </div>
 
             {/* Analytics Cookies (User Toggleable) */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#1a110d] border border-[#2e1911]">
+            <div className="cookie-pref-item flex items-center justify-between p-2.5 rounded-xl">
               <div className="pr-3">
-                <span className="font-semibold text-[#f7ede3] block">Analytics & Performance</span>
-                <span className="text-[#bcab9e] text-[11px] block mt-0.5">
+                <span className="cookie-pref-title font-semibold block">Analytics & Performance</span>
+                <span className="cookie-pref-desc text-[11px] block mt-0.5">
                   Helps us understand anonymous visitor counts to improve portfolio speed and design.
                 </span>
               </div>
@@ -135,7 +129,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
                   onChange={(e) => setAnalyticsEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-[#2c1d16] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff7a1a]"></div>
+                <div className="w-9 h-5 bg-[#3a261c] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff7a1a]"></div>
               </label>
             </div>
           </div>
@@ -147,7 +141,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
             <button
               type="button"
               onClick={handleSavePreferences}
-              className="w-full sm:flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
+              className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
             >
               Save Preferences
             </button>
@@ -157,7 +151,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="w-full sm:flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
+                className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
               >
                 Accept All
               </button>
@@ -166,7 +160,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
               <button
                 type="button"
                 onClick={handleDeclineAll}
-                className="w-full sm:flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-medium text-[#bcab9e] hover:text-[#f7ede3] bg-[#1a110d] hover:bg-[#261913] border border-[#382218] hover:border-[#ff7a1a]/40 transition-all cursor-pointer text-center"
+                className="cookie-btn-decline w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer text-center shadow-xs"
               >
                 Decline
               </button>
@@ -177,7 +171,7 @@ export default function CookieConsent({ activeTab = 'home' }) {
           <button
             type="button"
             onClick={() => setShowPreferences((prev) => !prev)}
-            className="w-full sm:w-auto py-2 px-3 text-xs text-[#bcab9e] hover:text-[#ff7a1a] transition-colors underline cursor-pointer text-center"
+            className="cookie-btn-customize w-full sm:w-auto py-2 px-3 text-xs font-semibold underline underline-offset-2 transition-colors cursor-pointer text-center"
           >
             {showPreferences ? 'Back' : 'Customize'}
           </button>

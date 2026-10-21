@@ -2641,3 +2641,94 @@ p, span, a, input, select, textarea, button, li, small {
   color: #cf5208 !important;
   font-weight: 700 !important;
 }
+
+/* ==========================================================
+   COOKIE CONSENT MODAL (Crystal-Clear Visibility in Dark & Light Modes)
+   ========================================================== */
+.cookie-card {
+  background: rgba(22, 14, 10, 0.96);
+  border: 1px solid #3d2b20;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(213, 124, 99, 0.15);
+  color: #f7ede3;
+}
+
+:root[data-theme="light"] .cookie-card {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid #e2d2c1 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(207, 82, 8, 0.12) !important;
+  color: #140d07 !important;
+}
+
+.cookie-title {
+  color: #f7ede3 !important;
+}
+
+:root[data-theme="light"] .cookie-title {
+  color: #140d07 !important;
+}
+
+.cookie-desc {
+  color: #c9b9ad !important;
+}
+
+:root[data-theme="light"] .cookie-desc {
+  color: #4a382c !important;
+}
+
+.cookie-btn-decline {
+  background: #251812;
+  border: 1px solid #3d2b20;
+  color: #f7ede3 !important;
+}
+
+.cookie-btn-decline:hover {
+  background: #332219;
+  border-color: #ff7a1a;
+  color: #ffffff !important;
+}
+
+:root[data-theme="light"] .cookie-btn-decline {
+  background: #f5ebe0 !important;
+  border: 1px solid #d9c2af !important;
+  color: #1f140c !important;
+}
+
+:root[data-theme="light"] .cookie-btn-decline:hover {
+  background: #ede0d0 !important;
+  border-color: #cf5208 !important;
+  color: #cf5208 !important;
+}
+
+.cookie-btn-customize {
+  color: #ff926b !important;
+}
+
+:root[data-theme="light"] .cookie-btn-customize {
+  color: #cf5208 !important;
+}
+
+.cookie-pref-item {
+  background: #1a110d;
+  border: 1px solid #2e1911;
+}
+
+:root[data-theme="light"] .cookie-pref-item {
+  background: #fbf7f2 !important;
+  border: 1px solid #e6d7c8 !important;
+}
+
+.cookie-pref-title {
+  color: #f7ede3 !important;
+}
+
+:root[data-theme="light"] .cookie-pref-title {
+  color: #140d07 !important;
+}
+
+.cookie-pref-desc {
+  color: #c9b9ad !important;
+}
+
+:root[data-theme="light"] .cookie-pref-desc {
+  color: #5c4739 !important;
+}
