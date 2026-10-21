@@ -99,10 +99,10 @@ export default function TerminalPreloader({ onComplete }) {
         isFadingOut ? 'opacity-0 scale-[1.02] filter blur-[3px] pointer-events-none' : 'opacity-100 scale-100'
       }`}
       style={{
-        backgroundColor: '#030706',
+        backgroundColor: '#070402',
         backgroundImage: `
-          radial-gradient(ellipse 70% 55% at 50% 45%, rgba(16, 185, 129, 0.12) 0%, rgba(3, 7, 6, 0.96) 65%, #020504 100%),
-          repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0px, rgba(0, 0, 0, 0.3) 1px, transparent 1px, transparent 2px)
+          radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255, 122, 26, 0.16) 0%, rgba(10, 6, 4, 0.96) 65%, #050302 100%),
+          repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0px, rgba(0, 0, 0, 0.35) 1px, transparent 1px, transparent 2px)
         `
       }}
       title="Click anywhere to skip"
@@ -113,17 +113,17 @@ export default function TerminalPreloader({ onComplete }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Terminal Header Bar */}
-        <div className="flex items-center gap-3 pb-3 border-b border-emerald-950/60 text-slate-400 text-xs sm:text-sm">
+        <div className="flex items-center gap-3 pb-3 border-b border-[#2e1911] text-slate-400 text-xs sm:text-sm">
           {/* 3 Window Dots */}
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-slate-600/80 inline-block" />
             <span className="w-2.5 h-2.5 rounded-full bg-slate-600/80 inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff7a1a] shadow-[0_0_8px_rgba(255,122,26,0.85)] inline-block" />
           </div>
 
           {/* Prompt Label */}
           <div className="flex items-center gap-1.5 text-slate-400 ml-1">
-            <span className="text-emerald-400 font-bold">&gt;_</span>
+            <span className="text-[#ff7a1a] font-bold">&gt;_</span>
             <span className="text-slate-400">rahila@portfolio:</span>
             <span className="text-slate-300">~/dev</span>
           </div>
@@ -134,18 +134,18 @@ export default function TerminalPreloader({ onComplete }) {
           {/* Completed Lines */}
           {completedLines.map((line, idx) => (
             <div key={idx} className="flex items-center flex-wrap gap-x-2">
-              <span className="text-emerald-400 font-bold">&gt;</span>
-              <span className={idx === 5 ? "text-emerald-400 font-semibold" : "text-emerald-400"}>
+              <span className="text-[#ff7a1a] font-bold">&gt;</span>
+              <span className="text-[#ff7a1a] font-medium">
                 {line.label}
               </span>
               {line.status && (
-                <span className={idx === 4 ? "text-slate-300 font-medium ml-1" : "text-slate-500 font-normal ml-1"}>
+                <span className={idx === 4 ? "text-slate-200 font-medium ml-1" : "text-slate-400 font-normal ml-1"}>
                   {line.status}
                 </span>
               )}
               {/* Keep blinking cursor on last line after system ready is done */}
               {idx === LINES.length - 1 && currentLineIndex >= LINES.length && (
-                <span className="inline-block w-2.5 h-5 bg-emerald-400 animate-pulse ml-1 align-middle shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
+                <span className="inline-block w-2.5 h-5 bg-[#ff7a1a] animate-pulse ml-1 align-middle shadow-[0_0_12px_rgba(255,122,26,0.9)]" />
               )}
             </div>
           ))}
@@ -153,33 +153,33 @@ export default function TerminalPreloader({ onComplete }) {
           {/* Currently Typing Line */}
           {currentLine && (
             <div className="flex items-center flex-wrap gap-x-2">
-              <span className="text-emerald-400 font-bold">&gt;</span>
-              <span className={currentLineIndex === 5 ? "text-emerald-400 font-semibold" : "text-emerald-400"}>
+              <span className="text-[#ff7a1a] font-bold">&gt;</span>
+              <span className="text-[#ff7a1a] font-medium">
                 {currentLabelPart}
               </span>
               {currentStatusPart && (
-                <span className={currentLineIndex === 4 ? "text-slate-300 font-medium ml-1" : "text-slate-500 font-normal ml-1"}>
+                <span className={currentLineIndex === 4 ? "text-slate-200 font-medium ml-1" : "text-slate-400 font-normal ml-1"}>
                   {currentStatusPart}
                 </span>
               )}
-              {/* Blinking Cyan/Emerald Block Cursor */}
-              <span className="inline-block w-2.5 h-5 bg-emerald-400 animate-pulse ml-0.5 align-middle shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
+              {/* Blinking Orange Block Cursor */}
+              <span className="inline-block w-2.5 h-5 bg-[#ff7a1a] animate-pulse ml-0.5 align-middle shadow-[0_0_12px_rgba(255,122,26,0.9)]" />
             </div>
           )}
         </div>
 
-        {/* Bottom Status Underline (matches screenshot) */}
+        {/* Bottom Status Underline */}
         <div className="mt-4 pt-1 relative w-full">
-          <div className="w-full h-[1px] bg-emerald-950/40" />
-          <div className="absolute top-1 left-0 w-64 sm:w-80 h-[1.5px] bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+          <div className="w-full h-[1px] bg-[#2e1911]" />
+          <div className="absolute top-1 left-0 w-64 sm:w-80 h-[1.5px] bg-[#ff7a1a] shadow-[0_0_10px_rgba(255,122,26,0.75)]" />
         </div>
 
         {/* Subtle Skip Hint at bottom */}
-        <div className="mt-8 flex items-center justify-between text-[11px] text-emerald-500/30 tracking-wider">
+        <div className="mt-8 flex items-center justify-between text-[11px] text-orange-500/40 tracking-wider">
           <span>PORTFOLIO TERMINAL v2.4</span>
           <button
             onClick={finishPreloader}
-            className="hover:text-emerald-400/80 transition-colors uppercase cursor-pointer"
+            className="hover:text-[#ff7a1a] transition-colors uppercase cursor-pointer"
           >
             [ click anywhere to skip ]
           </button>

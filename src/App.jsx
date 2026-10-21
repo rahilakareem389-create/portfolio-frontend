@@ -16,6 +16,7 @@ import WordPressPage from './components/WordPressPage';
 import Testimonials from './components/Testimonials';
 import AdminPage from './components/AdminPage';
 import TerminalPreloader from './components/TerminalPreloader';
+import ErrorBoundary from './components/ErrorBoundary';
 import { trackPageView } from './utils/visitorTracker';
 
 function App() {
@@ -132,82 +133,84 @@ function App() {
 
       {/* Main Dynamic View with Smooth Open/Close Transitions */}
       <main className="flex-1 relative z-10">
-        {activeTab === 'home' && (
-          <>
-            <Hero
+        <ErrorBoundary resetKey={activeTab}>
+          {activeTab === 'home' && (
+            <>
+              <Hero
+                setActiveTab={handleTabChange}
+              />
+              <StatsCounter />
+              <HomeSkillCards
+                setActiveTab={handleTabChange}
+              />
+              <Testimonials
+                setActiveTab={handleTabChange}
+                setSelectedPlan={setSelectedPlan}
+              />
+            </>
+          )}
+
+          {activeTab === 'about' && (
+            <About
               setActiveTab={handleTabChange}
             />
-            <StatsCounter />
-            <HomeSkillCards
-              setActiveTab={handleTabChange}
-            />
-            <Testimonials
+          )}
+
+          {activeTab === 'services' && (
+            <Services
               setActiveTab={handleTabChange}
               setSelectedPlan={setSelectedPlan}
             />
-          </>
-        )}
+          )}
 
-        {activeTab === 'about' && (
-          <About
-            setActiveTab={handleTabChange}
-          />
-        )}
+          {activeTab === 'portfolio' && (
+            <Portfolio
+              setActiveTab={handleTabChange}
+            />
+          )}
 
-        {activeTab === 'services' && (
-          <Services
-            setActiveTab={handleTabChange}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
+          {activeTab === 'pricing' && (
+            <Pricing
+              setActiveTab={handleTabChange}
+              setSelectedPlan={setSelectedPlan}
+            />
+          )}
 
-        {activeTab === 'portfolio' && (
-          <Portfolio
-            setActiveTab={handleTabChange}
-          />
-        )}
+          {activeTab === 'contact' && (
+            <Contact
+              setActiveTab={handleTabChange}
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
+            />
+          )}
 
-        {activeTab === 'pricing' && (
-          <Pricing
-            setActiveTab={handleTabChange}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
+          {activeTab === 'fullstack' && (
+            <FullStackPage
+              setActiveTab={handleTabChange}
+              setSelectedPlan={setSelectedPlan}
+            />
+          )}
 
-        {activeTab === 'contact' && (
-          <Contact
-            setActiveTab={handleTabChange}
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
+          {activeTab === 'seo' && (
+            <SeoPage
+              setActiveTab={handleTabChange}
+              setSelectedPlan={setSelectedPlan}
+            />
+          )}
 
-        {activeTab === 'fullstack' && (
-          <FullStackPage
-            setActiveTab={handleTabChange}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
+          {activeTab === 'wordpress' && (
+            <WordPressPage
+              setActiveTab={handleTabChange}
+              setSelectedPlan={setSelectedPlan}
+            />
+          )}
 
-        {activeTab === 'seo' && (
-          <SeoPage
-            setActiveTab={handleTabChange}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
-
-        {activeTab === 'wordpress' && (
-          <WordPressPage
-            setActiveTab={handleTabChange}
-            setSelectedPlan={setSelectedPlan}
-          />
-        )}
-
-        {activeTab === 'admin' && (
-          <AdminPage
-            setActiveTab={handleTabChange}
-          />
-        )}
+          {activeTab === 'admin' && (
+            <AdminPage
+              setActiveTab={handleTabChange}
+            />
+          )}
+        </ErrorBoundary>
       </main>
 
       {/* Global Footer (hidden on dedicated admin page) */}
