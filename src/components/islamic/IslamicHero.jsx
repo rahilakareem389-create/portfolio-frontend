@@ -125,7 +125,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
             </div>
 
             {/* 2. Main Headline */}
-            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] text-[#241B35] tracking-tight leading-[1.16]">
+            <h2 className="font-heading font-extrabold text-[26px] xs:text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] text-[#241B35] tracking-tight leading-[1.18]">
               Learn the Holy Quran with{' '}
               <span
                 className="font-black text-[#6D28D9]"
@@ -234,7 +234,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
 
             {/* Interactive 3D Canvas Box with generous height and lowered images */}
             <div
-              className="relative w-full max-w-[480px] sm:max-w-[530px] h-[530px] sm:h-[590px] flex items-center justify-center transition-transform duration-300 ease-out"
+              className="relative w-full max-w-[440px] sm:max-w-[530px] h-[430px] xs:h-[480px] sm:h-[590px] flex items-center justify-center transition-transform duration-300 ease-out"
               style={{
                 transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
                 transformStyle: 'preserve-3d',
@@ -246,7 +246,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                   Positioned lower down with Top-Left Diagonal Corner Ribbon
                  ==================================================== */}
               <div
-                className="absolute top-4 sm:top-6 right-1 sm:right-3 w-[72%] sm:w-[75%] h-[310px] sm:h-[360px] rounded-[32px] overflow-hidden border-4 border-white shadow-[0_20px_45px_rgba(109,40,217,0.18)] bg-white animate-islamic-float-1 z-10 group"
+                className="absolute top-2 sm:top-6 right-1 sm:right-3 w-[74%] sm:w-[75%] h-[255px] xs:h-[285px] sm:h-[360px] rounded-[24px] sm:rounded-[32px] overflow-hidden border-3 sm:border-4 border-white shadow-[0_20px_45px_rgba(109,40,217,0.18)] bg-white animate-islamic-float-1 z-10 group"
                 style={{ transform: 'translateZ(20px)' }}
               >
                 <img
@@ -273,7 +273,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                   Overlapping lower down with Top-Left Diagonal Corner Ribbon
                  ==================================================== */}
               <div
-                className="absolute bottom-0 left-0 sm:left-2 w-[78%] sm:w-[80%] h-[260px] sm:h-[300px] rounded-[32px] overflow-hidden border-4 border-white shadow-[0_25px_50px_rgba(76,29,149,0.28)] bg-white z-20 animate-islamic-float-2 group"
+                className="absolute bottom-0 left-0 sm:left-2 w-[78%] sm:w-[80%] h-[215px] xs:h-[240px] sm:h-[300px] rounded-[24px] sm:rounded-[32px] overflow-hidden border-3 sm:border-4 border-white shadow-[0_25px_50px_rgba(76,29,149,0.28)] bg-white z-20 animate-islamic-float-2 group"
                 style={{ transform: 'translateZ(40px)' }}
               >
                 <img
@@ -300,7 +300,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                   100% transparent container with 0 box-shadow and 0 background box
                  ==================================================== */}
               <div
-                className="absolute bottom-2 sm:bottom-4 right-0 sm:-right-3 z-30 w-[130px] h-[130px] sm:w-[150px] sm:h-[150px] animate-islamic-badge select-none pointer-events-none"
+                className="absolute bottom-1 sm:bottom-4 right-0 sm:-right-3 z-30 w-[105px] h-[105px] xs:w-[120px] xs:h-[120px] sm:w-[150px] sm:h-[150px] animate-islamic-badge select-none pointer-events-none"
                 style={{
                   transform: 'translateZ(65px)',
                   background: 'transparent',

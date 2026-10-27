@@ -139,7 +139,7 @@ function App() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen flex flex-col relative selection:bg-[#ff7a1a] selection:text-black">
+    <div className="min-h-screen w-full flex flex-col relative selection:bg-[#ff7a1a] selection:text-black overflow-x-clip">
       {/* Interactive Startup Terminal Preloader */}
       {showPreloader && (
         <TerminalPreloader onComplete={() => setShowPreloader(false)} />
@@ -238,7 +238,7 @@ function App() {
 
           {/* Standalone Complete Islamic Learn — Online Quran Education Website */}
           {activeTab === 'islamic-learn' && (
-            <div className="min-h-screen flex flex-col relative selection:bg-[#e0a93b] selection:text-[#1c1040]">
+            <div className="min-h-screen w-full flex flex-col relative selection:bg-[#e0a93b] selection:text-[#1c1040] overflow-x-clip">
               <IslamicNavbar
                 activeSection="home"
                 onNavigate={(id) => {

@@ -52,7 +52,7 @@ function Title({ parts, className = '', dark = false }) {
   const label = parts.map((p) => p[0]).join(' ');
   return (
     <Reveal as="h2" split aria-label={label}
-      className={`mb-4 mt-3.5 text-[clamp(34px,6vw,68px)] font-extrabold leading-[1.05] tracking-[-0.04em] ${dark ? 'text-white keep-white' : 'text-[#1f1540]'} ${className}`}>
+      className={`mb-4 mt-3.5 text-[clamp(26px,5.5vw,68px)] font-extrabold leading-[1.05] tracking-[-0.04em] ${dark ? 'text-white keep-white' : 'text-[#1f1540]'} ${className}`}>
       {parts.flatMap(([t, g]) => t.split(' ').filter(Boolean).map((w) => {
         const idx = i++;
         return (
@@ -91,7 +91,7 @@ function Btn({ as: Tag = 'a', variant = 'primary', className = '', ...p }) {
   };
   return (
     <Tag onPointerMove={move} onPointerLeave={(e) => (e.currentTarget.style.transform = '')}
-      className={`inline-flex cursor-pointer items-center gap-2 rounded-full border-0 px-7 py-[15px] font-extrabold no-underline transition-[transform,box-shadow] duration-200 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-[#e0a93b] ${v} ${className}`} {...p} />
+      className={`inline-flex cursor-pointer items-center justify-center text-center gap-2 rounded-full border-0 px-5 sm:px-7 py-3 sm:py-[15px] text-sm sm:text-base font-extrabold no-underline transition-[transform,box-shadow] duration-200 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-[#e0a93b] ${v} ${className}`} {...p} />
   );
 }
 
@@ -100,7 +100,7 @@ function Section({ id, bg, wave, dark, className = '', children }) {
     <section
       id={id}
       style={{ background: bg }}
-      className={`relative px-5 pb-[110px] pt-[80px] scroll-mt-[80px] sm:scroll-mt-[90px] ${dark ? 'text-white' : ''} ${className}`}
+      className={`relative px-4 sm:px-6 lg:px-8 pb-14 sm:pb-20 lg:pb-[110px] pt-14 sm:pt-16 lg:pt-[80px] scroll-mt-[80px] sm:scroll-mt-[90px] overflow-x-clip ${dark ? 'text-white' : ''} ${className}`}
     >
       <svg className="absolute left-0 top-[-59px] block h-[60px] w-full" viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ color: bg }} aria-hidden="true">
         <path fill="currentColor" d={WAVES[wave]} />
@@ -110,7 +110,7 @@ function Section({ id, bg, wave, dark, className = '', children }) {
   );
 }
 const Aurora = ({ o = 1 }) => <div className="absolute inset-0 overflow-hidden" style={{ opacity: o }}><div className="aurora absolute inset-0" /></div>;
-const Wrap = ({ className = '', children }) => <div className={`relative z-10 mx-auto max-w-[1140px] pt-4 sm:pt-6 ${className}`}>{children}</div>;
+const Wrap = ({ className = '', children }) => <div className={`relative z-10 mx-auto max-w-[1140px] pt-2 sm:pt-4 md:pt-6 ${className}`}>{children}</div>;
 
 function Seg({ options, value, onChange, dark }) {
   const i = options.findIndex((o) => o[0] === value);
@@ -157,7 +157,7 @@ function Courses({ onApply }) {
         <div className="mt-[50px]">
           {COURSES.map(([name, text], i) => (
             <article key={name} style={{ top: `calc(84px + ${i} * 16px)`, background: PAL[i][0], color: PAL[i][1] }}
-              className="sticky mb-[26px] grid min-h-[300px] items-center gap-5 overflow-hidden rounded-[36px] border border-white/50 p-[38px] shadow-[0_-14px_40px_-18px_rgba(40,15,110,.5),0_30px_50px_-30px_rgba(40,15,110,.5)] md:grid-cols-[1.3fr_1fr]">
+              className="sticky mb-[26px] grid min-h-[300px] items-center gap-5 overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-[36px] border border-white/50 p-5 sm:p-7 md:p-[38px] shadow-[0_-14px_40px_-18px_rgba(40,15,110,.5),0_30px_50px_-30px_rgba(40,15,110,.5)] md:grid-cols-[1.3fr_1fr]">
               <div>
                 <span className="text-[14px] font-extrabold uppercase tracking-[0.14em] opacity-80">Part 0{i + 1} of 07 · Core Module</span>
                 <h3 className="mb-3 mt-2 text-[clamp(26px,4vw,42px)] font-extrabold leading-[1.1] tracking-[-0.03em]">{name}</h3>
@@ -373,13 +373,13 @@ function Certificates() {
             <div className="absolute -inset-4 bg-gradient-to-tr from-[#6d3fd9]/30 via-[#ffd777]/20 to-[#a47bff]/25 blur-3xl pointer-events-none -z-10 rounded-full" />
 
             {/* Orbit Root Container - overflow-visible allows badges to swing outside image freely */}
-            <div className="orbit-root relative w-full max-w-[480px] flex justify-center items-center overflow-visible select-none">
+            <div className="orbit-root relative w-full max-w-[480px] flex justify-center items-center overflow-visible select-none scale-[0.82] xs:scale-[0.92] sm:scale-100 origin-center">
               
               {/* Islamic Arch Door (Darwaza / Mihrab Gool Top) Card Frame */}
-              <div className="relative w-full max-w-[400px] sm:max-w-[420px] aspect-[4/4.5] sm:h-[480px] rounded-t-[220px] sm:rounded-t-[240px] rounded-b-[28px] overflow-hidden bg-gradient-to-b from-[#22104a] via-[#160830] to-[#0a0217] border-[3.5px] border-[#ffd777] shadow-[0_0_35px_rgba(255,215,119,0.35),0_25px_60px_rgba(20,5,45,0.7)] group">
+              <div className="relative w-full max-w-[310px] xs:max-w-[350px] sm:max-w-[420px] aspect-[4/4.5] sm:h-[480px] rounded-t-[200px] sm:rounded-t-[240px] rounded-b-[28px] overflow-hidden bg-gradient-to-b from-[#22104a] via-[#160830] to-[#0a0217] border-[3.5px] border-[#ffd777] shadow-[0_0_35px_rgba(255,215,119,0.35),0_25px_60px_rgba(20,5,45,0.7)] group">
                 
                 {/* Royal Islamic Door Inner Arch Trim */}
-                <div className="absolute inset-2.5 rounded-t-[205px] sm:rounded-t-[225px] rounded-b-[20px] border border-[#ffd777]/35 pointer-events-none z-[12]" />
+                <div className="absolute inset-2.5 rounded-t-[185px] sm:rounded-t-[225px] rounded-b-[20px] border border-[#ffd777]/35 pointer-events-none z-[12]" />
 
                 {/* Starry Night Sky Background Overlay */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(109,63,217,0.35)_0%,rgba(224,169,59,0.15)_45%,transparent_75%)] pointer-events-none" />
@@ -403,46 +403,46 @@ function Certificates() {
               {/* SIDE BADGES LAYER - Strictly on Left & Right Sides (Laptop & Center Always 100% Visible) */}
               <div className="absolute inset-0 pointer-events-none z-20">
                 {/* Visual Orbit Tracks around Laptop */}
-                <div className="absolute top-[75%] left-1/2 w-[430px] sm:w-[460px] h-[84px] -mt-[42px] -ml-[215px] sm:-ml-[230px] rounded-[50%] border border-dashed border-[#ffd777]/35 shadow-[0_0_20px_rgba(255,215,119,0.2)] pointer-events-none z-[8]" />
+                <div className="absolute top-[75%] left-1/2 w-[340px] sm:w-[460px] h-[84px] -mt-[42px] -ml-[170px] sm:-ml-[230px] rounded-[50%] border border-dashed border-[#ffd777]/35 shadow-[0_0_20px_rgba(255,215,119,0.2)] pointer-events-none z-[8]" />
 
                 {/* === LEFT SIDE BADGES === */}
                 
                 {/* 1. Quran Reading (Top-Left) */}
-                <div className="float-badge-1 pointer-events-auto absolute top-[20%] left-[-25px] sm:left-[-75px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#f59e0b] to-[#ffd777] text-[#1c0c3a] flex items-center justify-center shadow-[0_0_16px_rgba(255,215,119,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#1c0c3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-1 pointer-events-auto absolute top-[20%] left-[-20px] sm:left-[-75px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#f59e0b] to-[#ffd777] text-[#1c0c3a] flex items-center justify-center shadow-[0_0_16px_rgba(255,215,119,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-[#1c0c3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-white text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
+                  <span className="whitespace-nowrap font-black text-white text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
                     Quran Reading
                   </span>
                 </div>
 
                 {/* 2. Noorani Qaida (Mid-Left) */}
-                <div className="float-badge-2 pointer-events-auto absolute top-[47%] left-[-35px] sm:left-[-90px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#4c1d95] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-2 pointer-events-auto absolute top-[47%] left-[-30px] sm:left-[-90px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#4c1d95] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
                       <path d="M6 6h10" /><path d="M6 10h10" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-[#17072b] text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
+                  <span className="whitespace-nowrap font-black text-[#17072b] text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
                     Noorani Qaida
                   </span>
                 </div>
 
                 {/* 3. Daily Duas (Lower-Left) */}
-                <div className="float-badge-3 pointer-events-auto absolute top-[74%] left-[-25px] sm:left-[-70px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#059669] to-[#34d399] text-white flex items-center justify-center shadow-[0_0_16px_rgba(52,211,153,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-3 pointer-events-auto absolute top-[74%] left-[-20px] sm:left-[-70px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#059669] to-[#34d399] text-white flex items-center justify-center shadow-[0_0_16px_rgba(52,211,153,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M7 11v6a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3v-6" />
                       <path d="M9 11V5a2 2 0 0 1 4 0v6" />
                       <path d="M12 2v2" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-white text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
+                  <span className="whitespace-nowrap font-black text-white text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
                     Daily Duas
                   </span>
                 </div>
@@ -450,40 +450,40 @@ function Certificates() {
                 {/* === RIGHT SIDE BADGES === */}
 
                 {/* 4. Tajweed Rules (Top-Right) */}
-                <div className="float-badge-4 pointer-events-auto absolute top-[20%] right-[-25px] sm:right-[-75px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-4 pointer-events-auto absolute top-[20%] right-[-20px] sm:right-[-75px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-[#17072b] text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
+                  <span className="whitespace-nowrap font-black text-[#17072b] text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
                     Tajweed Rules
                   </span>
                 </div>
 
                 {/* 5. Namaz & Salah (Mid-Right) */}
-                <div className="float-badge-5 pointer-events-auto absolute top-[47%] right-[-35px] sm:right-[-90px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#d97706] to-[#fbbf24] text-[#1c0c3a] flex items-center justify-center shadow-[0_0_16px_rgba(251,191,36,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#1c0c3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-5 pointer-events-auto absolute top-[47%] right-[-30px] sm:right-[-90px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-purple">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#d97706] to-[#fbbf24] text-[#1c0c3a] flex items-center justify-center shadow-[0_0_16px_rgba(251,191,36,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-[#1c0c3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2v3" />
                       <path d="M12 5a6 6 0 0 0-6 6v9h12v-9a6 6 0 0 0-6-6Z" />
                       <path d="M10 20v-4a2 2 0 0 1 4 0v4" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-white text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
+                  <span className="whitespace-nowrap font-black text-white text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
                     Namaz &amp; Salah
                   </span>
                 </div>
 
                 {/* 6. Hadith & Sunnah (Lower-Right) */}
-                <div className="float-badge-6 pointer-events-auto absolute top-[74%] right-[-25px] sm:right-[-70px] flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
-                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <div className="float-badge-6 pointer-events-auto absolute top-[74%] right-[-20px] sm:right-[-70px] flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 orbit-badge-gold">
+                  <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-gradient-to-tr from-[#6d28d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-[0_0_16px_rgba(109,40,217,0.9)] shrink-0">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M8 2h8a2 2 0 0 1 2 2v14a4 4 0 0 1-4 4H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h2" />
                       <path d="M8 7h8" /><path d="M8 11h8" /><path d="M8 15h5" />
                     </svg>
                   </div>
-                  <span className="whitespace-nowrap font-black text-[#17072b] text-[13.5px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
+                  <span className="whitespace-nowrap font-black text-[#17072b] text-[12px] sm:text-[15.5px] tracking-wide" style={{ color: '#17072b', WebkitTextFillColor: '#17072b' }}>
                     Hadith &amp; Sunnah
                   </span>
                 </div>

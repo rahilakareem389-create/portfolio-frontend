@@ -111,7 +111,7 @@ export default function IslamicLearnApp({ onBackToPortfolio }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8FF] text-[#241B35] font-sans flex flex-col selection:bg-[#F2C94C] selection:text-[#241B35] relative">
+    <div className="min-h-screen bg-[#FAF8FF] text-[#241B35] font-sans flex flex-col selection:bg-[#F2C94C] selection:text-[#241B35] relative overflow-x-clip">
       {/* Global Moveable Background: Floating Islamic 8-Point Stars, Crescent Moon, Lanterns & Particles */}
       <IslamicGlobalMoveableBackground />
 

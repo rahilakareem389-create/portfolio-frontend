@@ -1001,7 +1001,7 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
   ];
 
   return (
-    <section className="pt-24 pb-28 page-enter">
+    <section className="pt-24 pb-28 page-enter overflow-x-clip">
       {/* ======================================================== */}
       {/* GOOGLE SCHEMA MARKUP (JSON-LD) FOR 18 SERVICES & IMAGES */}
       {/* ======================================================== */}

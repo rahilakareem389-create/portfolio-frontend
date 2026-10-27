@@ -142,12 +142,12 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               <img
                 src="/logo-usk-dark.png"
                 alt="Unity Space by Rahila Kareem - Online Quran Education"
-                className="logo-theme-dark h-[48px] sm:h-[56px] md:h-[62px] w-auto max-w-[220px] sm:max-w-[280px] object-contain transition-transform group-hover:scale-105"
+                className="logo-theme-dark h-[38px] sm:h-[50px] md:h-[62px] w-auto max-w-[145px] sm:max-w-[220px] md:max-w-[280px] object-contain transition-transform group-hover:scale-105"
               />
               <img
                 src="/logo-usk-light.png"
                 alt="Unity Space by Rahila Kareem - Online Quran Education"
-                className="logo-theme-light h-[48px] sm:h-[56px] md:h-[62px] w-auto max-w-[220px] sm:max-w-[280px] object-contain transition-transform group-hover:scale-105"
+                className="logo-theme-light h-[38px] sm:h-[50px] md:h-[62px] w-auto max-w-[145px] sm:max-w-[220px] md:max-w-[280px] object-contain transition-transform group-hover:scale-105"
               />
             </button>
 
@@ -326,18 +326,18 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--ink)] bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--org)] transition-all cursor-pointer shadow-sm"
+                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--ink)] bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--org)] transition-all cursor-pointer shadow-sm"
                   title="Switch Website Language / زبان تبدیل کریں"
                 >
                   <span className="text-sm">{selectedLangObj.flag}</span>
-                  <span className="font-bold text-[12px] text-[var(--org)]">{selectedLangObj.native}</span>
-                  <span className="hidden sm:inline text-[11px] text-[var(--mute)]">({selectedCountry.code})</span>
+                  <span className="font-bold text-[11px] sm:text-[12px] text-[var(--org)]">{selectedLangObj.native}</span>
+                  <span className="hidden md:inline text-[11px] text-[var(--mute)]">({selectedCountry.code})</span>
                   <ChevronDown className="w-3 h-3 text-[var(--mute)]" />
                 </button>
 
                 {/* Dropdown Menu of Human Spoken Languages & Countries */}
                 {langDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-80 max-h-[420px] overflow-y-auto rounded-2xl bg-[var(--panel)] border border-[var(--org)]/35 shadow-2xl p-2.5 z-50 animate-fade-in backdrop-blur-xl">
+                  <div className="absolute right-0 mt-2 w-[calc(100vw-32px)] sm:w-80 max-w-sm max-h-[420px] overflow-y-auto rounded-2xl bg-[var(--panel)] border border-[var(--org)]/35 shadow-2xl p-2.5 z-50 animate-fade-in backdrop-blur-xl">
                     
                     {/* Tabs: Languages vs Client Countries */}
                     <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[var(--bg)] border border-[var(--line)] mb-2.5">
@@ -455,12 +455,12 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                 )}
               </button>
 
-              {/* Let's talk button */}
+              {/* Let's talk button (Prominent on tablets & desktop, accessible via mobile drawer) */}
               <a
                 href={personalInfo.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glow-btn px-4 sm:px-5 py-2 sm:py-2.5 text-[13px] sm:text-[14px] font-bold text-[var(--onorg)] rounded-[40px] cursor-pointer whitespace-nowrap shrink-0 shadow-md"
+                className="glow-btn hidden sm:inline-flex px-4 sm:px-5 py-2 sm:py-2.5 text-[13px] sm:text-[14px] font-bold text-[var(--onorg)] rounded-[40px] cursor-pointer whitespace-nowrap shrink-0 shadow-md"
               >
                 {t('nav.talk')}
               </a>

@@ -111,18 +111,18 @@ export default function IslamicNavbar({
       {/* Prominent Authentic Transparent Logo Fixed Across Both Bars (Seamless, no box, 2.5x Grand Scale) */}
       <div
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="absolute left-2 sm:left-4 top-[52px] sm:top-[58px] -translate-y-1/2 z-30 cursor-pointer group select-none flex items-center justify-center p-0 m-0 bg-transparent border-0"
+        className="absolute left-2 sm:left-4 top-[46px] sm:top-[56px] -translate-y-1/2 z-30 cursor-pointer group select-none flex items-center justify-center p-0 m-0 bg-transparent border-0"
         title="Islamic Learn — Online Quran Education"
       >
         <img
           src="/islamic-learn-logo.png"
           alt="Islamic Learn Logo"
-          className="w-[125px] h-[125px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_4px_16px_rgba(109,63,217,0.20)]"
+          className="w-[85px] h-[85px] sm:w-[130px] sm:h-[130px] lg:w-[170px] lg:h-[170px] object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_4px_16px_rgba(109,63,217,0.20)]"
         />
       </div>
 
       {/* 1. Full-Width Moveable Top Ticker Bar */}
-      <div className="w-full overflow-hidden bg-[#f3edff]/95 border-b border-[#6d28d9]/12 py-1.5 pl-[135px] sm:pl-[165px] lg:pl-[190px] pr-3 sm:pr-6 select-none flex items-center">
+      <div className="w-full overflow-hidden bg-[#f3edff]/95 border-b border-[#6d28d9]/12 py-1.5 pl-[95px] sm:pl-[145px] lg:pl-[185px] pr-3 sm:pr-6 select-none flex items-center">
         <div className="hidden sm:flex items-center gap-1.5 pr-4 shrink-0 border-r border-[#6d28d9]/15">
           <span className="w-2.5 h-2.5 rounded-full bg-[#e0a93b] animate-ping" />
           <span
@@ -145,8 +145,8 @@ export default function IslamicNavbar({
       </div>
 
       {/* 2. Main Full-Width Navigation Bar */}
-      <div className="w-full pl-[135px] sm:pl-[165px] lg:pl-[190px] pr-3 sm:pr-6 lg:pr-8 xl:pr-10">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
+      <div className="w-full pl-[95px] sm:pl-[145px] lg:pl-[185px] pr-2.5 sm:pr-6 lg:pr-8 xl:pr-10">
+        <div className="flex items-center justify-between h-14 sm:h-20 gap-2 sm:gap-3">
           
           {/* Desktop Nav Items */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 h-full">
@@ -246,7 +246,7 @@ export default function IslamicNavbar({
           </div>
 
           {/* Mobile Menu Toggle Button & Mobile Auth */}
-          <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 ml-auto">
+          <div className="flex lg:hidden items-center gap-1 sm:gap-2 ml-auto shrink-0">
             {user ? (
               <button
                 type="button"
@@ -257,17 +257,17 @@ export default function IslamicNavbar({
                     setDashboardModalOpen(true);
                   }
                 }}
-                className="h-9 px-2.5 rounded-xl text-xs font-bold bg-[#6D28D9]/15 text-[#6D28D9] border border-[#6D28D9]/30 flex items-center gap-1.5 shadow-xs"
+                className="h-8 sm:h-9 px-2 sm:px-2.5 rounded-xl text-[11px] sm:text-xs font-bold bg-[#6D28D9]/15 text-[#6D28D9] border border-[#6D28D9]/30 flex items-center gap-1 shadow-xs"
                 title="Workspace"
               >
-                <span className={`w-2 h-2 rounded-full ${user.emailVerified || user.isAdmin ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-                <span className="max-w-[65px] truncate">{user.name?.split(' ')[0] || 'Client'}</span>
+                <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${user.emailVerified || user.isAdmin ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                <span className="max-w-[55px] sm:max-w-[70px] truncate">{user.name?.split(' ')[0] || 'Client'}</span>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() => setAuthModalOpen(true)}
-                className="h-9 px-2.5 rounded-xl text-xs font-bold bg-[#6D28D9]/10 text-[#6D28D9] border border-[#6D28D9]/25 flex items-center gap-1 shadow-xs"
+                className="h-8 sm:h-9 px-2 sm:px-2.5 rounded-xl text-[11px] sm:text-xs font-bold text-[#6D28D9] bg-[#6D28D9]/10 border border-[#6D28D9]/25 flex items-center gap-1 shadow-xs"
                 title="Sign In"
               >
                 <span className="text-xs">🔑</span>
@@ -277,7 +277,7 @@ export default function IslamicNavbar({
 
             <button
               onClick={handleEnrollClick}
-              className="h-9 px-3 rounded-xl text-xs font-black bg-gradient-to-r from-[#ffd777] to-[#e0a93b] text-[#1c1040] flex items-center gap-1 shadow-xs"
+              className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-black bg-gradient-to-r from-[#ffd777] to-[#e0a93b] text-[#1c1040] flex items-center gap-1 shadow-xs shrink-0"
             >
               <GraduationCap className="w-3.5 h-3.5" />
               <span>Enroll</span>
@@ -285,10 +285,10 @@ export default function IslamicNavbar({
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="h-9 w-9 flex items-center justify-center rounded-xl bg-[#6D28D9]/10 border border-[#6D28D9]/25 text-[#2b1766]"
+              className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl bg-[#6D28D9]/10 border border-[#6D28D9]/25 text-[#2b1766] shrink-0"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
           </div>
 

@@ -244,11 +244,11 @@ export default function IslamicPrayerFloatingWidget({ isOpenExternal, onCloseExt
   return (
     <>
       {/* 1. FLOATING CIRCULAR WIDGET ON RIGHT SIDE (Persists on Scroll) */}
-      <div className="fixed right-4 sm:right-6 bottom-24 sm:bottom-28 z-[99970] select-none">
+      <div className="fixed right-3 sm:right-6 bottom-20 sm:bottom-28 z-[99970] select-none">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="group relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#4C1D95] via-[#6D28D9] to-[#6D28D9] text-[#F2C94C] shadow-[0_10px_30px_rgba(109,40,217,0.5)] border-2 border-[#F2C94C]/70 flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-all"
+          className="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#4C1D95] via-[#6D28D9] to-[#6D28D9] text-[#F2C94C] shadow-[0_10px_30px_rgba(109,40,217,0.5)] border-2 border-[#F2C94C]/70 flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-all"
           title="Global Prayer Times (Click to Open)"
           aria-label="Open Global Prayer Times"
         >

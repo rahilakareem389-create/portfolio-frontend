@@ -296,7 +296,7 @@ export default function HomeSkillCards({ setActiveTab }) {
               <div
                 key={domain.id}
                 id={`card-${domain.id}`}
-                className={`reveal-up skill-card ${shadowClass} group relative flex flex-col justify-between rounded-3xl p-7 sm:p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer overflow-hidden scroll-mt-28 select-none`}
+                className={`reveal-up skill-card ${shadowClass} group relative flex flex-col justify-between rounded-3xl p-5 sm:p-7 md:p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer overflow-hidden scroll-mt-28 select-none`}
                 style={{
                   animationDelay: `${index * 150}ms`
                 }}

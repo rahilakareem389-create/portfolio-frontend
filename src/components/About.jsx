@@ -103,7 +103,7 @@ const About = ({ setActiveTab }) => {
   const filteredSkills = skills.filter(s => s.category === activeCategory);
 
   return (
-    <section className="pt-24 pb-24 page-enter">
+    <section className="pt-24 pb-24 page-enter overflow-x-clip">
       <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
         
         {/* Page Top Nav / Close Bar */}

@@ -438,7 +438,7 @@ export default function WordPressPage({ setActiveTab, setSelectedPlan }) {
   };
 
   return (
-    <div className="w-full min-h-screen pt-28 pb-24 page-enter">
+    <div className="w-full min-h-screen pt-28 pb-24 page-enter overflow-x-clip">
       
       {/* ======================================================== */}
       {/* GOOGLE SCHEMA MARKUP (JSON-LD @GRAPH COMPLIANT) */}

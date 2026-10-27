@@ -45,6 +45,12 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
@@ -1540,6 +1546,42 @@ p, span, a, input, select, textarea, button, li, small {
     font-size: 11px;
     padding: 5px 10px;
     gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stage {
+    height: 290px;
+  }
+  .orbit {
+    width: min(72vw, 270px);
+  }
+  .tags-orbit-wrap {
+    transform: translateY(68px) rotateX(14deg) rotateZ(-6deg);
+  }
+  .tags i {
+    transform: rotateY(var(--a)) translateZ(132px) translate(-50%, -50%);
+    font-size: 10px;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .stage {
+    height: 260px;
+  }
+  .orbit {
+    width: min(68vw, 230px);
+  }
+  .tags-orbit-wrap {
+    transform: translateY(58px) rotateX(14deg) rotateZ(-6deg);
+  }
+  .tags i {
+    transform: rotateY(var(--a)) translateZ(112px) translate(-50%, -50%);
+    font-size: 9px;
+    padding: 3px 6px;
+    gap: 3px;
   }
 }
 

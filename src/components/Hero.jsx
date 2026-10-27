@@ -216,12 +216,12 @@ const Hero = ({ setActiveTab }) => {
 
             {/* "I'm RAHILA KAREEM" with Schema.org itemprop="name" */}
             <h1 className="anim-up-2 mb-2.5">
-              <span className="hero-im-text text-3xl sm:text-4xl lg:text-[42px] font-extrabold leading-tight tracking-tight block">
+              <span className="hero-im-text text-2xl xs:text-3xl sm:text-4xl lg:text-[42px] font-extrabold leading-tight tracking-tight block">
                 I'm
               </span>
               <span
                 itemProp="name"
-                className="hero-name-text text-4xl sm:text-5xl lg:text-[58px] xl:text-[64px] font-black uppercase tracking-tight block leading-[1.05]"
+                className="hero-name-text text-[28px] xs:text-4xl sm:text-5xl lg:text-[58px] xl:text-[64px] font-black uppercase tracking-tight block leading-[1.05]"
               >
                 RAHILA KAREEM
               </span>
@@ -278,12 +278,12 @@ const Hero = ({ setActiveTab }) => {
             </div>
 
             {/* Call To Action Buttons */}
-            <div className="anim-up-5 flex flex-wrap items-center gap-3.5">
+            <div className="anim-up-5 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
               <a
                 href="/rahila-kareem-cv.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-hero-primary px-7 py-3 rounded-full text-[15px] font-bold text-white shadow-[0_6px_25px_rgba(213,124,99,0.45)] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+                className="btn-hero-primary w-full sm:w-auto justify-center px-7 py-3 rounded-full text-[15px] font-bold text-white shadow-[0_6px_25px_rgba(213,124,99,0.45)] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
                 title="View & Download Rahila Kareem CV"
               >
                 <span>Hire Me</span>
@@ -303,7 +303,7 @@ const Hero = ({ setActiveTab }) => {
                     }, 120);
                   }
                 }}
-                className="btn-hero-secondary px-6 py-3 rounded-full text-[15px] font-bold hover:-translate-y-0.5 transition-all cursor-pointer"
+                className="btn-hero-secondary w-full sm:w-auto justify-center px-6 py-3 rounded-full text-[15px] font-bold hover:-translate-y-0.5 transition-all cursor-pointer flex items-center gap-1.5"
               >
                 <span>Explore My Work</span>
               </button>
@@ -311,7 +311,7 @@ const Hero = ({ setActiveTab }) => {
               <button
                 type="button"
                 onClick={() => setActiveTab('contact')}
-                className="btn-hero-tertiary px-6 py-3 rounded-full text-[15px] font-bold transition-all cursor-pointer"
+                className="btn-hero-tertiary w-full sm:w-auto justify-center px-6 py-3 rounded-full text-[15px] font-bold transition-all cursor-pointer"
               >
                 <span>Contact Me</span>
               </button>
