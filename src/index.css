@@ -47,7 +47,21 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 70px;
+  scroll-padding-top: 80px;
+}
+
+/* Islamic Website Sections 80px Top Scroll Margin */
+#quran-hero,
+#courses,
+#about,
+#how,
+#times,
+#pricing,
+#why,
+#faq,
+#admission,
+#islamic-footer {
+  scroll-margin-top: 80px !important;
 }
 
 body {
@@ -256,11 +270,109 @@ body {
 :root[data-theme="light"] .bg-\[\#cf5208\] *,
 :root[data-theme="light"] .bg-\[\#ff7a1a\],
 :root[data-theme="light"] .bg-\[\#ff7a1a\] *,
-:root[data-theme="light"] [class*="bg-gradient-to-r"],
-:root[data-theme="light"] [class*="bg-gradient-to-r"] *,
 :root[data-theme="light"] .keep-white,
-:root[data-theme="light"] .keep-white * {
+:root[data-theme="light"] .keep-white *,
+:root[data-theme="light"] #why b,
+:root[data-theme="light"] #why h2,
+:root[data-theme="light"] #why .text-white,
+:root[data-theme="light"] #why .keep-white,
+:root[data-theme="light"] #times b,
+:root[data-theme="light"] #times h2,
+:root[data-theme="light"] #times .text-white,
+:root[data-theme="light"] #admission b,
+:root[data-theme="light"] #admission h2,
+:root[data-theme="light"] #admission .text-white,
+:root[data-theme="light"] #pricing .spin-glow,
+:root[data-theme="light"] #pricing .spin-glow *,
+:root[data-theme="light"] #pricing .spin-glow span,
+:root[data-theme="light"] #pricing .spin-glow a,
+:root[data-theme="light"] #pricing .spin-glow span.text-white,
+:root[data-theme="light"] #pricing .spin-glow .price-text,
+:root[data-theme="light"] .islamic-white-force,
+:root[data-theme="light"] .islamic-white,
+:root[data-theme="light"] .islamic-white * {
+  color: #ffffff;
+}
+
+.islamic-header .nav-link-btn {
+  color: #1f1540 !important;
+  -webkit-text-fill-color: #1f1540 !important;
+}
+.islamic-header .nav-link-btn:hover {
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+}
+.islamic-header .nav-link-btn.active {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #6d28d9 !important;
+}
+
+:root[data-theme="light"] .islamic-white-force,
+:root[data-theme="light"] .islamic-white,
+:root[data-theme="light"] .islamic-white * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+#pricing .spin-glow .price-gold,
+:root[data-theme="light"] #pricing .spin-glow .price-gold {
+  color: #ffd777 !important;
+  -webkit-text-fill-color: #ffd777 !important;
+}
+
+/* 100% High-Contrast Text for Pricing Custom Plan Accordion */
+#pricing .accordion-step-btn,
+#pricing .accordion-step-btn *,
+#pricing .accordion-step-desc,
+#pricing .accordion-step-desc * {
+  color: #1f1540 !important;
+  -webkit-text-fill-color: #1f1540 !important;
+}
+#pricing .accordion-step-desc p {
+  color: #2d1b54 !important;
+  -webkit-text-fill-color: #2d1b54 !important;
+}
+#pricing .accordion-step-badge-active {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* High-Contrast Crisp Typography for Light Purple Islamic Footer */
+#islamic-footer {
+  background-color: #ede4ff !important;
+  color: #14092b !important;
+}
+
+#islamic-footer h3,
+#islamic-footer h4,
+#islamic-footer b,
+#islamic-footer strong {
+  color: #14092b !important;
+  -webkit-text-fill-color: #14092b !important;
+  font-weight: 800 !important;
+}
+
+#islamic-footer p {
+  color: #241442 !important;
+  -webkit-text-fill-color: #241442 !important;
+}
+
+#islamic-footer .footer-link {
+  color: #261543 !important;
+  -webkit-text-fill-color: #261543 !important;
+  font-weight: 700 !important;
+}
+
+#islamic-footer .footer-link:hover {
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+}
+
+:root[data-theme="light"] .islamic-gold,
+:root[data-theme="light"] .islamic-gold * {
+  color: #f2c94c !important;
+  -webkit-text-fill-color: #f2c94c !important;
 }
 
 /* Elements inside gradients with solid white backgrounds must have visible contrast text */
@@ -2732,3 +2844,428 @@ p, span, a, input, select, textarea, button, li, small {
 :root[data-theme="light"] .cookie-pref-desc {
   color: #5c4739 !important;
 }
+
+/* ==========================================================
+   ISLAMIC LEARN & PRAYER FLOATING WIDGET HIGH-CONTRAST VISIBILITY
+   ========================================================== */
+.islamic-prayer-tooltip,
+:root[data-theme="light"] .islamic-prayer-tooltip {
+  background-color: #241B35 !important;
+  border-color: #F2C94C !important;
+}
+
+.islamic-prayer-tooltip span,
+:root[data-theme="light"] .islamic-prayer-tooltip span {
+  color: #ffffff !important;
+}
+
+.islamic-prayer-tooltip .gold-accent,
+:root[data-theme="light"] .islamic-prayer-tooltip .gold-accent {
+  color: #F2C94C !important;
+}
+
+.islamic-prayer-tooltip .yellow-accent,
+:root[data-theme="light"] .islamic-prayer-tooltip .yellow-accent {
+  color: #FFF4B8 !important;
+}
+
+.islamic-prayer-banner,
+:root[data-theme="light"] .islamic-prayer-banner {
+  color: #ffffff !important;
+}
+
+.islamic-prayer-banner h3,
+.islamic-prayer-banner span,
+.islamic-prayer-banner strong,
+:root[data-theme="light"] .islamic-prayer-banner h3,
+:root[data-theme="light"] .islamic-prayer-banner span,
+:root[data-theme="light"] .islamic-prayer-banner strong {
+  color: #ffffff !important;
+}
+
+.islamic-prayer-banner .gold-highlight,
+:root[data-theme="light"] .islamic-prayer-banner .gold-highlight {
+  color: #F2C94C !important;
+}
+
+/* ==========================================================
+   ISLAMIC HERO 3D FLOATING ANIMATIONS
+   ========================================================== */
+@keyframes islamicFloatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0.8deg);
+  }
+}
+
+@keyframes islamicFloatReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(-0.8deg);
+  }
+}
+
+@keyframes islamicBadgePulse {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+.animate-islamic-float-1 {
+  animation: islamicFloatSlow 6s ease-in-out infinite;
+}
+
+.animate-islamic-float-2 {
+  animation: islamicFloatReverse 7s ease-in-out infinite;
+}
+
+.animate-islamic-badge {
+  animation: islamicBadgePulse 5s ease-in-out infinite;
+}
+
+/* Islamic Subtle Background Decoration Animations (Whisper-light, non-intrusive) */
+@keyframes islamicSubtleDrift {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+}
+
+@keyframes islamicFloatGentle {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-7px) translateX(3px);
+  }
+}
+
+@keyframes islamicLanternSway {
+  0%, 100% {
+    transform: rotate(-1.8deg);
+  }
+  50% {
+    transform: rotate(1.8deg);
+  }
+}
+
+@keyframes islamicLanternGlow {
+  0%, 100% {
+    opacity: 0.08;
+    filter: drop-shadow(0 0 4px rgba(224, 169, 59, 0.2));
+  }
+  50% {
+    opacity: 0.16;
+    filter: drop-shadow(0 0 8px rgba(224, 169, 59, 0.45));
+  }
+}
+
+@keyframes islamicGentleShimmer {
+  0%, 100% {
+    opacity: 0.07;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.14;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes islamicParticleFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(0.9);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translateY(-9px) scale(1.15);
+    opacity: 0.15;
+  }
+}
+
+@keyframes islamicSacredBreathe {
+  0%, 100% {
+    opacity: 0.07;
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+
+.animate-islamic-drift {
+  animation: islamicSubtleDrift 9s ease-in-out infinite;
+}
+
+.animate-islamic-drift-slow {
+  animation: islamicSubtleDrift 14s ease-in-out infinite;
+}
+
+.animate-islamic-float {
+  animation: islamicFloatGentle 11s ease-in-out infinite;
+}
+
+.animate-islamic-lantern {
+  animation: islamicLanternSway 8.5s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-islamic-lantern-slow {
+  animation: islamicLanternSway 12s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-islamic-lantern-glow {
+  animation: islamicLanternGlow 6.5s ease-in-out infinite;
+}
+
+.animate-islamic-shimmer {
+  animation: islamicGentleShimmer 6s ease-in-out infinite;
+}
+
+.animate-islamic-shimmer-slow {
+  animation: islamicGentleShimmer 9.5s ease-in-out infinite;
+}
+
+.animate-islamic-particle {
+  animation: islamicParticleFloat 8s ease-in-out infinite;
+}
+
+.animate-islamic-sacred {
+  animation: islamicSacredBreathe 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-islamic-drift,
+  .animate-islamic-drift-slow,
+  .animate-islamic-float,
+  .animate-islamic-lantern,
+  .animate-islamic-lantern-slow,
+  .animate-islamic-lantern-glow,
+  .animate-islamic-shimmer,
+  .animate-islamic-shimmer-slow,
+  .animate-islamic-particle,
+  .animate-islamic-sacred {
+    animation: none !important;
+  }
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 62% 38% 46% 54% / 50% 60% 40% 50%;
+    transform: rotate(0deg);
+  }
+  50% {
+    border-radius: 38% 62% 55% 45% / 60% 40% 60% 40%;
+    transform: rotate(8deg);
+  }
+}
+
+.animate-morph {
+  animation: morph 10s ease-in-out infinite;
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
+@keyframes fyFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(4deg);
+  }
+}
+
+.animate-fy {
+  animation: fyFloat 7s ease-in-out infinite;
+}
+
+/* ========================================================
+   Landing Sections v3 Signature Styles
+   ======================================================== */
+
+/* Sticky Stack Course Cards */
+.stk-container {
+  position: relative;
+  margin-top: 36px;
+}
+
+.stk-card {
+  position: sticky;
+  top: calc(90px + var(--stack-idx, 0) * 16px);
+  margin-bottom: 28px;
+  border-radius: 36px;
+  padding: 38px 42px;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 28px;
+  align-items: center;
+  min-height: 290px;
+  overflow: hidden;
+  box-shadow: 0 -14px 40px -18px rgba(40, 15, 110, 0.2), 0 30px 50px -25px rgba(40, 15, 110, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (max-width: 860px) {
+  .stk-card {
+    grid-template-columns: 1fr;
+    top: calc(75px + var(--stack-idx, 0) * 12px);
+    padding: 26px 20px;
+    margin-bottom: 20px;
+  }
+}
+
+/* 3D Geometric Floating Art Elements */
+.art-shapes {
+  position: relative;
+  height: 220px;
+  perspective: 700px;
+}
+
+.art-shapes i {
+  position: absolute;
+  inset: 18% 22%;
+  border-radius: 30px;
+  background: currentColor;
+  opacity: 0.16;
+  transform: rotate(calc(var(--r, 0) * 1deg)) translate(calc(var(--k, 0) * 22px), calc(var(--k, 0) * -14px));
+  animation: fyFloat 7s ease-in-out infinite;
+  animation-delay: calc(var(--k, 0) * -2s);
+}
+
+.art-shapes i:nth-child(1) {
+  --k: -1;
+  --r: -14;
+}
+
+.art-shapes i:nth-child(2) {
+  --k: 0;
+  --r: 8;
+  opacity: 0.28;
+}
+
+.art-shapes i:nth-child(3) {
+  --k: 1;
+  --r: 24;
+  opacity: 0.5;
+  border-radius: 50% 12px 50% 12px;
+}
+
+@media (max-width: 860px) {
+  .art-shapes {
+    height: 90px;
+  }
+}
+
+/* Winding Snake Path in #how */
+.snake-wrap {
+  position: relative;
+  height: 820px;
+  margin-top: 40px;
+}
+
+@media (max-width: 860px) {
+  .snake-wrap {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 22px;
+    border-left: 4px dashed rgba(109, 63, 217, 0.3);
+    margin-top: 24px;
+  }
+  .snake-svg-layer {
+    display: none !important;
+  }
+  .snake-point-card {
+    position: relative !important;
+    width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+  }
+}
+
+/* Conic Rotating Gradient Border on Pricing Card */
+.pricing-conic-glow {
+  position: relative;
+  border-radius: 40px;
+  padding: 3.5px;
+  overflow: hidden;
+  box-shadow: 0 40px 70px -32px rgba(80, 35, 190, 0.7);
+}
+
+.pricing-conic-glow::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1;
+  margin: -110% 0 0 -110%;
+  background: conic-gradient(from 0deg, #6d3fd9, #e0a93b, #a47bff, #6d3fd9);
+  animation: spinSlow 8s linear infinite;
+}
+
+/* Segmented Pill Switcher */
+.v3-segmented-control {
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(109, 63, 217, 0.18);
+  border-radius: 99px;
+  padding: 5px;
+}
+
+/* Wave SVGs */
+.v3-wave-top {
+  position: absolute;
+  left: 0;
+  top: -59px;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  display: block;
+}
+
+

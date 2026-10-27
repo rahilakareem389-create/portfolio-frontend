@@ -18,6 +18,9 @@ import AdminPage from './components/AdminPage';
 import TerminalPreloader from './components/TerminalPreloader';
 import ErrorBoundary from './components/ErrorBoundary';
 import CookieConsent from './components/CookieConsent';
+import IslamicNavbar from './components/islamic/IslamicNavbar';
+import IslamicHero from './components/islamic/IslamicHero';
+import LandingSections from './components/islamic/LandingSections';
 import { trackPageView } from './utils/visitorTracker';
 
 function App() {
@@ -36,11 +39,29 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      const validTabs = ['home', 'about', 'services', 'portfolio', 'pricing', 'contact', 'fullstack', 'seo', 'wordpress', 'admin'];
+      const validTabs = [
+        'home',
+        'about',
+        'services',
+        'portfolio',
+        'pricing',
+        'contact',
+        'fullstack',
+        'seo',
+        'wordpress',
+        'admin',
+        'islamic-learn',
+      ];
 
       // Secret Admin Portal Aliases: #rk-admin, #admin, #rk-portal, #rahila-admin
       if (['rk-admin', 'admin', 'rk-portal', 'rahila-admin'].includes(hash)) {
         setActiveTab('admin');
+        return;
+      }
+
+      // Islamic Learn Direct Portal Aliases: #islamic, #quran, #islamic-learn, #islamiclearn, #quran-education
+      if (['islamic', 'quran', 'islamic-learn', 'islamiclearn', 'quran-education'].includes(hash)) {
+        setActiveTab('islamic-learn');
         return;
       }
 
@@ -52,6 +73,7 @@ function App() {
         }, 150);
         return;
       }
+
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       }
@@ -121,11 +143,11 @@ function App() {
         <TerminalPreloader onComplete={() => setShowPreloader(false)} />
       )}
 
-      {/* 3D Interactive Three.js Background Constellation */}
-      <Background3D enabled={true} />
+      {/* 3D Interactive Three.js Background Constellation (Disabled on Islamic Learn) */}
+      <Background3D enabled={activeTab !== 'islamic-learn'} />
 
-      {/* Modern Fixed Navbar (hidden on dedicated admin page) */}
-      {activeTab !== 'admin' && (
+      {/* Modern Fixed Navbar (hidden on dedicated admin page & dedicated Islamic Learn portal) */}
+      {activeTab !== 'admin' && activeTab !== 'islamic-learn' && (
         <Navbar
           activeTab={activeTab}
           setActiveTab={handleTabChange}
@@ -211,11 +233,55 @@ function App() {
               setActiveTab={handleTabChange}
             />
           )}
+
+          {/* Standalone Complete Islamic Learn — Online Quran Education Website */}
+          {activeTab === 'islamic-learn' && (
+            <div className="min-h-screen flex flex-col relative selection:bg-[#e0a93b] selection:text-[#1c1040]">
+              <IslamicNavbar
+                activeSection="home"
+                onNavigate={(id) => {
+                  const el = document.getElementById(id);
+                  if (el) {
+                    const headerOffset = 80;
+                    const elementPosition = el.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+                onBackToPortfolio={() => handleTabChange('home')}
+              />
+              <IslamicHero
+                id="quran-hero"
+                setActiveTab={handleTabChange}
+                onNavigate={(dest) => {
+                  if (dest === 'portfolio' || dest === 'home') {
+                    handleTabChange('home');
+                    return;
+                  }
+                  const targetId = dest === 'contact' || dest === 'enroll' ? 'admission' : dest;
+                  const el = document.getElementById(targetId);
+                  if (el) {
+                    const headerOffset = 80;
+                    const elementPosition = el.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+              />
+              <LandingSections />
+            </div>
+          )}
         </ErrorBoundary>
       </main>
 
-      {/* Global Footer (hidden on dedicated admin page) */}
-      {activeTab !== 'admin' && (
+      {/* Global Footer (hidden on dedicated admin page & dedicated Islamic Learn portal) */}
+      {activeTab !== 'admin' && activeTab !== 'islamic-learn' && (
         <Footer setActiveTab={handleTabChange} />
       )}
 

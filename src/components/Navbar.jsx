@@ -96,6 +96,12 @@ const Navbar = ({ activeTab, setActiveTab }) => {
   ];
 
   const handleNavClick = (id) => {
+    if (id === 'quran-education' || id === 'islamic-learn' || id === 'quran') {
+      setActiveTab('islamic-learn');
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     setActiveTab(id);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -127,20 +133,20 @@ const Navbar = ({ activeTab, setActiveTab }) => {
             className="flex items-center justify-between h-[80px] sm:h-[88px] gap-2 lg:gap-4"
           >
             
-            {/* Logo: Prominent 58px-64px Height */}
+            {/* Logo: Clickable to open Islamic Learn (Online Quran Education Platform) */}
             <button
-              onClick={() => handleNavClick('home')}
+              onClick={() => handleNavClick('islamic-learn')}
               className="flex items-center cursor-pointer text-left focus:outline-none py-1 group shrink-0"
-              title="Unity Space by Rahila Kareem"
+              title="Islamic Learn — Online Quran Education (Click to Open)"
             >
               <img
                 src="/logo-usk-dark.png"
-                alt="Unity Space by Rahila Kareem"
+                alt="Unity Space by Rahila Kareem - Online Quran Education"
                 className="logo-theme-dark h-[48px] sm:h-[56px] md:h-[62px] w-auto max-w-[220px] sm:max-w-[280px] object-contain transition-transform group-hover:scale-105"
               />
               <img
                 src="/logo-usk-light.png"
-                alt="Unity Space by Rahila Kareem"
+                alt="Unity Space by Rahila Kareem - Online Quran Education"
                 className="logo-theme-light h-[48px] sm:h-[56px] md:h-[62px] w-auto max-w-[220px] sm:max-w-[280px] object-contain transition-transform group-hover:scale-105"
               />
             </button>

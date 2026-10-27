@@ -31,10 +31,12 @@ import {
   Eye,
   Check,
   Menu,
-  X
+  X,
+  BookOpen
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
+import { ISLAMIC_COURSES } from '../data/islamicData';
 import { useAuth, mapAuthError, getAdminEmails } from '../context/AuthContext';
 
 const OWNER_EMAIL = 'wordpressrahila@gmail.com';
@@ -242,6 +244,34 @@ export default function AdminPage({ setActiveTab }) {
     category: 'SEO & Web Development'
   });
 
+  // Islamic Announcements & Offers State ("new project ya offer lagy")
+  const [announcements, setAnnouncements] = useState(() => {
+    try {
+      const stored = localStorage.getItem('rahila_islamic_announcements');
+      if (stored !== null) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (_) {}
+    return [];
+  });
+
+  const [showAddAnnouncementModal, setShowAddAnnouncementModal] = useState(false);
+  const [newAnnouncementForm, setNewAnnouncementForm] = useState({
+    title: '',
+    shortDesc: '',
+    longDesc: '',
+    type: 'offer',
+    badge: '🔥 Special Offer (33% OFF)',
+    image: '/quran-roses-hero.jpg',
+    duration: '4 Weeks',
+    ageGroup: 'Kids & Adults (Ages 6+)',
+    price: '$10/month (Normally $15/mo)',
+    schedule: 'Mon to Thu • Flexible Slots',
+    status: 'active',
+    ctaText: 'Enroll in Program'
+  });
+
   // Helper: Retrieve authorization headers containing Admin credentials & Token
   const getAuthHeaders = () => {
     const adminToken =
@@ -362,6 +392,19 @@ export default function AdminPage({ setActiveTab }) {
           }));
         }
       }
+
+      // Fetch Islamic Announcements & Special Offers
+      fetch(`${API_BASE_URL}/api/admin/announcements`, { headers })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && Array.isArray(data.announcements)) {
+            setAnnouncements(data.announcements);
+            try {
+              localStorage.setItem('rahila_islamic_announcements', JSON.stringify(data.announcements));
+            } catch (_) {}
+          }
+        })
+        .catch(() => {});
     } catch (err) {
       console.warn('Admin fetch data notice:', err);
     } finally {
@@ -890,6 +933,99 @@ export default function AdminPage({ setActiveTab }) {
     showToast('Official Q&A added to live FAQ section.');
   };
 
+  // Action: Add Islamic Announcement, Project or Special Offer ("new project ya offer lagy")
+  const handleCreateAnnouncement = async (e) => {
+    e?.preventDefault();
+    const cleanTitle = (newAnnouncementForm.title || '').trim();
+    if (cleanTitle.length < 3) {
+      alert('Please enter a valid title for the offer or program.');
+      return;
+    }
+
+    const annId = `ann_${Date.now()}`;
+    const newAnn = {
+      id: annId,
+      title: cleanTitle,
+      shortDesc: (newAnnouncementForm.shortDesc || '').trim(),
+      longDesc: (newAnnouncementForm.longDesc || '').trim() || (newAnnouncementForm.shortDesc || '').trim(),
+      type: newAnnouncementForm.type || 'offer',
+      badge: (newAnnouncementForm.badge || 'Special Offer').trim(),
+      image: newAnnouncementForm.image || '/quran-roses-hero.jpg',
+      duration: (newAnnouncementForm.duration || 'Flexible').trim(),
+      ageGroup: (newAnnouncementForm.ageGroup || 'All Ages').trim(),
+      price: (newAnnouncementForm.price || '$15/month').trim(),
+      schedule: (newAnnouncementForm.schedule || 'Flexible Slots').trim(),
+      status: newAnnouncementForm.status || 'active',
+      ctaText: (newAnnouncementForm.ctaText || 'Enroll in Program').trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/announcements`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(newAnn)
+      });
+    } catch (_) {}
+
+    const updated = [newAnn, ...announcements];
+    setAnnouncements(updated);
+    try {
+      localStorage.setItem('rahila_islamic_announcements', JSON.stringify(updated));
+    } catch (_) {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('portfolio_data_sync', {
+          detail: { type: 'announcement_created', announcement: newAnn }
+        })
+      );
+    }
+
+    setShowAddAnnouncementModal(false);
+    setNewAnnouncementForm({
+      title: '',
+      shortDesc: '',
+      longDesc: '',
+      type: 'offer',
+      badge: '🔥 Special Offer (33% OFF)',
+      image: '/quran-roses-hero.jpg',
+      duration: '4 Weeks',
+      ageGroup: 'Kids & Adults (Ages 6+)',
+      price: '$10/month (Normally $15/mo)',
+      schedule: 'Mon to Thu • Flexible Slots',
+      status: 'active',
+      ctaText: 'Enroll in Program'
+    });
+    showToast('✓ Program / Offer published live to website!');
+  };
+
+  // Action: Delete Announcement
+  const handleDeleteAnnouncement = async (annId) => {
+    if (!window.confirm('Are you sure you want to remove this offer/program from the live site?')) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/announcements/${annId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch (_) {}
+
+    const updated = announcements.filter((a) => a.id !== annId);
+    setAnnouncements(updated);
+    try {
+      localStorage.setItem('rahila_islamic_announcements', JSON.stringify(updated));
+    } catch (_) {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('portfolio_data_sync', {
+          detail: { type: 'announcement_deleted', id: annId }
+        })
+      );
+    }
+    showToast('Program / Offer removed from website.');
+  };
+
   // Badges & Counters
   const newMessagesCount = messages.filter((m) => m.status === 'new').length;
   const pendingReviewsCount = reviews.filter((r) => r.status === 'pending').length;
@@ -1212,6 +1348,13 @@ export default function AdminPage({ setActiveTab }) {
               icon: Globe,
               badge: '5.0 ★',
               badgeColor: 'bg-blue-500/20 text-blue-400'
+            },
+            {
+              id: 'islamic',
+              label: 'Islamic Learn Hub',
+              icon: BookOpen,
+              badge: 'Quran Portal',
+              badgeColor: 'bg-[#6D28D9] text-white shadow-xs'
             }
           ].map((item) => {
             const Icon = item.icon;
@@ -1733,7 +1876,7 @@ export default function AdminPage({ setActiveTab }) {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#261711]">
                         <div>
                           <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">
-                            Question by {faq.author || faq.askedBy || 'Visitor'}
+                            Question by {faq.author || faq.askedBy || 'Visitor'} {faq.portal ? `• ${faq.portal}` : ''}
                           </span>
                           <h3 className="font-heading font-bold text-base text-white mt-0.5">
                             {faq.question}
@@ -1957,6 +2100,204 @@ export default function AdminPage({ setActiveTab }) {
             </div>
           )}
 
+          {/* =============================================================== */}
+          {/* SECTION 6: ISLAMIC LEARN — ONLINE QURAN EDUCATION HUB */}
+          {/* =============================================================== */}
+          {activeSection === 'islamic' && (
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#170e0a] border border-[#2d1b14] space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#261711]">
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/islamic-learn-logo.png"
+                    alt="Islamic Learn Logo"
+                    className="w-14 h-14 rounded-2xl bg-white p-1 object-contain shadow-md border border-[#F2C94C]/40"
+                  />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-heading font-black text-lg text-white">Islamic Learn Academy Hub</h3>
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#6D28D9]/40 text-[#F2C94C] border border-[#F2C94C]/40">
+                        Active Education Portal
+                      </span>
+                    </div>
+                    <p className="text-xs text-[#bcab9e]">Online Quran, Tajweed, Salah, Duas &amp; Tafheem Administration</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddAnnouncementModal(true)}
+                    className="px-5 py-2.5 rounded-full text-xs font-black text-[#1f1540] bg-gradient-to-r from-[#ffd777] via-[#f2c94c] to-[#e0a93b] hover:from-[#f5cb5c] hover:to-[#d49929] shadow-lg flex items-center gap-2 transition-all cursor-pointer transform hover:scale-[1.02]"
+                  >
+                    <Plus className="w-4 h-4 text-[#1f1540]" />
+                    <span>+ Post New Offer / Project / Announcement</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('islamic-learn')}
+                    className="px-5 py-2.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#6D28D9] to-[#4C1D95] hover:from-[#5B21B6] hover:to-[#3B1578] shadow-lg flex items-center gap-2 transition-all cursor-pointer"
+                  >
+                    <span>Open Live Islamic Learn Website</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-[#F2C94C]" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Islamic Metrics Summary */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div className="p-4 rounded-xl border bg-[#180e09] border-[#4a3022]">
+                  <span className="block mb-1 font-semibold text-[#ff9a7b]">Active Courses</span>
+                  <span className="font-bold text-lg text-white">6 Specialized (No Hifz)</span>
+                </div>
+                <div className="p-4 rounded-xl border bg-[#180e09] border-[#4a3022]">
+                  <span className="block mb-1 font-semibold text-[#ff9a7b]">Syllabus Modules</span>
+                  <span className="font-bold text-lg text-white">154 Lessons</span>
+                </div>
+                <div className="p-4 rounded-xl border bg-[#180e09] border-[#4a3022]">
+                  <span className="block mb-1 font-semibold text-[#ff9a7b]">Prayer Times API</span>
+                  <span className="font-bold text-lg text-emerald-400">Live AlAdhan Dynamic</span>
+                </div>
+                <div className="p-4 rounded-xl border bg-[#180e09] border-[#4a3022]">
+                  <span className="block mb-1 font-semibold text-[#ff9a7b]">Standard Tuition</span>
+                  <span className="font-bold text-lg text-[#F2C94C]">$15/mo • $120/yr</span>
+                </div>
+              </div>
+
+              {/* Islamic Announcements, Special Offers & Project Activities Showcase */}
+              <div className="space-y-4 pt-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#261711]">
+                  <div>
+                    <h4 className="font-heading font-black text-base text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#F2C94C]" />
+                      <span>Live Special Offers, Programs &amp; Announcements ({announcements.length})</span>
+                    </h4>
+                    <p className="text-xs text-[#bcab9e]">
+                      Any offer, project, or coming soon announcement added here is immediately displayed live on the website for students and visitors.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowAddAnnouncementModal(true)}
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-[#1f1540] bg-[#F2C94C] hover:bg-[#e5be40] flex items-center gap-1.5 self-start cursor-pointer shadow-md transition"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-[#1f1540]" />
+                    <span>Add New Program / Offer</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {announcements.map((ann) => (
+                    <div
+                      key={ann.id}
+                      className="p-4 rounded-2xl bg-[#1d120c] border border-[#3b251a] hover:border-[#F2C94C]/40 transition-all space-y-3 relative group"
+                    >
+                      <div className="flex items-start gap-3">
+                        <img
+                          src={ann.image || '/quran-roses-hero.jpg'}
+                          alt={ann.title}
+                          className="w-20 h-20 rounded-xl object-cover shrink-0 border border-[#4a3022]"
+                        />
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#ffd777]/20 text-[#ffd777] border border-[#ffd777]/30">
+                              {ann.badge || 'Special Offer'}
+                            </span>
+                            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              {ann.status === 'active' ? 'Live Onsite' : 'Coming Soon'}
+                            </span>
+                          </div>
+                          <h5 className="font-heading font-bold text-sm text-white line-clamp-1">
+                            {ann.title}
+                          </h5>
+                          <p className="text-[11px] text-[#bcab9e] line-clamp-2">
+                            {ann.shortDesc}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Specs pills */}
+                      <div className="grid grid-cols-2 gap-1.5 text-[10.5px] pt-1 border-t border-[#2d1b14]">
+                        <span className="text-[#d6c7bc]">⏱ <strong className="text-white">{ann.duration}</strong></span>
+                        <span className="text-[#d6c7bc]">👥 <strong className="text-white">{ann.ageGroup}</strong></span>
+                        <span className="text-[#d6c7bc]">📅 <strong className="text-white">{ann.schedule}</strong></span>
+                        <span className="text-[#F2C94C] font-black">{ann.price}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[10px] text-[#8e7e72]">
+                          Added {ann.createdAt ? new Date(ann.createdAt).toLocaleDateString() : 'Recently'}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab('islamic-learn');
+                              setTimeout(() => {
+                                const el = document.getElementById('offers');
+                                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                              }, 150);
+                            }}
+                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#ffd777] text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                            title="Preview on live website"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span className="text-[11px]">View Onsite</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteAnnouncement(ann.id)}
+                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white transition cursor-pointer"
+                            title="Delete this program"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Course Catalog Management Table */}
+              <div className="space-y-3">
+                <h4 className="font-heading font-bold text-sm text-white flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-[#D57C63]" />
+                  <span>Curriculum &amp; Course Tracks</span>
+                </h4>
+
+                <div className="overflow-x-auto rounded-2xl border border-[#2d1b14]">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#1e120d] text-[#d6c7bc] border-b border-[#2d1b14]">
+                      <tr>
+                        <th className="py-3 px-4">Course Name</th>
+                        <th className="py-3 px-4">Level</th>
+                        <th className="py-3 px-4">Duration</th>
+                        <th className="py-3 px-4">Modules</th>
+                        <th className="py-3 px-4">Rating</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#261711] bg-[#170e0a]">
+                      {ISLAMIC_COURSES.map((c) => (
+                        <tr key={c.id} className="hover:bg-[#1f130e]">
+                          <td className="py-3 px-4 font-bold text-white">
+                            <div>{c.title}</div>
+                            <div className="text-[10px] text-[#ff9a7b]">{c.arabicTitle}</div>
+                          </td>
+                          <td className="py-3 px-4 text-[#bcab9e]">{c.level}</td>
+                          <td className="py-3 px-4 text-[#bcab9e]">{c.duration}</td>
+                          <td className="py-3 px-4 font-bold text-[#D57C63]">{c.lessonsCount} Modules</td>
+                          <td className="py-3 px-4 text-amber-400 font-bold">{c.rating} ★</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </main>
 
@@ -2113,6 +2454,229 @@ export default function AdminPage({ setActiveTab }) {
                   className="px-5 py-2 rounded-xl glow-btn text-white font-bold"
                 >
                   Publish Q&amp;A Live
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================================================================= */}
+      {/* MODAL: ADD ISLAMIC ANNOUNCEMENT / OFFER / PROJECT ("new project ya offer lagy") */}
+      {/* ================================================================= */}
+      {showAddAnnouncementModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+          <div className="w-full max-w-xl rounded-3xl bg-[#170e0a] border border-[#F2C94C]/50 p-6 space-y-4 my-8 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#2d1b14]">
+              <div>
+                <h3 className="font-heading font-black text-lg text-white flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#F2C94C]" />
+                  <span>Post New Offer / Program / Announcement</span>
+                </h3>
+                <p className="text-xs text-[#bcab9e] mt-0.5">
+                  Added items appear instantly on the live Islamic Learn website for all visitors.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowAddAnnouncementModal(false)}
+                className="p-1 rounded-full text-[#8a7569] hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateAnnouncement} className="space-y-3.5 text-xs">
+              {/* Type & Badge */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Category Type</label>
+                  <select
+                    value={newAnnouncementForm.type}
+                    onChange={(e) => {
+                      const t = e.target.value;
+                      let b = '🔥 Special Offer';
+                      if (t === 'project') b = '✨ New Course Program';
+                      if (t === 'announcement') b = '📢 Academy Announcement';
+                      if (t === 'coming_soon') b = '⏳ Coming Soon';
+                      setNewAnnouncementForm({ ...newAnnouncementForm, type: t, badge: b });
+                    }}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                  >
+                    <option value="offer">Special Offer / Discount</option>
+                    <option value="project">New Course / Batch</option>
+                    <option value="announcement">General Announcement</option>
+                    <option value="coming_soon">Coming Soon Project</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Display Badge Text</label>
+                  <input
+                    type="text"
+                    required
+                    value={newAnnouncementForm.badge}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, badge: e.target.value })}
+                    placeholder="e.g. 🔥 33% OFF Ramadan Special"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                  />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="text-[#d6c7bc] block mb-1 font-bold">Program / Offer Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={newAnnouncementForm.title}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, title: e.target.value })}
+                  placeholder="e.g. Ramadan Special Quran &amp; Tajweed Intensive Batch"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                />
+              </div>
+
+              {/* Short & Long Description */}
+              <div>
+                <label className="text-[#d6c7bc] block mb-1 font-bold">Short Description (for card preview) *</label>
+                <input
+                  type="text"
+                  required
+                  value={newAnnouncementForm.shortDesc}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, shortDesc: e.target.value })}
+                  placeholder="e.g. Special 30-day intensive program with certified tutor Rahila Kareem..."
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                />
+              </div>
+
+              <div>
+                <label className="text-[#d6c7bc] block mb-1 font-bold">Detailed Description (for full modal view)</label>
+                <textarea
+                  rows={3}
+                  value={newAnnouncementForm.longDesc}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, longDesc: e.target.value })}
+                  placeholder="Full syllabus details, teacher background, benefits, and learning milestones..."
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                />
+              </div>
+
+              {/* Image with Presets */}
+              <div>
+                <label className="text-[#d6c7bc] block mb-1 font-bold">Cover Image (URL or Presets)</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setNewAnnouncementForm({ ...newAnnouncementForm, image: '/quran-roses-hero.jpg' })}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border cursor-pointer ${newAnnouncementForm.image === '/quran-roses-hero.jpg' ? 'bg-[#F2C94C] text-[#1f1540] border-[#F2C94C]' : 'bg-[#221612] text-[#bcab9e] border-[#3e2c22]'}`}
+                  >
+                    📖 Quran with Roses
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewAnnouncementForm({ ...newAnnouncementForm, image: '/noorani-qaida-hero.jpg' })}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border cursor-pointer ${newAnnouncementForm.image === '/noorani-qaida-hero.jpg' ? 'bg-[#F2C94C] text-[#1f1540] border-[#F2C94C]' : 'bg-[#221612] text-[#bcab9e] border-[#3e2c22]'}`}
+                  >
+                    ✨ Noorani Qaida
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewAnnouncementForm({ ...newAnnouncementForm, image: '/images/about-academy.jpg' })}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border cursor-pointer ${newAnnouncementForm.image === '/images/about-academy.jpg' ? 'bg-[#F2C94C] text-[#1f1540] border-[#F2C94C]' : 'bg-[#221612] text-[#bcab9e] border-[#3e2c22]'}`}
+                  >
+                    🧕 Tutor Academy
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={newAnnouncementForm.image}
+                  onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, image: e.target.value })}
+                  placeholder="/quran-roses-hero.jpg or https://..."
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white focus:outline-none focus:border-[#F2C94C]"
+                />
+              </div>
+
+              {/* Duration, Age Group, Price, Schedule */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Duration</label>
+                  <input
+                    type="text"
+                    value={newAnnouncementForm.duration}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, duration: e.target.value })}
+                    placeholder="e.g. 4 Weeks"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#221612] border border-[#3e2c22] text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Age Group</label>
+                  <input
+                    type="text"
+                    value={newAnnouncementForm.ageGroup}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, ageGroup: e.target.value })}
+                    placeholder="e.g. Kids &amp; Adults"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#221612] border border-[#3e2c22] text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Price / Offer</label>
+                  <input
+                    type="text"
+                    value={newAnnouncementForm.price}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, price: e.target.value })}
+                    placeholder="e.g. $10/mo"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#221612] border border-[#3e2c22] text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Schedule</label>
+                  <input
+                    type="text"
+                    value={newAnnouncementForm.schedule}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, schedule: e.target.value })}
+                    placeholder="e.g. Mon to Thu"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-[#221612] border border-[#3e2c22] text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Status & CTA Text */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">Publish Status</label>
+                  <select
+                    value={newAnnouncementForm.status}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, status: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white"
+                  >
+                    <option value="active">Active &amp; Live Onsite</option>
+                    <option value="coming_soon">Coming Soon</option>
+                    <option value="paused">Paused / Draft</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[#d6c7bc] block mb-1 font-bold">CTA Button Label</label>
+                  <input
+                    type="text"
+                    value={newAnnouncementForm.ctaText}
+                    onChange={(e) => setNewAnnouncementForm({ ...newAnnouncementForm, ctaText: e.target.value })}
+                    placeholder="e.g. Enroll in Special Offer"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#221612] border border-[#3e2c22] text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-[#2d1b14]">
+                <button
+                  type="button"
+                  onClick={() => setShowAddAnnouncementModal(false)}
+                  className="px-4 py-2 rounded-xl bg-white/5 text-[#bcab9e] font-bold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 rounded-xl font-black text-[#1f1540] bg-gradient-to-r from-[#ffd777] via-[#f2c94c] to-[#e0a93b] hover:from-[#f5cb5c] hover:to-[#d49929] shadow-lg cursor-pointer flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-[#1f1540]" />
+                  <span>Publish Live to Website</span>
                 </button>
               </div>
             </form>

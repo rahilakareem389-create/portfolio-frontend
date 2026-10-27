@@ -825,7 +825,7 @@ export default function AdminDashboardModal({
                       <div className="flex items-start justify-between gap-3">
                         <div className="space-y-1">
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300">
-                            Q&amp;A Community
+                            {faq.portal ? `Q&A • ${faq.portal}` : 'Q&A Community'}
                           </span>
                           <h4 className="font-heading font-bold text-sm sm:text-base text-white">
                             {faq.question}
