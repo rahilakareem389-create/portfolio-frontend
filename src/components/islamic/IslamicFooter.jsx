@@ -115,11 +115,22 @@ export default function IslamicFooter({ onNavigate, onBackToPortfolio }) {
 
         </div>
 
-        {/* Bottom Bar: Copyright & Scroll to Top */}
+        {/* Bottom Bar: Copyright, Cookies & Scroll to Top */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-purple-300">
-          <p>
-            © {new Date().getFullYear()} Islamic Learn — Online Quran Education. All Rights Reserved.
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <p>
+              © {new Date().getFullYear()} Islamic Learn — Online Quran Education. All Rights Reserved.
+            </p>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))}
+              className="text-[#F2C94C] hover:underline cursor-pointer transition-colors"
+              title="Cookie & Privacy Settings"
+            >
+              Cookie Settings
+            </button>
+          </div>
 
           <button
             onClick={scrollToTop}

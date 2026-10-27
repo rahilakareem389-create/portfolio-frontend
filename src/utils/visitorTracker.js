@@ -10,7 +10,7 @@ const API_BASE_URL =
 
 export function getCookieConsent() {
   try {
-    return localStorage.getItem('cookie_consent'); // 'accepted' | 'declined' | null
+    return localStorage.getItem('cookie_consent_v2'); // 'accepted' | 'declined' | null
   } catch (_) {
     return null;
   }
@@ -18,7 +18,8 @@ export function getCookieConsent() {
 
 export function setCookieConsent(status) {
   try {
-    localStorage.setItem('cookie_consent', status);
+    localStorage.setItem('cookie_consent_v2', status);
+    localStorage.setItem('cookie_consent', status); // backward compatibility
     localStorage.setItem('cookie_consent_date', new Date().toISOString());
 
     if (status === 'declined') {

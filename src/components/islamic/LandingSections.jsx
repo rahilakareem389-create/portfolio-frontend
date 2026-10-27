@@ -2156,8 +2156,17 @@ function Footer() {
 
         {/* Bottom Clean Sleek Copyright Bar */}
         <div className="w-full mt-5 sm:mt-6 pt-3 sm:pt-4 border-t border-[#6d28d9]/20 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs font-bold text-[#2e1a5a]">
-          <div>
-            © {new Date().getFullYear()} Islamic Learn Academy. All rights reserved.
+          <div className="flex flex-wrap items-center gap-3">
+            <span>© {new Date().getFullYear()} Islamic Learn Academy. All rights reserved.</span>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))}
+              className="text-[#6d28d9] hover:text-[#4c1d95] hover:underline cursor-pointer transition-colors"
+              title="Cookie & Privacy Settings"
+            >
+              Cookie Settings
+            </button>
           </div>
           <div>
             <button

@@ -285,8 +285,8 @@ function App() {
         <Footer setActiveTab={handleTabChange} />
       )}
 
-      {/* Authentic GDPR & ePrivacy Compliant Cookie Consent Banner */}
-      <CookieConsent activeTab={activeTab} />
+      {/* Authentic GDPR & ePrivacy Compliant Cookie Consent Banner & Floating Re-open Control */}
+      <CookieConsent activeTab={activeTab} preloaderActive={showPreloader} />
     </div>
   );
 }
