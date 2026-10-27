@@ -100,7 +100,7 @@ function Section({ id, bg, wave, dark, className = '', children }) {
     <section
       id={id}
       style={{ background: bg }}
-      className={`relative px-5 pb-[110px] pt-[130px] scroll-mt-[80px] sm:scroll-mt-[90px] ${dark ? 'text-white' : ''} ${className}`}
+      className={`relative px-5 pb-[110px] pt-[80px] scroll-mt-[80px] sm:scroll-mt-[90px] ${dark ? 'text-white' : ''} ${className}`}
     >
       <svg className="absolute left-0 top-[-59px] block h-[60px] w-full" viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ color: bg }} aria-hidden="true">
         <path fill="currentColor" d={WAVES[wave]} />

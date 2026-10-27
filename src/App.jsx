@@ -21,12 +21,14 @@ import CookieConsent from './components/CookieConsent';
 import IslamicNavbar from './components/islamic/IslamicNavbar';
 import IslamicHero from './components/islamic/IslamicHero';
 import LandingSections from './components/islamic/LandingSections';
+import IslamicPrayerFloatingWidget from './components/islamic/IslamicPrayerFloatingWidget';
 import { trackPageView } from './utils/visitorTracker';
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
   const [selectedPlan, setSelectedPlan] = useState('Standard ($180)');
+  const [isPrayerModalOpen, setIsPrayerModalOpen] = useState(false);
 
   // Track anonymous visitor page views
   useEffect(() => {
@@ -240,6 +242,10 @@ function App() {
               <IslamicNavbar
                 activeSection="home"
                 onNavigate={(id) => {
+                  if (id === 'prayer-times') {
+                    setIsPrayerModalOpen(true);
+                    return;
+                  }
                   const el = document.getElementById(id);
                   if (el) {
                     const headerOffset = 80;
@@ -261,6 +267,10 @@ function App() {
                     handleTabChange('home');
                     return;
                   }
+                  if (dest === 'prayer-times') {
+                    setIsPrayerModalOpen(true);
+                    return;
+                  }
                   const targetId = dest === 'contact' || dest === 'enroll' ? 'admission' : dest;
                   const el = document.getElementById(targetId);
                   if (el) {
@@ -275,6 +285,12 @@ function App() {
                 }}
               />
               <LandingSections />
+
+              {/* Floating Circular Prayer Times Widget & 200+ Countries Modal (Exclusively on Quran/Islamic Learn page) */}
+              <IslamicPrayerFloatingWidget
+                isOpenExternal={isPrayerModalOpen}
+                onCloseExternal={() => setIsPrayerModalOpen(false)}
+              />
             </div>
           )}
         </ErrorBoundary>
