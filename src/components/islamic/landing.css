@@ -149,33 +149,33 @@ html{scroll-behavior:smooth}
   }
 }
 
-/* Highly Visible Royal Purple & Gold Badges as requested */
+/* Soft Premium Pastels for Side Orbit Badges */
 .orbit-badge-purple {
-  background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%) !important;
-  border: 2px solid #ffd777 !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 119, 0.6) !important;
+  background: linear-gradient(135deg, #6b3fc4 0%, #8b5cf6 50%, #a78bfa 100%) !important;
+  border: 1.5px solid #ffe89e !important;
+  box-shadow: 0 8px 22px rgba(107, 63, 196, 0.35), 0 0 15px rgba(255, 232, 158, 0.3) !important;
 }
 .orbit-badge-purple:hover {
   border-color: #ffffff !important;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 215, 119, 0.95) !important;
+  box-shadow: 0 12px 28px rgba(107, 63, 196, 0.45), 0 0 25px rgba(255, 232, 158, 0.5) !important;
 }
 .orbit-badge-purple span,
 .orbit-badge-purple strong,
 .orbit-badge-purple b {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95) !important;
-  font-weight: 900 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+  font-weight: 800 !important;
 }
 
 .orbit-badge-gold {
-  background: linear-gradient(135deg, #b45309 0%, #d97706 30%, #f59e0b 70%, #ffd777 100%) !important;
-  border: 2px solid #ffffff !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75), 0 0 22px rgba(255, 215, 119, 0.75) !important;
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 40%, #fbbf24 75%, #fde68a 100%) !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 8px 22px rgba(217, 119, 6, 0.35), 0 0 15px rgba(253, 230, 138, 0.3) !important;
 }
 .orbit-badge-gold:hover {
-  border-color: #ffd777 !important;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 255, 255, 0.95) !important;
+  border-color: #fde68a !important;
+  box-shadow: 0 12px 28px rgba(217, 119, 6, 0.45), 0 0 25px rgba(255, 255, 255, 0.6) !important;
 }
 .orbit-badge-gold span,
 .orbit-badge-gold strong,
@@ -183,7 +183,7 @@ html{scroll-behavior:smooth}
   color: #17072b !important;
   -webkit-text-fill-color: #17072b !important;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
 }
 
 /* 3D Smooth Floating Motion for Side Badges (Sides Only - Center/Laptop Always Clear) */

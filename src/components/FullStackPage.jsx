@@ -87,7 +87,7 @@ const fullStackServices = [
     number: '04',
     title: 'REST API Development',
     icon: Cpu,
-    shortDesc: 'APIs create karna aur third-party services integrate karna.',
+    shortDesc: 'Build RESTful APIs and integrate third-party services seamlessly.',
     longDesc: 'Developing standardized RESTful APIs with clean URI naming conventions, versioning, pagination, query filtering, and smooth external third-party API integrations.',
     features: [
       'Standardized CRUD endpoints (GET, POST, PUT, DELETE)',
@@ -102,7 +102,7 @@ const fullStackServices = [
     number: '05',
     title: 'Database Integration',
     icon: Database,
-    shortDesc: 'MongoDB aur Mongoose ke saath structured data management.',
+    shortDesc: 'Structured data management with MongoDB and Mongoose ODM.',
     longDesc: 'Designing high-efficiency NoSQL schemas, collections, indexes, validation rules, aggregation pipelines, and data relationships using MongoDB and Mongoose ODM.',
     features: [
       'Custom Mongoose schemas with strict data validation',
@@ -117,7 +117,7 @@ const fullStackServices = [
     number: '06',
     title: 'Authentication Systems',
     icon: Lock,
-    shortDesc: 'Login, registration, password hashing aur protected routes.',
+    shortDesc: 'Secure login, registration, password hashing, and protected routes.',
     longDesc: 'Implementing secure user identity management with encrypted password hashing (bcrypt), JSON Web Tokens (JWT), session cookies, and role-based access control (RBAC).',
     features: [
       'Secure user sign-up & login workflows',
@@ -132,7 +132,7 @@ const fullStackServices = [
     number: '07',
     title: 'E-commerce Development',
     icon: ShoppingCart,
-    shortDesc: 'Product listings, cart, checkout aur admin dashboard.',
+    shortDesc: 'Product listings, cart management, checkout flow, and admin dashboard.',
     longDesc: 'Building custom online storefronts with rich product catalogs, filtering, shopping cart state management, checkout flows, and administrative management dashboards.',
     features: [
       'Dynamic product catalog with multi-variant filtering',
@@ -147,7 +147,7 @@ const fullStackServices = [
     number: '08',
     title: 'Bug Fixing & Optimization',
     icon: Wrench,
-    shortDesc: 'Code debugging, performance aur responsive layout improvements.',
+    shortDesc: 'Code debugging, performance tuning, and responsive layout improvements.',
     longDesc: 'Diagnosing and resolving tricky JavaScript errors, React re-render bottlenecks, layout shifts, API latency issues, and optimizing bundle size for Google Core Web Vitals.',
     features: [
       'Deep debugging with Chrome DevTools & Node console inspector',
@@ -162,7 +162,7 @@ const fullStackServices = [
     number: '09',
     title: 'Website Deployment',
     icon: UploadCloud,
-    shortDesc: 'GitHub, Vercel aur supported backend hosting platforms par deployment.',
+    shortDesc: 'Deploy to GitHub, Vercel, and backend hosting platforms with CI/CD pipelines.',
     longDesc: 'Configuring modern CI/CD deployment pipelines on Vercel, Railway, Render, and GitHub, ensuring zero-downtime releases and properly configured environment variables.',
     features: [
       'Automated Git push-to-deploy workflows on Vercel & Railway',

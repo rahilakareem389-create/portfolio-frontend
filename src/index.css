@@ -4,41 +4,41 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
 
 :root {
-  --bg: #0e0a08;
-  --panel: #1b1411;
-  --panel-card: rgba(27, 20, 17, 0.85);
-  --panel-hover: #261b17;
-  --ink: #f7ede3;
-  --mute: #bcab9e;
+  --bg: #16100d;
+  --panel: #221813;
+  --panel-card: rgba(34, 24, 19, 0.88);
+  --panel-hover: #2e1f18;
+  --ink: #f8f0e8;
+  --mute: #c8b9ae;
   --org: #D57C63;
   --org-dark: #b85c43;
-  --org-glow: rgba(213, 124, 99, 0.45);
+  --org-glow: rgba(213, 124, 99, 0.42);
   --sal: #e29f8c;
-  --line: #33271f;
+  --line: #3a2a22;
   --onorg: #ffffff;
   --grad: linear-gradient(135deg, #D57C63, #e5937d);
-  --glow: rgba(213, 124, 99, 0.2);
-  --glow2: rgba(213, 124, 99, 0.12);
-  --ll: 58%;
+  --glow: rgba(213, 124, 99, 0.18);
+  --glow2: rgba(213, 124, 99, 0.10);
+  --ll: 60%;
 }
 
 :root[data-theme="light"] {
-  --bg: #fbf7f2;
+  --bg: #fdfaf7;
   --panel: #ffffff;
-  --panel-card: rgba(255, 255, 255, 0.95);
-  --panel-hover: #f5ebe0;
-  --ink: #140d07;
-  --mute: #4a382c;
-  --org: #cf5208;
-  --org-dark: #a84105;
-  --org-glow: rgba(207, 82, 8, 0.25);
-  --sal: #9c4524;
-  --line: #e5d6c5;
+  --panel-card: rgba(255, 255, 255, 0.97);
+  --panel-hover: #faf3ec;
+  --ink: #1a0f08;
+  --mute: #5a4438;
+  --org: #D57C63;
+  --org-dark: #b85c43;
+  --org-glow: rgba(213, 124, 99, 0.22);
+  --sal: #e29f8c;
+  --line: #ecddd0;
   --onorg: #ffffff;
-  --grad: linear-gradient(135deg, #c24a06, #ea7724);
-  --glow: rgba(255, 140, 50, 0.12);
-  --glow2: rgba(240, 180, 150, 0.12);
-  --ll: 38%;
+  --grad: linear-gradient(135deg, #D57C63, #e5937d);
+  --glow: rgba(213, 124, 99, 0.10);
+  --glow2: rgba(213, 124, 99, 0.08);
+  --ll: 40%;
 }
 
 * {
@@ -46,7 +46,7 @@
 }
 
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
   width: 100%;
 }
@@ -77,7 +77,7 @@ body {
   line-height: 1.65;
   background-color: var(--bg);
   color: var(--ink);
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background-color 0.25s ease, color 0.25s ease;
   background: 
     radial-gradient(900px 520px at 85% 0%, var(--glow), transparent 70%),
@@ -103,9 +103,9 @@ body {
 
 /* Hero Section Base Elements (Night / Default Mode) */
 .hero-hello-badge {
-  background: rgba(26, 15, 10, 0.9);
+  background: rgba(32, 20, 14, 0.92);
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(213, 124, 99, 0.3);
+  box-shadow: 0 0 18px rgba(224, 139, 114, 0.28);
 }
 
 .hero-im-text {
@@ -189,14 +189,15 @@ body {
 }
 
 .btn-hero-secondary {
-  background-color: #1a120e;
+  background-color: #201610;
   color: #ffffff;
-  border: 1px solid rgba(213, 124, 99, 0.6);
+  border: 1px solid rgba(213, 124, 99, 0.55);
 }
 
 .btn-hero-secondary:hover {
-  background-color: rgba(213, 124, 99, 0.15);
+  background-color: rgba(213, 124, 99, 0.14);
   border-color: #D57C63;
+  box-shadow: 0 4px 16px rgba(213, 124, 99, 0.14);
 }
 
 .btn-hero-tertiary {
@@ -346,7 +347,7 @@ body {
 
 /* High-Contrast Crisp Typography for Light Purple Islamic Footer */
 #islamic-footer {
-  background-color: #ede4ff !important;
+  background-color: #f0eaff !important;
   color: #14092b !important;
 }
 
@@ -455,17 +456,18 @@ body {
    Guarantees 100% visible text, sharp contrast, and compact look
    ============================================================== */
 .testimonial-quote-card {
-  background-color: #1a120e !important;
-  border: 2px solid #3d2b22 !important;
-  color: #f7ede3 !important;
+  background-color: #1e1410 !important;
+  border: 2px solid #442e24 !important;
+  color: #f8f0e8 !important;
 }
 
 .testimonial-quote-card:hover {
-  border-color: #ff7a1a !important;
+  border-color: #E08B72 !important;
+  box-shadow: 0 8px 28px rgba(224, 139, 114, 0.18) !important;
 }
 
 .quote-mark-badge {
-  background-color: #1a120e !important;
+  background-color: #1e1410 !important;
 }
 
 .review-card-title {
@@ -637,9 +639,9 @@ body {
 }
 
 .footer-cta-card {
-  background-color: #1b1411 !important;
-  border-color: #33271f !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+  background-color: #221813 !important;
+  border-color: #3a2a22 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4) !important;
 }
 
 .footer-status-badge {
@@ -746,8 +748,8 @@ body {
 }
 
 .footer-bottom-bar {
-  background-color: #1b1411 !important;
-  border-color: #33271f !important;
+  background-color: #221813 !important;
+  border-color: #3a2a22 !important;
 }
 
 .footer-copyright {
@@ -921,9 +923,9 @@ body {
 
 :root[data-theme="dark"] .footer-cta-card,
 :root:not([data-theme="light"]) .footer-cta-card {
-  background-color: #1b1411 !important;
-  border-color: #33271f !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+  background-color: #221813 !important;
+  border-color: #3a2a22 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4) !important;
 }
 
 :root[data-theme="dark"] .footer-cta-title,
@@ -1003,8 +1005,8 @@ body {
 
 :root[data-theme="dark"] .footer-bottom-bar,
 :root:not([data-theme="light"]) .footer-bottom-bar {
-  background-color: #1b1411 !important;
-  border-color: #33271f !important;
+  background-color: #221813 !important;
+  border-color: #3a2a22 !important;
 }
 
 :root[data-theme="dark"] .footer-copyright,
@@ -1643,7 +1645,7 @@ p, span, a, input, select, textarea, button, li, small {
 
 .glass-card:hover {
   border-color: var(--org);
-  box-shadow: 0 8px 30px rgba(255, 122, 26, 0.2);
+  box-shadow: 0 8px 28px rgba(224, 139, 114, 0.18);
   transform: translateY(-3px);
 }
 
@@ -1651,14 +1653,14 @@ p, span, a, input, select, textarea, button, li, small {
   background: var(--grad);
   color: var(--onorg);
   font: 700 15px 'Plus Jakarta Sans', sans-serif !important;
-  box-shadow: 0 6px 25px rgba(255, 106, 0, 0.35);
+  box-shadow: 0 6px 22px rgba(224, 139, 114, 0.30);
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 40px;
 }
 
 .glow-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 106, 0, 0.55);
+  box-shadow: 0 10px 32px rgba(224, 139, 114, 0.45);
 }
 
 .glow-text {
@@ -2149,7 +2151,7 @@ p, span, a, input, select, textarea, button, li, small {
   box-shadow: 0 16px 38px -8px rgba(0, 0, 0, 0.85), 0 0 24px rgba(213, 124, 99, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Down to Up Orange Surface Sweep on Hover with Suitable Transparency & Glass Blur */
+/* Soft Premium Glow on Hover — elegant lift, no full orange flood */
 .service-3d-card::before,
 .service-domain-card::before,
 .skill-card::before {
@@ -2157,16 +2159,16 @@ p, span, a, input, select, textarea, button, li, small {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    0deg,
-    rgba(213, 75, 20, 0.84) 0%,
-    rgba(234, 88, 12, 0.8) 50%,
-    rgba(255, 122, 26, 0.75) 100%
+    160deg,
+    rgba(224, 139, 114, 0.08) 0%,
+    rgba(196, 101, 78, 0.16) 55%,
+    rgba(175, 72, 45, 0.22) 100%
   ) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   transform: scaleY(0);
   transform-origin: bottom center;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1 !important;
   border-radius: inherit;
   pointer-events: none;
@@ -2181,15 +2183,15 @@ p, span, a, input, select, textarea, button, li, small {
 .service-3d-card:hover,
 .service-domain-card:hover,
 .skill-card:hover {
-  border-color: #f97316 !important;
-  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.55), 0 0 35px rgba(249, 115, 22, 0.4) !important;
+  border-color: #E08B72 !important;
+  box-shadow: 0 20px 46px -8px rgba(196, 101, 78, 0.32), 0 0 26px rgba(224, 139, 114, 0.18) !important;
 }
 
-/* On Hover: All text & icons turn pure, brilliant WHITE with 100% visibility */
+/* On Hover: Keep card text visible — premium dark/warm palette, NOT full white */
 .service-3d-card:hover *,
 .service-domain-card:hover * {
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  color: inherit;
+  text-shadow: none;
 }
 
 .service-3d-card:hover h3,
@@ -2198,7 +2200,7 @@ p, span, a, input, select, textarea, button, li, small {
 .service-domain-card:hover .service-card-title,
 .skill-card:hover .skill-card-title {
   color: #ffffff !important;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  text-shadow: none !important;
 }
 
 .service-3d-card:hover p,
@@ -2206,98 +2208,98 @@ p, span, a, input, select, textarea, button, li, small {
 .service-domain-card:hover p,
 .service-domain-card:hover .service-card-desc,
 .skill-card:hover .skill-card-statement {
-  color: #ffffff !important;
-  opacity: 0.98 !important;
+  color: #f0e0d8 !important;
+  opacity: 1 !important;
   font-weight: 500 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  text-shadow: none;
 }
 
 .service-3d-card:hover .service-price-text,
 .service-domain-card:hover .service-price-text {
   color: #ffffff !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  text-shadow: none;
 }
 
 .service-3d-card:hover .service-badge-pill,
 .service-domain-card:hover .service-badge-pill {
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(224, 139, 114, 0.20) !important;
+  color: #fff3ee !important;
+  border-color: rgba(224, 139, 114, 0.50) !important;
   backdrop-filter: blur(4px);
 }
 
 .service-3d-card:hover svg,
 .service-domain-card:hover svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
-/* Specific Skill Card Hover High-Contrast Rules */
+/* Specific Skill Card Hover — accent color, not forced white */
 .skill-card:hover .skill-card-btn,
 .skill-card:hover .skill-open-btn {
-  color: #ffffff !important;
+  color: #E08B72 !important;
 }
 
 .skill-card:hover .skill-card-btn svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
 .skill-card:hover .skill-card-icon-wrap {
-  background: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(224, 139, 114, 0.20) !important;
+  border-color: rgba(224, 139, 114, 0.60) !important;
+  box-shadow: 0 4px 14px rgba(196, 101, 78, 0.22) !important;
 }
 
 .skill-card:hover .skill-card-icon-wrap svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
 .skill-card:hover .skill-exp-pill {
-  background: #ffffff !important;
-  color: #9e3505 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(224, 139, 114, 0.16) !important;
+  color: #ffd8ca !important;
+  border-color: rgba(224, 139, 114, 0.42) !important;
 }
 
 .skill-card:hover .skill-shadow-tag {
-  background: #ffffff !important;
-  color: #b03e08 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(224, 139, 114, 0.12) !important;
+  color: #ffcfbd !important;
+  border-color: rgba(224, 139, 114, 0.32) !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  color: #f8f0e8 !important;
+  border-color: rgba(224, 139, 114, 0.48) !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn * {
-  color: #140d07 !important;
+  color: #f8f0e8 !important;
   text-shadow: none !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
 .service-domain-card:hover .service-link-row {
-  border-color: rgba(255, 255, 255, 0.35) !important;
+  border-color: rgba(224, 139, 114, 0.45) !important;
   color: #ffffff !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
 }
 
 .service-3d-card:hover .service-card-btn {
-  background: #ffffff !important;
-  color: #ea580c !important;
-  border-color: #ffffff !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(224, 139, 114, 0.22) !important;
+  color: #ffffff !important;
+  border-color: rgba(224, 139, 114, 0.60) !important;
+  box-shadow: 0 4px 14px rgba(196, 101, 78, 0.25) !important;
 }
 
 .service-3d-card:hover .service-card-btn * {
-  color: #ea580c !important;
+  color: #ffffff !important;
 }
 
 /* Card Inner Typography */
@@ -2326,10 +2328,10 @@ p, span, a, input, select, textarea, button, li, small {
 }
 
 .service-card-btn:hover {
-  background: #D57C63;
+  background: #E08B72;
   color: #ffffff !important;
-  border-color: #D57C63;
-  box-shadow: 0 6px 18px rgba(213, 124, 99, 0.4);
+  border-color: #E08B72;
+  box-shadow: 0 6px 18px rgba(224, 139, 114, 0.35);
 }
 
 :root[data-theme="light"] .service-card-btn {
@@ -2379,78 +2381,78 @@ p, span, a, input, select, textarea, button, li, small {
 :root[data-theme="light"] .service-domain-card::before,
 :root[data-theme="light"] .skill-card::before {
   background: linear-gradient(
-    0deg,
-    rgba(207, 75, 10, 0.86) 0%,
-    rgba(234, 88, 12, 0.82) 50%,
-    rgba(255, 122, 26, 0.76) 100%
+    160deg,
+    rgba(217, 95, 40, 0.08) 0%,
+    rgba(196, 78, 30, 0.15) 55%,
+    rgba(175, 60, 20, 0.20) 100%
   ) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
 }
 
 :root[data-theme="light"] .service-3d-card:hover,
 :root[data-theme="light"] .service-domain-card:hover,
 :root[data-theme="light"] .skill-card:hover {
-  border-color: #ea580c !important;
-  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.45), 0 0 35px rgba(249, 115, 22, 0.35) !important;
+  border-color: #d95f28 !important;
+  box-shadow: 0 20px 46px -8px rgba(196, 78, 30, 0.24), 0 0 24px rgba(217, 95, 40, 0.16) !important;
 }
 
 :root[data-theme="light"] .service-3d-card:hover *,
 :root[data-theme="light"] .service-domain-card:hover * {
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  color: inherit;
+  text-shadow: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap {
-  background: #ffffff !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+  background: #fff0e8 !important;
+  border: 1.5px solid rgba(217, 95, 40, 0.55) !important;
+  box-shadow: 0 4px 14px rgba(196, 78, 30, 0.18) !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+  color: #d95f28 !important;
+  stroke: #d95f28 !important;
+  filter: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  background: #fff0e8 !important;
+  color: #1a0f08 !important;
+  border: 1px solid rgba(217, 95, 40, 0.45) !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn * {
-  color: #140d07 !important;
+  color: #1a0f08 !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn svg {
-  color: #c2410c !important;
+  color: #d95f28 !important;
   stroke: #c2410c !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-exp-pill {
-  background: #ffffff !important;
+  background: #fde8d8 !important;
   color: #9e3505 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(217, 95, 40, 0.45) !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shadow-tag {
-  background: #ffffff !important;
+  background: #fdeee4 !important;
   color: #b03e08 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(217, 95, 40, 0.38) !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .service-3d-card:hover .service-card-btn {
-  background: #ffffff !important;
-  color: #ea580c !important;
-  border-color: #ffffff !important;
+  background: rgba(217, 95, 40, 0.14) !important;
+  color: #9e3505 !important;
+  border-color: rgba(217, 95, 40, 0.45) !important;
 }
 
 :root[data-theme="light"] .service-3d-card:hover .service-card-btn * {
-  color: #ea580c !important;
+  color: #9e3505 !important;
 }
 
 /* ==========================================================================
@@ -2469,8 +2471,8 @@ p, span, a, input, select, textarea, button, li, small {
 
 .recent-project-card:hover {
   transform: translateY(-4px);
-  border-color: #D57C63 !important;
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.8), 0 0 24px rgba(213, 124, 99, 0.25) !important;
+  border-color: #E08B72 !important;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.7), 0 0 22px rgba(224, 139, 114, 0.20) !important;
 }
 
 :root[data-theme="light"] .recent-project-card {

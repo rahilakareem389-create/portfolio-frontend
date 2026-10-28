@@ -44,13 +44,13 @@ export const COURSES = [
 ];
 
 export const PAL = [
-  ['linear-gradient(135deg,#5a2fc9,#a47bff)', '#fff'],
-  ['#ffe9a8', '#3a2a00'],
-  ['#dccbff', '#2a1a5e'],
+  ['linear-gradient(135deg,#7c52df,#b695ff)', '#fff'],
+  ['#fff2c7', '#3a2a00'],
+  ['#e8dcff', '#2a1a5e'],
   ['#ffffff', '#2a1a5e'],
-  ['linear-gradient(135deg,#2b1766,#4d22b8)', '#fff'],
-  ['linear-gradient(135deg,#fff1c0,#ffd9ec)', '#4a1f4a'],
-  ['linear-gradient(135deg,#c9b6ff,#ebe3ff)', '#2a1a5e'],
+  ['linear-gradient(135deg,#3c2282,#5e2fce)', '#fff'],
+  ['linear-gradient(135deg,#fff8dc,#ffe8f3)', '#4a1f4a'],
+  ['linear-gradient(135deg,#d8caff,#f3eeff)', '#2a1a5e'],
 ];
 
 export const FAQ = [

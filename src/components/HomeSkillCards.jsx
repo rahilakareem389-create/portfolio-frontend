@@ -497,15 +497,15 @@ const css = `
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Down-to-Up Orange Sheet on Hover */
+/* Soft Premium Glow on Hover — light elegant lift instead of full orange flood */
 .skill-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, #c2410c 0%, #ea580c 50%, #f97316 100%);
+  background: linear-gradient(160deg, rgba(224, 139, 114, 0.10) 0%, rgba(196, 101, 78, 0.18) 60%, rgba(180, 80, 55, 0.22) 100%);
   transform: scaleY(0);
   transform-origin: bottom center;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
   border-radius: inherit;
   pointer-events: none;
@@ -516,82 +516,82 @@ const css = `
 }
 
 .skill-card:hover {
-  border-color: #f97316 !important;
-  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.55), 0 0 35px rgba(249, 115, 22, 0.4) !important;
+  border-color: #E08B72 !important;
+  border-bottom-color: #E08B72 !important;
+  box-shadow: 0 20px 48px -8px rgba(196, 101, 78, 0.30), 0 0 28px rgba(224, 139, 114, 0.18) !important;
 }
 
-/* On Hover: Orange card sweep with crystal-clear high-contrast badges */
+/* On Hover: Soft premium look — keep existing card text colors, just elevate accent */
 .skill-card:hover .skill-card-title {
   color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  text-shadow: none;
 }
 
 .skill-card:hover .skill-card-statement {
-  color: #ffffff !important;
-  opacity: 0.98 !important;
+  color: #f0e0d8 !important;
+  opacity: 1 !important;
   font-weight: 500 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .skill-card:hover .skill-card-icon-wrap {
-  background: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22) !important;
+  background: rgba(224, 139, 114, 0.22) !important;
+  border-color: rgba(224, 139, 114, 0.65) !important;
+  box-shadow: 0 4px 14px rgba(196, 101, 78, 0.25) !important;
 }
 
 .skill-card:hover .skill-card-icon-wrap svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
 .skill-card:hover .skill-exp-pill {
-  background: #ffffff !important;
-  color: #9e3505 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  background: rgba(224, 139, 114, 0.18) !important;
+  color: #f8d0c0 !important;
+  border-color: rgba(224, 139, 114, 0.45) !important;
+  box-shadow: none !important;
   text-shadow: none !important;
 }
 
 .skill-card:hover .skill-shadow-tag {
-  background: #ffffff !important;
-  color: #b03e08 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  background: rgba(224, 139, 114, 0.12) !important;
+  color: #f8c8b4 !important;
+  border-color: rgba(224, 139, 114, 0.35) !important;
+  box-shadow: none !important;
   text-shadow: none !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  color: #f8f0e8 !important;
+  border-color: rgba(224, 139, 114, 0.50) !important;
+  box-shadow: none !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn * {
-  color: #140d07 !important;
+  color: #f8f0e8 !important;
   text-shadow: none !important;
 }
 
 .skill-card:hover .skill-shutter-click-btn svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
+  color: #E08B72 !important;
+  stroke: #E08B72 !important;
 }
 
 .skill-card:hover .skill-card-btn,
 .skill-card:hover .skill-open-btn {
-  color: #ffffff !important;
-  font-weight: 800 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  color: #E08B72 !important;
+  font-weight: 700 !important;
+  text-shadow: none;
 }
 
 .skill-card:hover .skill-card-btn svg {
-  color: #ffffff !important;
+  color: #E08B72 !important;
 }
 
 .skill-card:hover .skill-tag-pill {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border-color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(224, 139, 114, 0.15) !important;
+  color: #f8e8e0 !important;
+  border-color: rgba(224, 139, 114, 0.35) !important;
 }
 
 .skill-section-title {
@@ -704,86 +704,87 @@ const css = `
 }
 
 :root[data-theme="light"] .skill-card::before {
-  background: linear-gradient(0deg, #c2410c 0%, #ea580c 50%, #f97316 100%) !important;
+  background: linear-gradient(160deg, rgba(217, 95, 40, 0.08) 0%, rgba(196, 78, 30, 0.15) 60%, rgba(180, 60, 20, 0.18) 100%) !important;
 }
 
 :root[data-theme="light"] .skill-card:hover {
-  border-color: #ea580c !important;
-  box-shadow: 0 24px 50px -8px rgba(234, 88, 12, 0.45), 0 0 35px rgba(249, 115, 22, 0.35) !important;
+  border-color: #d95f28 !important;
+  border-bottom-color: #d95f28 !important;
+  box-shadow: 0 20px 46px -8px rgba(196, 78, 30, 0.22), 0 0 24px rgba(217, 95, 40, 0.14) !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-title {
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  color: #1a0f08 !important;
+  text-shadow: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-statement {
-  color: #ffffff !important;
-  opacity: 0.98 !important;
+  color: #2e1a0e !important;
+  opacity: 1 !important;
   font-weight: 500 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  text-shadow: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap {
-  background: #ffffff !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16) !important;
+  background: #fff4ef !important;
+  border: 1.5px solid rgba(217, 95, 40, 0.55) !important;
+  box-shadow: 0 4px 14px rgba(196, 78, 30, 0.18) !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-icon-wrap svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+  color: #d95f28 !important;
+  stroke: #d95f28 !important;
+  filter: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-exp-pill {
-  background: #ffffff !important;
+  background: #fde8d8 !important;
   color: #9e3505 !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(217, 95, 40, 0.45) !important;
+  box-shadow: none !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shadow-tag {
-  background: #ffffff !important;
+  background: #fdeee4 !important;
   color: #b03e08 !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(217, 95, 40, 0.38) !important;
+  box-shadow: none !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  background: #fff0e8 !important;
+  color: #1a0f08 !important;
+  border: 1px solid rgba(217, 95, 40, 0.45) !important;
+  box-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn * {
-  color: #140d07 !important;
+  color: #1a0f08 !important;
   text-shadow: none !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-shutter-click-btn svg {
-  color: #c2410c !important;
-  stroke: #c2410c !important;
+  color: #d95f28 !important;
+  stroke: #d95f28 !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-btn,
 :root[data-theme="light"] .skill-card:hover .skill-open-btn {
-  color: #ffffff !important;
-  font-weight: 800 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  color: #d95f28 !important;
+  font-weight: 700 !important;
+  text-shadow: none;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-card-btn svg {
-  color: #ffffff !important;
+  color: #d95f28 !important;
 }
 
 :root[data-theme="light"] .skill-card:hover .skill-tag-pill {
-  background: #ffffff !important;
-  color: #140d07 !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  background: #fde8d8 !important;
+  color: #1a0f08 !important;
+  border: 1px solid rgba(217, 95, 40, 0.35) !important;
 }
 
 :root[data-theme="light"] .skill-card-title {
