@@ -416,9 +416,6 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                   <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-[#D57C63] transition-colors font-medium">
                     {personalInfo.email}
                   </a>
-                  <span className="text-xs text-[#8a7569] block mt-0.5">
-                    Secondary: <a href="mailto:rahilakareem389@gmail.com" className="text-[#e2d5cb] hover:underline">rahilakareem389@gmail.com</a>
-                  </span>
                 </div>
 
                 <div className="pt-1">
@@ -437,9 +434,10 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
 
                 <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Location & Response:</strong>
-                  <span className="text-[#e2d5cb]">{t('contact.location')}</span>
-                  <br />
-                  <span className="text-xs text-[#bcab9e]">{t('contact.responseRate')}</span>
+                  <div className="text-white font-medium">
+                    {t('contact.location').replace(/^[^:：]+[:：]\s*/, '')}
+                  </div>
+                  <span className="text-xs text-[#bcab9e] block mt-0.5">{t('contact.responseRate')}</span>
                 </div>
               </div>
             </div>
