@@ -9,13 +9,11 @@ import Portfolio from './components/Portfolio';
 import Pricing from './components/Pricing';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Background3D from './components/Background3D';
 import FullStackPage from './components/FullStackPage';
 import SeoPage from './components/SeoPage';
 import WordPressPage from './components/WordPressPage';
 import Testimonials from './components/Testimonials';
 import AdminPage from './components/AdminPage';
-import TerminalPreloader from './components/TerminalPreloader';
 import ErrorBoundary from './components/ErrorBoundary';
 import CookieConsent from './components/CookieConsent';
 import IslamicNavbar from './components/islamic/IslamicNavbar';
@@ -25,7 +23,6 @@ import IslamicPrayerFloatingWidget from './components/islamic/IslamicPrayerFloat
 import { trackPageView } from './utils/visitorTracker';
 
 function App() {
-  const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
   const [selectedPlan, setSelectedPlan] = useState('Standard ($180)');
   const [isPrayerModalOpen, setIsPrayerModalOpen] = useState(false);
@@ -139,14 +136,7 @@ function App() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen w-full flex flex-col relative selection:bg-[#ff7a1a] selection:text-black overflow-x-clip">
-      {/* Interactive Startup Terminal Preloader */}
-      {showPreloader && (
-        <TerminalPreloader onComplete={() => setShowPreloader(false)} />
-      )}
-
-      {/* 3D Interactive Three.js Background Constellation (Disabled on Islamic Learn) */}
-      <Background3D enabled={activeTab !== 'islamic-learn'} />
+    <div className="min-h-screen w-full flex flex-col relative selection:bg-[#D57C63] selection:text-white overflow-x-clip">
 
       {/* Modern Fixed Navbar (hidden on dedicated admin page & dedicated Islamic Learn portal) */}
       {activeTab !== 'admin' && activeTab !== 'islamic-learn' && (
@@ -302,7 +292,7 @@ function App() {
       )}
 
       {/* Authentic GDPR & ePrivacy Compliant Cookie Consent Banner & Floating Re-open Control */}
-      <CookieConsent activeTab={activeTab} preloaderActive={showPreloader} />
+      <CookieConsent activeTab={activeTab} preloaderActive={false} />
     </div>
   );
 }

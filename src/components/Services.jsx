@@ -701,157 +701,30 @@ const Service3DCard = ({ item, onAction, shadowClass = '' }) => {
   );
 };
 
-// Reusable 3D Domain Hero Card Component
-// Reusable 3D Domain Hero Card Component with Left-to-Right Orange Hover & Slow Orange Page Click
-const DomainHero3DCard = ({ icon: Icon, badge, price, title, description, linkText, shadowClass = '', shadowName = '', onClick }) => {
-  const [transformStyle, setTransformStyle] = useState('');
-  const [glareStyle, setGlareStyle] = useState({ opacity: 0, x: 50, y: 50 });
-  const [isWiping, setIsWiping] = useState(false);
-  const cardRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current || isWiping) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = -((y - centerY) / centerY) * 7;
-    const rotateY = ((x - centerX) / centerX) * 7;
-
-    setTransformStyle(
-      `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale3d(1.02, 1.02, 1.02)`
-    );
-
-    const glareX = (x / rect.width) * 100;
-    const glareY = (y / rect.height) * 100;
-    setGlareStyle({
-      opacity: 1,
-      x: glareX,
-      y: glareY,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTransformStyle('perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)');
-    setGlareStyle({ opacity: 0, x: 50, y: 50 });
-  };
-
-  const handleClick = (e) => {
-    if (isWiping) return;
-    setIsWiping(true);
-
-    // Subtle audio click feedback
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (AudioCtx) {
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(540, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.12);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.13);
-      }
-    } catch {}
-
-    // Slow cinematic orange page opens left to right over 720ms
-    setTimeout(() => {
-      if (onClick) onClick(e);
-      setTimeout(() => {
-        setIsWiping(false);
-      }, 350);
-    }, 720);
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-      style={{ transform: transformStyle }}
-      className={`service-domain-card ${shadowClass} p-6 sm:p-7 rounded-2xl cursor-pointer group flex flex-col justify-between relative min-h-[220px] select-none`}
-    >
-      {/* 1. Down-to-Up Hover Orange Backdrop is handled via CSS ::before */}
-
-      {/* 2. Slow New Orange Page Wipe: Down to Up on Click with Pure White Text */}
-      <div
-        className={`pointer-events-none absolute inset-0 z-30 overflow-hidden rounded-2xl transition-opacity duration-200 ${
-          isWiping ? 'opacity-100' : 'opacity-0'
-        }`}
-        aria-hidden="true"
-      >
-        <div
-          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#c2410c]/85 via-[#ea580c]/85 to-[#f97316]/80 backdrop-blur-md flex flex-col justify-center items-center px-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-[0_-6px_35px_rgba(0,0,0,0.5)] border-t-3 border-white/80"
-          style={{
-            height: isWiping ? '100%' : '0%',
-          }}
-        >
-          <div className="flex items-center gap-2.5 text-white font-extrabold text-base tracking-wide uppercase drop-shadow-md">
-            <Icon className="w-5 h-5 text-white animate-spin" />
-            <span>Opening {title}...</span>
-          </div>
-          <p className="text-white/95 text-xs font-bold mt-1 drop-shadow-sm">
-            {price} • 6 Deliverables
-          </p>
-          <div className="mt-2 text-[10px] uppercase tracking-widest font-extrabold px-3 py-0.5 rounded-full bg-white text-[#c2410c] shadow-md">
-            Loading Catalog &darr;
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Subtle 3D Glare */}
-      <div
-        className="pointer-events-none absolute inset-0 z-10 rounded-2xl transition-opacity duration-300"
-        style={{
-          opacity: glareStyle.opacity,
-          background: `radial-gradient(circle at ${glareStyle.x}% ${glareStyle.y}%, rgba(255, 255, 255, 0.22), transparent 60%)`,
-        }}
-      />
-
-      {/* 4. Card Content (Positioned above hover orange backdrop) */}
-      <div className="relative z-10" style={{ transform: 'translateZ(18px)' }}>
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="service-badge-pill px-3 py-1 rounded-full text-xs font-bold bg-[#D57C63]/15 text-[#D57C63] border border-[#D57C63]/30 flex items-center gap-1.5 shadow-sm transition-colors duration-300">
-            <Icon className="w-3.5 h-3.5" />
-            <span>{badge}</span>
-          </span>
-          <span className="service-price-text text-xs text-[var(--mute)] font-semibold transition-colors duration-300">
-            {price}
-          </span>
-        </div>
-        <h3 className="service-card-title font-heading font-bold text-xl sm:text-2xl text-[var(--ink)] transition-colors duration-300 mb-2 text-left">
-          {title}
-        </h3>
-        <p className="service-card-desc text-xs sm:text-[13.5px] text-[var(--mute)] leading-relaxed mb-4 text-left transition-colors duration-300">
-          {description}
-        </p>
-      </div>
-
-      <div
-        className="service-link-row relative z-10 text-xs sm:text-sm font-bold text-[#D57C63] flex items-center justify-between pt-3 border-t border-[var(--line)] transition-colors duration-300"
-        style={{ transform: 'translateZ(24px)' }}
-      >
-        <span className="flex items-center gap-2">
-          <span>{linkText}</span>
-          <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1.5 transition-transform" />
+// Domain summary card (clean, accessible, no gimmicks)
+const DomainHero3DCard = ({ icon: Icon, badge, price, title, description, linkText, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="pro-card p-6 sm:p-7 cursor-pointer group flex flex-col justify-between text-left min-h-[220px] w-full"
+  >
+    <div>
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <span className="pro-pill inline-flex items-center gap-1.5">
+          <Icon className="w-3.5 h-3.5 text-[var(--org)]" />
+          <span>{badge}</span>
         </span>
-        {shadowName && (
-          <span className="text-[10px] font-semibold opacity-75 uppercase tracking-wider">
-            {shadowName}
-          </span>
-        )}
+        <span className="text-xs text-[var(--mute)] font-semibold">{price}</span>
       </div>
+      <h3 className="font-heading font-bold text-xl sm:text-[22px] text-[var(--ink)] mb-2">{title}</h3>
+      <p className="text-[14.5px] text-[var(--mute)] leading-relaxed mb-5">{description}</p>
     </div>
-  );
-};
+    <span className="pt-4 border-t border-[var(--line)] text-sm font-semibold text-[var(--org)] flex items-center gap-2">
+      <span>{linkText}</span>
+      <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
+    </span>
+  </button>
+);
 
 const Services = ({ setActiveTab, setSelectedPlan }) => {
   const { t } = useLanguage();
@@ -1310,7 +1183,6 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   description="Website Design, Elementor, WooCommerce, and Website Redesign."
                   linkText="View Services (6 Deliverables)"
                   shadowClass="shadow-type-1"
-                  shadowName="Cyber Neon Glow"
                   onClick={() => handleSkillSelect('wordpress', 'wordpress-services')}
                 />
 
@@ -1322,7 +1194,6 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   description="Keyword Research, On-Page SEO, Technical SEO, and Website Audits."
                   linkText="View Services (6 Deliverables)"
                   shadowClass="shadow-type-2"
-                  shadowName="3D Deep Elevation"
                   onClick={() => handleSkillSelect('seo', 'seo-services')}
                 />
 
@@ -1334,7 +1205,6 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                   description="React.js, Node.js, Express.js, MongoDB, and API Integration."
                   linkText="View Services (6 Deliverables)"
                   shadowClass="shadow-type-3"
-                  shadowName="Dual-Tone Aurora"
                   onClick={() => handleSkillSelect('fullstack', 'fullstack-services')}
                 />
               </div>
@@ -1546,7 +1416,7 @@ const Services = ({ setActiveTab, setSelectedPlan }) => {
                 >
                   {/* Step Number Top Pill */}
                   <div className="flex items-center justify-between mb-4 relative z-10">
-                    <span className="w-8 h-8 rounded-full bg-[#D57C63] group-hover:bg-white group-hover:text-[#ea580c] text-white text-xs font-black flex items-center justify-center shadow-md transition-colors">
+                    <span className="w-8 h-8 rounded-full bg-[#D57C63] group-hover:bg-white group-hover:text-[#b85c43] text-white text-xs font-black flex items-center justify-center shadow-md transition-colors">
                       {step.step}
                     </span>
                     <Icon className="w-5 h-5 text-[#D57C63] group-hover:text-white opacity-80 group-hover:scale-110 transition-transform" />

@@ -111,18 +111,18 @@ const About = ({ setActiveTab }) => {
           <div className="flex items-center gap-2 text-sm text-[#bcab9e]">
             <button
               onClick={() => setActiveTab('home')}
-              className="hover:text-[#ff7a1a] flex items-center gap-1 transition-colors cursor-pointer"
+              className="hover:text-[#D57C63] flex items-center gap-1 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
               <span>{t('about.backOverview')}</span>
             </button>
             <span>/</span>
-            <span className="text-[#ff7a1a]">{t('about.title')}</span>
+            <span className="text-[#D57C63]">{t('about.title')}</span>
           </div>
 
           <button
             onClick={() => setActiveTab('home')}
-            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#ff7a1a] transition-all flex items-center gap-1 text-xs cursor-pointer"
+            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#D57C63] transition-all flex items-center gap-1 text-xs cursor-pointer"
             title="Close page"
           >
             <X className="w-4 h-4" />
@@ -142,52 +142,34 @@ const About = ({ setActiveTab }) => {
 
         {/* Top Profile Card with 3-Stepped Radiant Neon Bars */}
         <div className="relative my-6 mb-14">
-          {/* 3 Stepped Layer Bars Behind the Card on TOP - LEFT */}
-          <div className="absolute -top-3.5 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-0">
-            {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
-            <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
-            {/* Layer 2: Us se patli (Medium thickness & width tier) */}
-            <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
-            {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
-            <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
-          </div>
 
-          {/* 3 Stepped Layer Bars Behind the Card on TOP - RIGHT */}
-          <div className="absolute -top-3.5 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-0">
-            {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
-            <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
-            {/* Layer 2: Us se patli (Medium thickness & width tier) */}
-            <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
-            {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
-            <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
-          </div>
 
           {/* Main Card Container */}
-          <div className="reveal-up glass-card p-6 sm:p-8 rounded-[18px] border border-[#33271f] hover:border-[#ff7a1a]/50 transition-colors duration-300 relative z-10 shadow-2xl overflow-hidden">
+          <div className="reveal-up glass-card p-6 sm:p-8 rounded-[18px] border border-[#33271f] hover:border-[#D57C63]/50 transition-colors duration-300 relative z-10 shadow-2xl overflow-hidden">
             {/* 3 Stepped Radiant Glowing Bars on TOP of Card - LEFT */}
             <div className="absolute top-0 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-20">
               {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
-              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#e8a08b] via-[#D57C63] to-[#b85c43] shadow-[0_2px_14px_rgba(213, 124, 99,0.85)]" />
               {/* Bar 2: Us se patli (Medium thickness & width) */}
-              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#e8a08b]/90 via-[#D57C63] to-[#b85c43]/85 shadow-[0_1px_8px_rgba(213, 124, 99,0.6)]" />
               {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
-              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#e8a08b]/70 via-[#D57C63]/80 to-[#b85c43]/60 shadow-[0_1px_6px_rgba(213, 124, 99,0.4)]" />
             </div>
 
             {/* 3 Stepped Radiant Glowing Bars on TOP of Card - RIGHT */}
             <div className="absolute top-0 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-20">
               {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
-              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#b85c43] via-[#D57C63] to-[#e8a08b] shadow-[0_2px_14px_rgba(213, 124, 99,0.85)]" />
               {/* Bar 2: Us se patli (Medium thickness & width) */}
-              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#b85c43]/85 via-[#D57C63] to-[#e8a08b]/90 shadow-[0_1px_8px_rgba(213, 124, 99,0.6)]" />
               {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
-              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#b85c43]/60 via-[#D57C63]/80 to-[#e8a08b]/70 shadow-[0_1px_6px_rgba(213, 124, 99,0.4)]" />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             {/* Avatar in glowing circular ring */}
             <div className="lg:col-span-4 flex flex-col items-center sm:flex-row lg:flex-col gap-5 text-center sm:text-left lg:text-center">
-              <div className="relative w-40 h-40 rounded-full overflow-hidden border-3 border-[#ff7a1a] shadow-[0_0_35px_rgba(255,106,0,0.5)]">
+              <div className="relative w-40 h-40 rounded-full overflow-hidden border-3 border-[#D57C63] shadow-[0_0_35px_rgba(213, 124, 99,0.5)]">
                 <img
                   src={profileImg}
                   alt="Rahila Kareem"
@@ -235,15 +217,15 @@ const About = ({ setActiveTab }) => {
 
                 <button
                   onClick={() => setShowCvModal(true)}
-                  className="px-5 py-2.5 rounded-full text-sm font-semibold text-[#bcab9e] hover:text-white bg-[#1b1411] border border-[#33271f] hover:border-[#ff7a1a] transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-2.5 rounded-full text-sm font-semibold text-[#bcab9e] hover:text-white bg-[#1b1411] border border-[#33271f] hover:border-[#D57C63] transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Eye className="w-4 h-4 text-[#ff7a1a]" />
+                  <Eye className="w-4 h-4 text-[#D57C63]" />
                   <span>{t('about.previewCv')}</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('contact')}
-                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-white bg-[#1b1411] border border-[#33271f] hover:border-[#ff7a1a] transition-all cursor-pointer"
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-white bg-[#1b1411] border border-[#33271f] hover:border-[#D57C63] transition-all cursor-pointer"
                 >
                   <span>{t('hero.btnHireMe')}</span>
                 </button>
@@ -267,7 +249,7 @@ const About = ({ setActiveTab }) => {
               {experience.map((exp, idx) => (
                 <div
                   key={idx}
-                  className="pl-5 rtl:pl-0 rtl:pr-5 border-l-2 rtl:border-l-0 rtl:border-r-2 border-[#ff7a1a] relative"
+                  className="pl-5 rtl:pl-0 rtl:pr-5 border-l-2 rtl:border-l-0 rtl:border-r-2 border-[#D57C63] relative"
                 >
                   <h3 className="font-heading font-bold text-lg text-white mb-1">
                     {exp.role}
@@ -297,8 +279,8 @@ const About = ({ setActiveTab }) => {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     activeCategory === cat
-                      ? 'bg-[#ff7a1a] text-[#1a0c02] font-bold shadow-[0_0_12px_rgba(255,122,26,0.5)]'
-                      : 'bg-[#1b1411] text-[#bcab9e] border border-[#33271f] hover:border-[#ff7a1a]'
+                      ? 'bg-[#D57C63] text-[#1a0c02] font-bold shadow-[0_0_12px_rgba(213, 124, 99,0.5)]'
+                      : 'bg-[#1b1411] text-[#bcab9e] border border-[#33271f] hover:border-[#D57C63]'
                   }`}
                 >
                   {cat}
@@ -312,11 +294,11 @@ const About = ({ setActiveTab }) => {
                 <div key={idx} className="glass-card p-4">
                   <div className="flex justify-between items-center mb-1.5 text-sm font-semibold text-white">
                     <span>{s.name}</span>
-                    <span className="text-[#ff7a1a]">{s.level}%</span>
+                    <span className="text-[#D57C63]">{s.level}%</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-[#33271f] overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#ff7a1a] to-[#eaa487] transition-all duration-1000"
+                      className="h-full rounded-full bg-gradient-to-r from-[#D57C63] to-[#eaa487] transition-all duration-1000"
                       style={{ width: `${s.level}%` }}
                     />
                   </div>
@@ -329,46 +311,28 @@ const About = ({ setActiveTab }) => {
 
         {/* Dedicated Certifications Section Container */}
         <div className="relative my-10 mb-16 sm:mb-20">
-          {/* 3 Stepped Layer Bars Behind the Card on TOP - LEFT */}
-          <div className="absolute -top-3.5 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-0">
-            {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
-            <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
-            {/* Layer 2: Us se patli (Medium thickness & width tier) */}
-            <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
-            {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
-            <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
-          </div>
 
-          {/* 3 Stepped Layer Bars Behind the Card on TOP - RIGHT */}
-          <div className="absolute -top-3.5 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-0">
-            {/* Layer 3: Sab se patli (Thinnest, highest back tier) */}
-            <div className="h-[2px] w-14 sm:w-28 md:w-36 lg:w-44 rounded-t-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_-1px_6px_rgba(255,122,26,0.4)]" />
-            {/* Layer 2: Us se patli (Medium thickness & width tier) */}
-            <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-t-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_-2px_8px_rgba(255,122,26,0.6)]" />
-            {/* Layer 1: Moti (Thickest & widest tier closest to top edge) */}
-            <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-t-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_-2px_12px_rgba(255,122,26,0.85)]" />
-          </div>
 
           {/* Main Card Container */}
-          <div className="reveal-up glass-card p-6 sm:p-10 rounded-[18px] border border-[#33271f] hover:border-[#ff7a1a]/50 transition-colors duration-300 relative z-10 shadow-2xl overflow-hidden">
+          <div className="reveal-up glass-card p-6 sm:p-10 rounded-[18px] border border-[#33271f] hover:border-[#D57C63]/50 transition-colors duration-300 relative z-10 shadow-2xl overflow-hidden">
             {/* 3 Stepped Radiant Glowing Bars on TOP of Card - LEFT */}
             <div className="absolute top-0 left-4 sm:left-10 md:left-14 lg:left-16 flex flex-col items-start gap-[3px] pointer-events-none z-20">
               {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
-              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ffb076] via-[#ff7a1a] to-[#ea580c] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#e8a08b] via-[#D57C63] to-[#b85c43] shadow-[0_2px_14px_rgba(213, 124, 99,0.85)]" />
               {/* Bar 2: Us se patli (Medium thickness & width) */}
-              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ffb076]/90 via-[#ff7a1a] to-[#ea580c]/85 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#e8a08b]/90 via-[#D57C63] to-[#b85c43]/85 shadow-[0_1px_8px_rgba(213, 124, 99,0.6)]" />
               {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
-              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ffb076]/70 via-[#ff7a1a]/80 to-[#ea580c]/60 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#e8a08b]/70 via-[#D57C63]/80 to-[#b85c43]/60 shadow-[0_1px_6px_rgba(213, 124, 99,0.4)]" />
             </div>
 
             {/* 3 Stepped Radiant Glowing Bars on TOP of Card - RIGHT */}
             <div className="absolute top-0 right-4 sm:right-10 md:right-14 lg:right-16 flex flex-col items-end gap-[3px] pointer-events-none z-20">
               {/* Bar 1: Moti (Thickest, widest radiant gradient bar) */}
-              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#ea580c] via-[#ff7a1a] to-[#ffb076] shadow-[0_2px_14px_rgba(255,122,26,0.85)]" />
+              <div className="h-1.5 sm:h-2 w-28 sm:w-56 md:w-72 lg:w-80 rounded-b-full bg-gradient-to-r from-[#b85c43] via-[#D57C63] to-[#e8a08b] shadow-[0_2px_14px_rgba(213, 124, 99,0.85)]" />
               {/* Bar 2: Us se patli (Medium thickness & width) */}
-              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#ea580c]/85 via-[#ff7a1a] to-[#ffb076]/90 shadow-[0_1px_8px_rgba(255,122,26,0.6)]" />
+              <div className="h-[3px] sm:h-1 w-20 sm:w-40 md:w-52 lg:w-60 rounded-b-full bg-gradient-to-r from-[#b85c43]/85 via-[#D57C63] to-[#e8a08b]/90 shadow-[0_1px_8px_rgba(213, 124, 99,0.6)]" />
               {/* Bar 3: Phir us se patli (Sab se patli, thinnest & shortest) */}
-              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#ea580c]/60 via-[#ff7a1a]/80 to-[#ffb076]/70 shadow-[0_1px_6px_rgba(255,122,26,0.4)]" />
+              <div className="h-[1.5px] sm:h-[2px] w-14 sm:w-24 md:w-32 lg:w-40 rounded-b-full bg-gradient-to-r from-[#b85c43]/60 via-[#D57C63]/80 to-[#e8a08b]/70 shadow-[0_1px_6px_rgba(213, 124, 99,0.4)]" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -397,7 +361,7 @@ const About = ({ setActiveTab }) => {
                         {cert.isComingSoon ? (
                           <span className="inline-flex flex-wrap items-center">
                             <strong className="text-white">{cert.title}</strong>
-                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[#ff7a1a]/20 text-[#ff7a1a] border border-[#ff7a1a]/40">
+                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[#D57C63]/20 text-[#D57C63] border border-[#D57C63]/40">
                               Coming Soon
                             </span>
                           </span>
@@ -408,10 +372,10 @@ const About = ({ setActiveTab }) => {
                               if (activeImgIdx !== -1) setSelectedCertIndex(activeImgIdx);
                             }}
                             className={`text-left inline-flex flex-wrap items-center gap-1 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer ${
-                              isCurrent ? 'text-[#ff7a1a]' : 'hover:text-[#ff7a1a]'
+                              isCurrent ? 'text-[#D57C63]' : 'hover:text-[#D57C63]'
                             }`}
                           >
-                            <strong className={isCurrent ? 'text-[#ff7a1a]' : 'text-white'}>
+                            <strong className={isCurrent ? 'text-[#D57C63]' : 'text-white'}>
                               {cert.title}
                             </strong>
                             {cert.issuer && <span>, {cert.issuer}</span>}
@@ -429,7 +393,7 @@ const About = ({ setActiveTab }) => {
                     key={certifications.filter((c) => !c.isComingSoon)[selectedCertIndex].id}
                     className="mt-6 pt-4 border-t border-[#33271f] flex items-center gap-2 text-xs text-[#eaa487] animate-text-up"
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#ff7a1a] animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-[#D57C63] animate-pulse" />
                     <span>
                       Viewing: <strong className="text-white">{certifications.filter((c) => !c.isComingSoon)[selectedCertIndex].title}</strong> ({certifications.filter((c) => !c.isComingSoon)[selectedCertIndex].issuer})
                     </span>
@@ -453,7 +417,7 @@ const About = ({ setActiveTab }) => {
         {/* Modal for CV Interactive Preview */}
         {showCvModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-            <div className="glass-card modal-enter w-full max-w-4xl h-[90vh] p-6 rounded-[18px] border border-[#ff7a1a] relative shadow-2xl bg-[#1b1411] flex flex-col">
+            <div className="glass-card modal-enter w-full max-w-4xl h-[90vh] p-6 rounded-[18px] border border-[#D57C63] relative shadow-2xl bg-[#1b1411] flex flex-col">
               
               <div className="flex items-center justify-between pb-4 border-b border-[#33271f]">
                 <div>

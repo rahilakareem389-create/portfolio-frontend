@@ -1,5 +1,5 @@
 /* Only what Tailwind utilities can't express: keyframes, split-text, noise. */
-.rv{opacity:0;transform:translateY(46px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
 .rv.in{opacity:1;transform:none}
 .wd{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-right:0.28em}
 .wd:last-child{margin-right:0}

@@ -38,9 +38,10 @@ function Reveal({ as: Tag = 'div', delay = 0, split = false, className = '', sty
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // threshold 0 + bottom margin: tall blocks (taller than the screen) still reveal reliably
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { el.classList.add('in'); io.disconnect(); }
-    }, { threshold: 0.15 });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -1186,7 +1187,7 @@ function AskAdminFaqCard() {
             Ask Rahila Kareem Directly
           </h3>
           <p className="mt-1 text-[13px] text-[#6a6288] leading-relaxed">
-            Have a question not listed here? Submit it below — you will receive a direct reply to your email, and answered questions appear live.
+            Have a question not listed here? Submit it below — you will receive a reply by email.
           </p>
 
           {status === 'success' ? (
@@ -1200,7 +1201,7 @@ function AskAdminFaqCard() {
                     Question Sent to Admin!
                   </h4>
                   <p className="text-[12px] text-[#15803d] mt-0.5 leading-relaxed">
-                    Rahila Kareem has received your inquiry via Web3Forms &amp; MongoDB Atlas. You will receive an email response, and your answer will appear here once approved.
+                    Your question has been received. You will receive an email response, and your answer will appear here once approved.
                   </p>
                 </div>
               </div>
@@ -1240,7 +1241,7 @@ function AskAdminFaqCard() {
               <div>
                 <input
                   type="email"
-                  placeholder="Your Email (where admin will reply)"
+                  placeholder="Your email (for the reply)"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-[#ded2f9] bg-[#fbf9ff] px-3.5 py-2.5 text-[13px] font-bold text-[#1f1540] placeholder-[#9f96b7] transition focus:border-[#6d3fd9] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#6d3fd9]/20"
@@ -1282,7 +1283,7 @@ function AskAdminFaqCard() {
 
               <div className="flex items-center justify-between text-[10px] text-[#8e85aa] pt-1">
                 <span>🔒 Private &amp; Direct</span>
-                <span>⚡ Real-time Atlas &amp; Web3Forms Sync</span>
+                <span>You will get a reply by email</span>
               </div>
             </form>
           )}
@@ -1570,7 +1571,7 @@ function Admission({ form, setForm }) {
     }
 
     setSubmitting(true);
-    setMsg('Submitting your admission application to Web3Forms & MongoDB Atlas...');
+    setMsg('Submitting your application...');
 
     const cleanName = (form.name || '').trim();
     const cleanEmail = (form.email || '').trim().toLowerCase();
@@ -1769,7 +1770,7 @@ function Admission({ form, setForm }) {
           </div>
 
           <Reveal as="p" className="max-w-[560px] text-[16px] text-[#d9ceff] leading-relaxed">
-            Welcome to Islamic Learn! Students of <strong>all age groups</strong> — both <strong>male and female</strong> — are warmly invited to apply. You can enroll in our <strong>Complete All-in-One Course (All 7 subjects)</strong> or choose <strong>any specific individual modules</strong> according to your preference. Your application is saved directly to MongoDB Atlas and notified via Web3Forms.
+            Welcome to Islamic Learn! Students of <strong>all age groups</strong> — both <strong>male and female</strong> — are warmly invited to apply. You can enroll in our <strong>Complete All-in-One Course (All 7 subjects)</strong> or choose <strong>any specific individual modules</strong> according to your preference. We will contact you soon to schedule your free trial class.
           </Reveal>
 
           <Reveal as="div" className="mt-6 space-y-2.5">
@@ -1803,7 +1804,7 @@ function Admission({ form, setForm }) {
                 Admission Form Submitted Successfully!
               </h3>
               <p className="text-sm text-[#cfc4f5] max-w-md mx-auto leading-relaxed">
-                Your application has been stored in MongoDB Atlas, delivered to the Admin Dashboard, and dispatched via Web3Forms notification.
+                Thank you! Your application has been received. We will contact you on WhatsApp or email soon.
               </p>
             </div>
 
@@ -1910,7 +1911,7 @@ function Admission({ form, setForm }) {
               {submitting ? (
                 <>
                   <span className="w-4 h-4 border-2 border-[#1c1040] border-t-transparent rounded-full animate-spin" />
-                  <span>Submitting to Admissions &amp; Web3Forms...</span>
+                  <span>Submitting…</span>
                 </>
               ) : (
                 <>

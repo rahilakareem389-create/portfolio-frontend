@@ -125,18 +125,18 @@ const Hero = ({ setActiveTab }) => {
     const normY = Math.max(-1.25, Math.min(1.25, (e.clientY - centerY) / (rect.height / 2)));
 
     // Visible, responsive 3D rotation on main image
-    const rotY = (normX * 26).toFixed(2); // Left to right rotate (-26° to +26°)
-    const rotZ = (normX * 8).toFixed(2);  // Dynamic roll
-    const rotX = (-normY * 16).toFixed(2); // Vertical tilt
+    const rotY = (normX * 7).toFixed(2);
+    const rotZ = '0';
+    const rotX = (-normY * 5).toFixed(2);
 
     if (mainImageRef.current) {
       mainImageRef.current.style.transition = 'transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      mainImageRef.current.style.transform = `perspective(850px) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(1.035)`;
+      mainImageRef.current.style.transform = `perspective(850px) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(1.01)`;
     }
 
     if (innerImgRef.current) {
       innerImgRef.current.style.transition = 'transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      innerImgRef.current.style.transform = `scale(1.09) translate3d(${(normX * 9).toFixed(1)}px, ${(normY * 9).toFixed(1)}px, 0)`;
+      innerImgRef.current.style.transform = `scale(1.03) translate3d(${(normX * 3).toFixed(1)}px, ${(normY * 3).toFixed(1)}px, 0)`;
     }
 
     // Subtle tilt on orbit track
@@ -179,7 +179,7 @@ const Hero = ({ setActiveTab }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[calc(100vh-130px)]">
           
           {/* Left Column: Text & Buttons */}
-          <div className="lg:col-span-7 flex flex-col justify-center text-left order-2 lg:order-1">
+          <div className="lg:col-span-7 flex flex-col justify-center text-left order-1">
             
             {/* "Hello!" Pill Badge with 3 Radiating Orange Rays */}
             <div className="anim-up-1 flex items-center gap-3.5 mb-3">
@@ -269,7 +269,7 @@ const Hero = ({ setActiveTab }) => {
             {/* Selected Topic Description Text Box */}
             <div className="anim-up-4 hero-desc-box glass-card p-5 sm:p-6 rounded-2xl mb-7 shadow-lg">
               <div className="text-xs font-bold uppercase tracking-wider text-[#D57C63] mb-2 flex items-center gap-1.5">
-                <span>Active Domain:</span>
+                <span>Focus:</span>
                 <span className="hero-desc-heading font-extrabold">{activeTopic.centerHeading}</span>
               </div>
               <p className="hero-desc-text text-[14.5px] sm:text-[15.5px] leading-[1.75]">
@@ -279,48 +279,38 @@ const Hero = ({ setActiveTab }) => {
 
             {/* Call To Action Buttons */}
             <div className="anim-up-5 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
-              <a
-                href="/rahila-kareem-cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-hero-primary w-full sm:w-auto justify-center px-7 py-3 rounded-full text-[15px] font-bold text-white shadow-[0_6px_25px_rgba(213,124,99,0.45)] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
-                title="View & Download Rahila Kareem CV"
+              <button
+                type="button"
+                onClick={() => setActiveTab('contact')}
+                className="btn-hero-primary w-full sm:w-auto justify-center px-7 py-3 rounded-full text-[15px] font-bold text-white hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
               >
                 <span>Hire Me</span>
                 <ArrowRight className="w-4 h-4 rtl:rotate-180" />
-              </a>
+              </button>
 
               <button
                 type="button"
-                onClick={() => {
-                  const target = document.getElementById('explore-work');
-                  if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    setActiveTab('home');
-                    setTimeout(() => {
-                      document.getElementById('explore-work')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 120);
-                  }
-                }}
+                onClick={() => document.getElementById('explore-work')?.scrollIntoView({ behavior: 'smooth' })}
                 className="btn-hero-secondary w-full sm:w-auto justify-center px-6 py-3 rounded-full text-[15px] font-bold hover:-translate-y-0.5 transition-all cursor-pointer flex items-center gap-1.5"
               >
                 <span>Explore My Work</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab('contact')}
-                className="btn-hero-tertiary w-full sm:w-auto justify-center px-6 py-3 rounded-full text-[15px] font-bold transition-all cursor-pointer"
+              <a
+                href="/rahila-kareem-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-hero-tertiary w-full sm:w-auto justify-center px-6 py-3 rounded-full text-[15px] font-bold transition-all cursor-pointer flex items-center gap-2"
               >
-                <span>Contact Me</span>
-              </button>
+                <FileText className="w-4 h-4" />
+                <span>Download CV</span>
+              </a>
             </div>
 
           </div>
 
           {/* Right Column: Profile Image with Circling Points */}
-          <div className="lg:col-span-5 flex flex-col justify-center items-center order-1 lg:order-2">
+          <div className="lg:col-span-5 flex flex-col justify-center items-center order-2">
             
             <div
               ref={stageRef}
@@ -354,7 +344,7 @@ const Hero = ({ setActiveTab }) => {
                   ref={mainImageRef}
                   onMouseMove={handleMainImageMouseMove}
                   onMouseLeave={handleMainImageMouseLeave}
-                  className="ring border-[3.5px] border-[#D57C63] shadow-[0_0_35px_rgba(213,124,99,0.65),inset_0_0_45px_rgba(213,124,99,0.3)] cursor-pointer"
+                  className="ring border-[3.5px] border-[#D57C63] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8),0_0_0_8px_rgba(213,124,99,0.08)] cursor-pointer"
                   style={{
                     transformStyle: 'preserve-3d',
                     willChange: 'transform',
@@ -403,7 +393,7 @@ const Hero = ({ setActiveTab }) => {
                   className="hero-center-role absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 px-5 py-2 rounded-full flex items-center gap-2 whitespace-nowrap select-none"
                   style={{ transform: 'translate(-50%, 0) translateZ(50px)' }}
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#D57C63] animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
                   <span className="hero-center-role-text font-extrabold text-[14px] sm:text-[15px] tracking-wide">
                     {activeTopic.centerHeading}
                   </span>
@@ -452,9 +442,6 @@ const Hero = ({ setActiveTab }) => {
 
             {/* Mobile-Friendly Points List (Visible on smaller screens) */}
             <div className="mt-4 w-full max-w-[420px] block sm:hidden text-center">
-              <div className="text-xs font-semibold text-[#bcab9e] mb-2">
-                Circling Points:
-              </div>
               <div className="flex flex-wrap gap-1.5 justify-center">
                 {activeTopic.points.map((p, idx) => {
                   const PointIcon = p.icon;

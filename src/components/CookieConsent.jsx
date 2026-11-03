@@ -83,29 +83,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
 
   return (
     <>
-      {/* 1. Persistent Floating Cookie Badge (Visible on all pages when banner is closed) */}
-      {!isVisible && !preloaderActive && (
-        <button
-          type="button"
-          onClick={() => {
-            const currentConsent = getCookieConsent();
-            setAnalyticsEnabled(currentConsent !== 'declined');
-            setIsVisible(true);
-          }}
-          aria-label="Open Cookie & Privacy Settings"
-          title="Cookie & Privacy Settings"
-          className="cookie-floating-btn fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[99990] flex items-center gap-2 py-2 px-3 sm:px-3.5 rounded-full transition-all duration-300 group cursor-pointer backdrop-blur-md hover:scale-105"
-        >
-          <div className="w-5 h-5 rounded-full bg-[#ff7a1a]/20 flex items-center justify-center text-[#ff7a1a] group-hover:scale-110 transition-transform">
-            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-              <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10 5.523 0 10-4.477 10-10 0-.54-.043-1.07-.126-1.587a.75.75 0 0 0-.825-.623 3.5 3.5 0 0 1-3.839-3.839.75.75 0 0 0-.623-.825A9.957 9.957 0 0 0 12 2zm-1.5 5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4.5 3a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm-7 4.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm7.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-4 2.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg>
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold tracking-tight">
-            Cookie Settings
-          </span>
-        </button>
-      )}
+      {/* Cookie settings can be reopened from the footer link */}
 
       {/* 2. Authentic GDPR & ePrivacy Compliant Cookie Consent Modal */}
       {isVisible && (
@@ -138,7 +116,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
 
             {/* Header with Icon */}
             <div className="flex items-start gap-3.5 mb-3 relative z-10 pr-6">
-              <div className="w-10 h-10 rounded-xl bg-[#ff7a1a]/15 border border-[#ff7a1a]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,122,26,0.25)] text-[#ff7a1a]">
+              <div className="w-10 h-10 rounded-xl bg-[#D57C63]/15 border border-[#D57C63]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(213, 124, 99,0.25)] text-[#D57C63]">
                 {/* Cookie SVG Icon */}
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                   <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10 5.523 0 10-4.477 10-10 0-.54-.043-1.07-.126-1.587a.75.75 0 0 0-.825-.623 3.5 3.5 0 0 1-3.839-3.839.75.75 0 0 0-.623-.825A9.957 9.957 0 0 0 12 2zm-1.5 5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4.5 3a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm-7 4.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm7.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-4 2.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
@@ -172,7 +150,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
                       Required for core authentication, session security, and language selection.
                     </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#ff7a1a]/20 text-[#ff7a1a] border border-[#ff7a1a]/30 shrink-0">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#D57C63]/20 text-[#D57C63] border border-[#D57C63]/30 shrink-0">
                     Always Active
                   </span>
                 </div>
@@ -192,7 +170,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
                       onChange={(e) => setAnalyticsEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-[#3a261c] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff7a1a]"></div>
+                    <div className="w-9 h-5 bg-[#3a261c] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#D57C63]"></div>
                   </label>
                 </div>
               </div>
@@ -204,7 +182,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
                 <button
                   type="button"
                   onClick={handleSavePreferences}
-                  className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
+                  className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#D57C63] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
                 >
                   Save Preferences
                 </button>
@@ -214,7 +192,7 @@ export default function CookieConsent({ activeTab = 'home', preloaderActive = fa
                   <button
                     type="button"
                     onClick={handleAcceptAll}
-                    className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
+                    className="keep-white w-full sm:flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D57C63] to-[#D57C63] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_15px_rgba(213,124,99,0.35)] transition-all cursor-pointer text-center"
                   >
                     Accept All
                   </button>

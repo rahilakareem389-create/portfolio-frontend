@@ -314,7 +314,7 @@ const Footer = ({ setActiveTab }) => {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))}
-              className="footer-cookie-btn text-[#bcab9e] hover:text-[#ff7a1a] transition-colors cursor-pointer underline underline-offset-2"
+              className="footer-cookie-btn text-[#bcab9e] hover:text-[#D57C63] transition-colors cursor-pointer underline underline-offset-2"
               title="Manage Cookie Preferences"
             >
               Cookie Settings

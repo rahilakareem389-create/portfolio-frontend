@@ -444,7 +444,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               {/* Day / Moon Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 sm:p-2.5 rounded-full border border-[var(--line)] bg-[var(--panel)] text-[var(--org)] hover:border-[var(--org)] hover:shadow-[0_0_15px_rgba(255,122,26,0.35)] transition-all cursor-pointer flex items-center justify-center shrink-0"
+                className="p-2 sm:p-2.5 rounded-full border border-[var(--line)] bg-[var(--panel)] text-[var(--org)] hover:border-[var(--org)] hover:shadow-[0_0_15px_rgba(213, 124, 99,0.35)] transition-all cursor-pointer flex items-center justify-center shrink-0"
                 title={theme === 'dark' ? 'Current: Moon Theme (Dark) • Click for Sun Theme' : 'Current: Sun Theme (Light) • Click for Moon Theme'}
                 aria-label="Toggle Day and Night Theme"
               >

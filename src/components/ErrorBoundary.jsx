@@ -111,9 +111,9 @@ class ErrorBoundary extends Component {
             />
 
             {/* Warning Shield Icon */}
-            <div className="relative mx-auto mb-5 w-16 h-16 rounded-2xl bg-[#ff7a1a]/10 border border-[#ff7a1a]/30 flex items-center justify-center shadow-[0_0_20px_rgba(255,122,26,0.2)]">
+            <div className="relative mx-auto mb-5 w-16 h-16 rounded-2xl bg-[#D57C63]/10 border border-[#D57C63]/30 flex items-center justify-center shadow-[0_0_20px_rgba(213, 124, 99,0.2)]">
               <svg
-                className="w-8 h-8 text-[#ff7a1a]"
+                className="w-8 h-8 text-[#D57C63]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -143,7 +143,7 @@ class ErrorBoundary extends Component {
               <button
                 type="button"
                 onClick={this.handleReset}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-[#D57C63] to-[#ff7a1a] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_18px_rgba(213,124,99,0.35)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-[#D57C63] to-[#D57C63] hover:from-[#e58a72] hover:to-[#ff9245] shadow-[0_4px_18px_rgba(213,124,99,0.35)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2"
               >
                 <svg
                   className="w-4 h-4 text-white"
@@ -165,7 +165,7 @@ class ErrorBoundary extends Component {
               <button
                 type="button"
                 onClick={this.handleGoHome}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-medium text-[#bcab9e] hover:text-[#f7ede3] bg-[#1a110d] hover:bg-[#261913] border border-[#332219] hover:border-[#ff7a1a]/50 transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-medium text-[#bcab9e] hover:text-[#f7ede3] bg-[#1a110d] hover:bg-[#261913] border border-[#332219] hover:border-[#D57C63]/50 transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 <svg
                   className="w-4 h-4 text-current"
@@ -187,7 +187,7 @@ class ErrorBoundary extends Component {
             {/* Development Debug Accordion (Never rendered in Production) */}
             {isDev && this.state.error && (
               <details className="mt-6 text-left border-t border-[#332219] pt-4">
-                <summary className="text-xs font-mono text-[#ff7a1a] cursor-pointer hover:underline focus:outline-none">
+                <summary className="text-xs font-mono text-[#D57C63] cursor-pointer hover:underline focus:outline-none">
                   Developer Diagnostics (Dev Only)
                 </summary>
                 <div className="mt-3 p-3 rounded-lg bg-[#070402] border border-[#2e1911] text-[11px] font-mono text-orange-200/90 overflow-x-auto max-h-48 space-y-2">

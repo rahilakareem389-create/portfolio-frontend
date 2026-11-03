@@ -7,7 +7,8 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   updateProfile,
-  onAuthStateChanged
+  onAuthStateChanged,
+  onIdTokenChanged
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../firebase/config';
 
@@ -153,7 +154,7 @@ export const AuthProvider = ({ children }) => {
     // 1. Check verified admin session persistence
     try {
       const savedUserStr = localStorage.getItem('rahila_auth_user');
-      const isAdminSession = sessionStorage.getItem('rahila_admin_authenticated') === 'true';
+      const isAdminSession = sessionStorage.getItem('rahila_admin_authenticated') === 'true' && Boolean(localStorage.getItem('rahila_admin_jwt'));
       if (savedUserStr && isAdminSession) {
         const parsed = JSON.parse(savedUserStr);
         if (parsed && parsed.isAdmin) {
@@ -217,7 +218,18 @@ export const AuthProvider = ({ children }) => {
       setAuthLoading(false);
     });
 
-    return () => unsubscribe();
+    // Firebase ID tokens expire after 1 hour; keep the stored copy current for API calls
+    const unsubscribeToken = onIdTokenChanged(auth, async (fbUser) => {
+      if (!fbUser) return;
+      try {
+        localStorage.setItem('rahila_auth_token', await fbUser.getIdToken());
+      } catch (_) {}
+    });
+
+    return () => {
+      unsubscribe();
+      unsubscribeToken();
+    };
   }, []);
 
   /**
@@ -273,29 +285,6 @@ export const AuthProvider = ({ children }) => {
       // 1. Authenticate directly with Firebase Authentication
       credential = await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
     } catch (fbErr) {
-      // 2. Emergency fallback for Admin master password if Firebase account was not yet registered
-      const validAdminPasswords = ['rahila556688', 'rahila2026', 'admin123'];
-      if (isAdmin && validAdminPasswords.includes(cleanPass)) {
-        const adminUser = {
-          uid: 'admin-rahila-rk',
-          id: 'admin-rahila-rk',
-          email: cleanEmail,
-          displayName: 'Rahila Kareem',
-          name: 'Rahila Kareem',
-          emailVerified: true,
-          role: 'Admin',
-          isAdmin: true,
-          photoURL: null
-        };
-
-        setCurrentUser(adminUser);
-        localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
-        localStorage.setItem('rahila_auth_token', 'admin_token_' + Date.now());
-        sessionStorage.setItem('rahila_admin_authenticated', 'true');
-        syncUserSessionToBackend(adminUser, 'admin_login');
-        return adminUser;
-      }
-
       // 3. Rethrow original Firebase error (e.g. auth/user-not-found, auth/wrong-password, auth/invalid-credential)
       throw fbErr;
     }

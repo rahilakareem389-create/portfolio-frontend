@@ -38,6 +38,8 @@ import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { ISLAMIC_COURSES } from '../data/islamicData';
 import { useAuth, mapAuthError, getAdminEmails } from '../context/AuthContext';
+import { defaultFaqs } from '../data/defaultFaqs';
+import { getAdminHeaders, hasAdminSession, adminLoginWithPassword, adminLoginWithIdToken, clearAdminSession } from '../utils/adminAuth';
 
 const OWNER_EMAIL = 'wordpressrahila@gmail.com';
 const SECONDARY_EMAIL = 'rahilakareem389@gmail.com';
@@ -48,15 +50,9 @@ export default function AdminPage({ setActiveTab }) {
   const authorizedAdminEmails = getAdminEmails();
 
   // Session state for admin authentication
-  const [isAdminSessionUnlocked, setIsAdminSessionUnlocked] = useState(() => {
-    return sessionStorage.getItem('rahila_admin_authenticated') === 'true';
-  });
-
-  // Strict Authorization: Session unlocked OR verified admin user
-  const isAuthorizedAdmin = Boolean(
-    isAdminSessionUnlocked ||
-    (user && (user.isAdmin || user.role === 'Admin') && authorizedAdminEmails.includes((user.email || '').toLowerCase()))
-  );
+  // Unlocked only when the backend has issued a valid signed admin session
+  const [isAdminSessionUnlocked, setIsAdminSessionUnlocked] = useState(() => hasAdminSession());
+  const isAuthorizedAdmin = isAdminSessionUnlocked;
 
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
@@ -88,57 +84,11 @@ export default function AdminPage({ setActiveTab }) {
       activity: "Logged In to Client Workspace",
       ip: "Direct Dispatch Ready",
       date: "2026-10-20T06:40:05.000Z"
-    },
-    {
-      id: "usr_client_ayesha",
-      name: "Ayesha Noor",
-      email: "ayesha.noor@luxeboutique.pk",
-      role: "Verified Client",
-      source: "Website Auth",
-      activity: "Signed In & Reviewed WordPress Store",
-      ip: "182.185.132.41",
-      date: "2026-10-18T14:22:00.000Z"
-    },
-    {
-      id: "usr_client_hamza",
-      name: "Hamza Rafiq",
-      email: "hamza.growth@venturetech.io",
-      role: "Enterprise Client",
-      source: "Website Auth",
-      activity: "SEO Consultation Workspace Active",
-      ip: "39.40.118.23",
-      date: "2026-10-17T09:45:00.000Z"
     }
   ];
 
   // Default initial inquiries
   const defaultMasterMessages = [
-    {
-      id: "msg_client_ayesha",
-      name: "Ayesha Noor",
-      email: "ayesha.noor@luxeboutique.pk",
-      phone: "+92 300 1234567",
-      plan: "WordPress & E-Commerce Store ($220)",
-      subject: "Inquiry: WordPress & E-Commerce Store",
-      message: "Hi Rahila, I am looking to redesign our WooCommerce store for Luxe Boutique with fast checkout and technical SEO optimization. Looking forward to discussing this project.",
-      status: "new",
-      adminNotes: "",
-      web3FormsStatus: "delivered",
-      date: "2026-10-19T14:20:00.000Z"
-    },
-    {
-      id: "msg_client_hamza",
-      name: "Hamza Rafiq",
-      email: "hamza.growth@venturetech.io",
-      phone: "+92 321 9876543",
-      plan: "Enterprise Backlinks & Monthly SEO ($350)",
-      subject: "Inquiry: Enterprise Backlinks",
-      message: "Looking for high authority guest posting and monthly backlink building for our SaaS application. Please share case studies and proposal.",
-      status: "replied",
-      adminNotes: "Sent proposal via WhatsApp & email.",
-      web3FormsStatus: "delivered",
-      date: "2026-10-18T11:15:00.000Z"
-    }
   ];
 
   // Data States (Strictly Real Data, Zero Dummy)
@@ -273,18 +223,7 @@ export default function AdminPage({ setActiveTab }) {
   });
 
   // Helper: Retrieve authorization headers containing Admin credentials & Token
-  const getAuthHeaders = () => {
-    const adminToken =
-      localStorage.getItem('rahila_auth_token') ||
-      localStorage.getItem('rahila_admin_token') ||
-      'admin_token_' + Date.now();
-    return {
-      'Content-Type': 'application/json',
-      'x-admin-email': OWNER_EMAIL,
-      'x-admin-auth': 'true',
-      Authorization: `Bearer ${adminToken}`
-    };
-  };
+  const getAuthHeaders = () => getAdminHeaders();
 
   // Fetch real data from live backend
   const fetchAllData = async () => {
@@ -299,6 +238,14 @@ export default function AdminPage({ setActiveTab }) {
         fetch(`${API_BASE_URL}/api/admin/stats`, { headers }).catch(() => null),
         fetch(`${API_BASE_URL}/api/admin/analytics`, { headers }).catch(() => null)
       ]);
+
+      // Session expired or revoked: lock the dashboard and ask to log in again
+      if (statRes && statRes.status === 401) {
+        await clearAdminSession();
+        setIsAdminSessionUnlocked(false);
+        setAuthError('Your admin session has expired. Please log in again.');
+        return;
+      }
 
       if (msgRes && msgRes.ok) {
         const m = await msgRes.json();
@@ -463,154 +410,51 @@ export default function AdminPage({ setActiveTab }) {
     setTimeout(() => setActionSuccess(''), 3000);
   };
 
-  // Master Admin Email & Password Login Handler
+  // Admin Email & Password Login (verified by the backend)
   const handleAdminEmailLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
     setAuthLoading(true);
-
-    const cleanEmail = emailInput.trim().toLowerCase();
-    const cleanPass = passwordInput.trim();
-
-    // Verify authorized admin email
-    if (!authorizedAdminEmails.includes(cleanEmail)) {
-      setAuthLoading(false);
-      setAuthError(`Access Denied: Only Rahila Kareem's authorized email (${authorizedAdminEmails.join(', ')}) is permitted.`);
-      return;
-    }
-
-    // Verify authorized admin password with Firebase first, with fallback
-    const validAdminPasswords = ['rahila556688', 'rahila2026', 'admin123'];
-    let authenticatedUser = null;
-
     try {
-      authenticatedUser = await loginWithEmail(cleanEmail, cleanPass);
-    } catch (fbErr) {
-      if (!validAdminPasswords.includes(cleanPass)) {
-        setAuthLoading(false);
-        setAuthError(mapAuthError(fbErr) || 'Invalid admin password. Access denied.');
-        return;
-      }
-    }
-
-    try {
-      const adminUser = authenticatedUser || {
-        uid: 'admin-rahila-rk',
-        id: 'admin-rahila-rk',
-        email: cleanEmail,
-        displayName: 'Rahila Kareem',
-        name: 'Rahila Kareem',
-        emailVerified: true,
-        role: 'Admin',
-        isAdmin: true
-      };
-
-      sessionStorage.setItem('rahila_admin_authenticated', 'true');
-      localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
+      await adminLoginWithPassword(emailInput, passwordInput);
       setIsAdminSessionUnlocked(true);
-
-      // Attempt backend auth record and obtain signed JWT
-      try {
-        const authRes = await fetch(`${API_BASE_URL}/api/admin/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: cleanEmail, password: cleanPass })
-        });
-        if (authRes.ok) {
-          const authData = await authRes.json();
-          if (authData.token) {
-            localStorage.setItem('rahila_auth_token', authData.token);
-          }
-        }
-      } catch (_) {}
-
-      showToast('Welcome to Master Console, Rahila!');
+      setPasswordInput('');
+      showToast('Welcome back, Rahila!');
       fetchAllData();
     } catch (err) {
-      console.error('Admin Login Error:', err);
-      setAuthError('Authentication failed. Please verify credentials.');
+      setAuthError(err.message || 'Invalid email or password.');
     } finally {
       setAuthLoading(false);
     }
   };
 
-  // Admin Google Sign-In Handler
+  // Admin Google Sign-In (Firebase ID token verified by the backend)
   const handleAdminGoogleLogin = async () => {
     setAuthError('');
     setAuthLoading(true);
-
     try {
       const loggedUser = await loginWithGoogle();
       const userEmail = (loggedUser?.email || '').toLowerCase().trim();
-
       if (!authorizedAdminEmails.includes(userEmail)) {
         await logout();
-        setAuthError(`Access Denied: Only Rahila Kareem's verified account (${OWNER_EMAIL}) is authorized for the Admin Console.`);
-        return;
+        throw new Error('This Google account is not authorized for the admin dashboard.');
       }
-
-      // Obtain real cryptographically signed Firebase ID Token
-      let firebaseToken = null;
-      try {
-        firebaseToken = await loggedUser.getIdToken(true);
-      } catch (_) {}
-
-      const adminUser = {
-        uid: loggedUser.uid || 'admin-rahila-rk',
-        id: loggedUser.uid || 'admin-rahila-rk',
-        email: userEmail,
-        displayName: 'Rahila Kareem',
-        name: 'Rahila Kareem',
-        emailVerified: true,
-        role: 'Admin',
-        isAdmin: true
-      };
-
-      sessionStorage.setItem('rahila_admin_authenticated', 'true');
-      localStorage.setItem('rahila_auth_user', JSON.stringify(adminUser));
-      if (firebaseToken) {
-        localStorage.setItem('rahila_auth_token', firebaseToken);
-      }
+      const { auth } = await import('../firebase/config');
+      const idToken = auth && auth.currentUser ? await auth.currentUser.getIdToken(true) : null;
+      if (!idToken) throw new Error('Google sign-in could not be completed. Please try again.');
+      await adminLoginWithIdToken(idToken);
       setIsAdminSessionUnlocked(true);
-
-      // Record admin Google session in backend audit
-      try {
-        await fetch(`${API_BASE_URL}/api/user/auth`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(firebaseToken ? { Authorization: `Bearer ${firebaseToken}` } : {})
-          },
-          body: JSON.stringify({
-            name: 'Rahila Kareem',
-            email: userEmail,
-            role: 'Owner & Admin',
-            mode: 'admin_google_login'
-          })
-        });
-      } catch (_) {}
-
-      showToast('Welcome to Master Console, Rahila!');
+      showToast('Welcome back, Rahila!');
       fetchAllData();
     } catch (err) {
-      console.error('Admin Google Login Error:', err);
-      setAuthError(mapAuthError(err));
+      setAuthError(err.code ? mapAuthError(err) : (err.message || 'Google sign-in failed.'));
     } finally {
       setAuthLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await fetch(`${API_BASE_URL}/api/admin/logout`, {
-        method: 'POST',
-        headers: getAuthHeaders()
-      }).catch(() => {});
-    } catch (_) {}
-
-    sessionStorage.removeItem('rahila_admin_authenticated');
-    localStorage.removeItem('rahila_auth_token');
-    localStorage.removeItem('rahila_auth_user');
+    await clearAdminSession();
     setIsAdminSessionUnlocked(false);
     await logout();
     setActiveTab('home');
@@ -1098,7 +942,7 @@ export default function AdminPage({ setActiveTab }) {
       <div className="min-h-screen bg-[#0e0805] text-white flex items-center justify-center p-4 relative overflow-hidden admin-portal">
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D57C63]/15 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#ff7a1a]/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D57C63]/15 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10">
           
@@ -1123,7 +967,7 @@ export default function AdminPage({ setActiveTab }) {
                 Admin Console
               </h1>
               <p className="text-xs sm:text-sm text-[#bcab9e] leading-relaxed">
-                Dedicated management portal strictly reserved for verified admin ({OWNER_EMAIL}).
+                Sign in to manage messages, reviews and FAQs.
               </p>
             </div>
 
@@ -1188,7 +1032,7 @@ export default function AdminPage({ setActiveTab }) {
                 <form onSubmit={handleAdminEmailLogin} className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-[#d6c7bc] mb-1.5">
-                      Authorized Admin Email
+                      Email
                     </label>
                     <div className="relative">
                       <Mail className="w-4 h-4 text-[#8a7569] absolute left-3.5 top-3.5" />
@@ -1239,7 +1083,7 @@ export default function AdminPage({ setActiveTab }) {
             <div className="mt-6 pt-4 border-t border-[#291b15] text-center">
               <span className="text-[11px] text-[#8a7569] inline-flex items-center gap-1.5">
                 <Database className="w-3 h-3 text-emerald-400" />
-                <span>Protected by Master Security &amp; Access Verification</span>
+                <span>Secure admin access</span>
               </span>
             </div>
 
@@ -1295,7 +1139,7 @@ export default function AdminPage({ setActiveTab }) {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-heading font-black text-base text-white admin-title">Master Console</h2>
+              <h2 className="font-heading font-black text-base text-white admin-title">Admin Dashboard</h2>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Verified Active</span>
@@ -1316,7 +1160,7 @@ export default function AdminPage({ setActiveTab }) {
           {[
             {
               id: 'inquiries',
-              label: 'Messages & Web3Forms',
+              label: 'Messages',
               icon: Inbox,
               badge: newMessagesCount > 0 ? `${newMessagesCount} New` : `${messages.length}`,
               badgeColor: newMessagesCount > 0 ? 'bg-amber-500 text-black' : 'bg-white/10 text-[#bcab9e]'
@@ -1326,7 +1170,7 @@ export default function AdminPage({ setActiveTab }) {
               label: 'Reviews & Moderate',
               icon: Star,
               badge: pendingReviewsCount > 0 ? `${pendingReviewsCount} Pending` : `${reviews.length}`,
-              badgeColor: pendingReviewsCount > 0 ? 'bg-[#ff7a1a] text-white animate-pulse' : 'bg-white/10 text-[#bcab9e]'
+              badgeColor: pendingReviewsCount > 0 ? 'bg-[#D57C63] text-white animate-pulse' : 'bg-white/10 text-[#bcab9e]'
             },
             {
               id: 'faqs',
@@ -1401,7 +1245,7 @@ export default function AdminPage({ setActiveTab }) {
             className="w-full py-2.5 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out &amp; Lock Console</span>
+            <span>Sign Out</span>
           </button>
         </div>
 
@@ -1417,7 +1261,7 @@ export default function AdminPage({ setActiveTab }) {
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="font-heading font-black text-xl sm:text-2xl text-white admin-title capitalize">
-                {activeSection === 'inquiries' && 'Contact Inquiries & Web3Forms'}
+                {activeSection === 'inquiries' && 'Contact Messages'}
                 {activeSection === 'reviews' && 'Reviews Moderation & Direct Reply'}
                 {activeSection === 'faqs' && 'Community Questions & Admin Answers'}
                 {activeSection === 'users' && 'User Login & Session Audit ("kon login huwa")'}
@@ -1479,7 +1323,7 @@ export default function AdminPage({ setActiveTab }) {
             <div className="p-4 sm:p-5 rounded-2xl bg-[#170e0a] border border-[#2d1b14] shadow-sm">
               <div className="flex items-center justify-between text-xs text-[#d6c7bc] mb-1.5 font-semibold">
                 <span>Reviews</span>
-                <Star className="w-4 h-4 text-[#ff7a1a]" />
+                <Star className="w-4 h-4 text-[#D57C63]" />
               </div>
               <div className="font-heading font-black text-3xl text-white admin-stat-num">{reviews.length}</div>
               <div className="text-[11px] font-bold text-[#ff9a7b] mt-1">{pendingReviewsCount} Pending Moderation</div>
@@ -1515,13 +1359,13 @@ export default function AdminPage({ setActiveTab }) {
 
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-[#ff7a1a] absolute left-4 top-3.5" />
+            <Search className="w-4 h-4 text-[#D57C63] absolute left-4 top-3.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search across all entries, emails, names, messages..."
-              className="w-full pl-11 pr-4 py-3 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#ff7a1a] transition-all"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#D57C63] transition-all"
               style={{ backgroundColor: '#170e0a', border: '1.5px solid #3e2c22', color: '#ffffff' }}
             />
           </div>
@@ -1707,7 +1551,7 @@ export default function AdminPage({ setActiveTab }) {
 
               {filteredReviews.length === 0 ? (
                 <div className="p-12 text-center rounded-3xl bg-[#170e0a] border border-[#2d1b14] text-[#8a7569]">
-                  <Star className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#ff7a1a]" />
+                  <Star className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D57C63]" />
                   <p className="text-sm font-bold text-white">No reviews found in this filter</p>
                   <p className="text-xs mt-1">Real client reviews submitted on the site or Google Places will show here.</p>
                 </div>
@@ -1786,7 +1630,7 @@ export default function AdminPage({ setActiveTab }) {
                               setReplyDrafts({ ...replyDrafts, [rev.id]: e.target.value })
                             }
                             placeholder="Type public response to client..."
-                            className="flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#ff7a1a]"
+                            className="flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium focus:outline-none focus:border-[#D57C63]"
                             style={{ backgroundColor: '#1a100b', border: '1.5px solid #4a3022', color: '#ffffff' }}
                           />
                           <button
@@ -2086,7 +1930,7 @@ export default function AdminPage({ setActiveTab }) {
                 </div>
                 <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
                   <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>GMB Google Account</span>
-                  <span className="font-bold text-sm block" style={{ color: '#ff7a1a' }}>{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</span>
+                  <span className="font-bold text-sm block" style={{ color: '#D57C63' }}>{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</span>
                 </div>
                 <div className="p-4 rounded-xl border" style={{ backgroundColor: '#180e09', borderColor: '#4a3022' }}>
                   <span className="block mb-1 font-semibold" style={{ color: '#ff9a7b' }}>Public Share Link</span>

@@ -123,7 +123,7 @@ export const translations = {
       emailLabel: 'Email Address',
       emailPlaceholder: 'yourname@gmail.com',
       phoneLabel: 'Phone / WhatsApp',
-      phonePlaceholder: '+92 321 7812265 / Your WhatsApp number',
+      phonePlaceholder: 'Your phone or WhatsApp number',
       planLabel: 'Selected Package / Tech Platform',
       messageLabel: 'Project Requirements & Details',
       messagePlaceholder: 'Describe your website project goals, pages, and features...',
@@ -133,7 +133,7 @@ export const translations = {
       directChannels: 'Direct Contact Channels',
       availableBadge: 'Available for Worldwide Remote Projects',
       location: 'Location: Punjab, Pakistan',
-      responseRate: 'Typical Response Time: Under 2 Hours',
+      responseRate: 'I usually reply within 24 hours',
     },
     footer: {
       tagline: 'Unity Space by Rahila Kareem - Building high-quality, responsive and creative websites that reflect your brand and drive online growth.',
@@ -267,7 +267,7 @@ export const translations = {
       emailLabel: 'آپ کا ای میل',
       emailPlaceholder: 'yourname@gmail.com',
       phoneLabel: 'فون / واٹس ایپ',
-      phonePlaceholder: '0321 7812265 / واٹس ایپ نمبر',
+      phonePlaceholder: 'آپ کا فون یا واٹس ایپ نمبر',
       planLabel: 'منتخب کردہ پیکیج / پلیٹ فارم',
       messageLabel: 'پروجیکٹ کی تفصیلات',
       messagePlaceholder: 'اپنی ویب سائٹ کی ضروریات اور تفصیلات یہاں لکھیں...',
@@ -277,7 +277,7 @@ export const translations = {
       directChannels: 'براہ راست رابطہ',
       availableBadge: 'دنیا بھر کے ریموٹ پروجیکٹس کے لیے دستیاب',
       location: 'مقام: پنجاب، پاکستان',
-      responseRate: 'جواب کا اوسط وقت: 2 گھنٹے سے کم',
+      responseRate: 'میں عموماً 24 گھنٹوں میں جواب دیتی ہوں',
     },
     footer: {
       tagline: 'یونٹی اسپیس از راحیلہ کریم - جدید، تیز رفتار اور خوبصورت ویب سائٹس جو آپ کے کاروبار کو نئی بلندیوں پر لے جائیں۔',
@@ -421,7 +421,7 @@ export const translations = {
       directChannels: 'قنوات التواصل المباشر',
       availableBadge: 'متاحة لتنفيذ المشاريع عن بعد حول العالم',
       location: 'الموقع: البنجاب، باكستان',
-      responseRate: 'معدل الرد: خلال أقل من ساعتين',
+      responseRate: 'أرد عادةً خلال 24 ساعة',
     },
     footer: {
       tagline: 'يونيتي سبيس بواسطة راحيلة كريم - تطوير مواقع ويب فائقة الأداء وحلول سيو عصرية ترفع من قيمة علامتك التجارية.',
@@ -564,7 +564,7 @@ export const translations = {
       directChannels: 'Canales Directos',
       availableBadge: 'Disponible para proyectos remotos a nivel global',
       location: 'Ubicación: Punjab, Pakistán',
-      responseRate: 'Tiempo de respuesta: Menos de 2 horas',
+      responseRate: 'Suelo responder en 24 horas',
     },
     footer: {
       tagline: 'Unity Space por Rahila Kareem - Sitios web profesionales y soluciones SEO que potencian tu negocio en línea.',
@@ -708,7 +708,7 @@ export const translations = {
       directChannels: 'Canaux Directs',
       availableBadge: 'Disponible pour des projets à distance dans le monde entier',
       location: 'Localisation : Punjab, Pakistan',
-      responseRate: 'Délai de réponse moyen : Moins de 2 heures',
+      responseRate: 'Je réponds généralement sous 24 heures',
     },
     footer: {
       tagline: 'Unity Space par Rahila Kareem - Création de sites web professionnels et solutions SEO performantes pour booster votre activité.',
@@ -851,7 +851,7 @@ export const translations = {
       directChannels: 'Direkter Kontakt',
       availableBadge: 'Verfügbar für weltweite Remote-Projekte',
       location: 'Standort: Punjab, Pakistan',
-      responseRate: 'Antwortzeit: In der Regel unter 2 Stunden',
+      responseRate: 'Ich antworte in der Regel innerhalb von 24 Stunden',
     },
     footer: {
       tagline: 'Unity Space von Rahila Kareem - Hochwertige Websites und nachhaltige SEO-Strategien für Ihr digitales Wachstum.',
@@ -994,7 +994,7 @@ export const translations = {
       directChannels: '快捷联系渠道',
       availableBadge: '常年承接全球远程网站项目',
       location: '所在地：巴基斯坦 旁遮普',
-      responseRate: '平均响应时间：2小时以内',
+      responseRate: '我通常在24小时内回复',
     },
     footer: {
       tagline: 'Unity Space by Rahila Kareem - 高性能现代网站开发与 SEO 一体化解决方案。',
@@ -1137,7 +1137,7 @@ export const translations = {
       directChannels: 'सीधे संपर्क सूत्र',
       availableBadge: 'दुनिया भर के रिमोट प्रोजेक्ट्स के लिए उपलब्ध',
       location: 'स्थान: पंजाब, पाकिस्तान',
-      responseRate: 'जवाब देने का औसत समय: 2 घंटे से कम',
+      responseRate: 'मैं आमतौर पर 24 घंटे में जवाब देती हूँ',
     },
     footer: {
       tagline: 'यूनिटी स्पेस बाय रहीला करीम - हाई-परफॉर्मेंस वेबसाइट्स और आधुनिक एसईओ समाधान।',
@@ -1280,7 +1280,7 @@ export const translations = {
       directChannels: 'Doğrudan Kanallar',
       availableBadge: 'Dünya çapında uzaktan projelere açık',
       location: 'Konum: Pencap, Pakistan',
-      responseRate: 'Ortalama yanıt süresi: 2 saatten az',
+      responseRate: 'Genellikle 24 saat içinde yanıt veririm',
     },
     footer: {
       tagline: 'Unity Space by Rahila Kareem - İşinizi büyüten modern web ve SEO çözümleri.',
@@ -1423,7 +1423,7 @@ export const translations = {
       directChannels: 'Прямые контакты',
       availableBadge: 'Доступна для удаленных проектов по всему миру',
       location: 'Локация: Пенджаб, Пакистан',
-      responseRate: 'Среднее время ответа: менее 2 часов',
+      responseRate: 'Обычно отвечаю в течение 24 часов',
     },
     footer: {
       tagline: 'Unity Space от Рахилы Карим — современные быстрые сайты и надежное SEO продвижение.',
@@ -1566,7 +1566,7 @@ export const translations = {
       directChannels: 'Canais Diretos',
       availableBadge: 'Disponível para projetos remotos internacionais',
       location: 'Localização: Punjab, Paquistão',
-      responseRate: 'Tempo médio de resposta: Menos de 2 horas',
+      responseRate: 'Normalmente respondo em até 24 horas',
     },
     footer: {
       tagline: 'Unity Space por Rahila Kareem - Websites modernos de alto desempenho e estratégias de SEO.',
@@ -1709,7 +1709,7 @@ export const translations = {
       directChannels: 'Contatti Diretti',
       availableBadge: 'Disponibile per progetti remoti in tutto il mondo',
       location: 'Sede: Punjab, Pakistan',
-      responseRate: 'Tempo medio di risposta: Meno di 2 ore',
+      responseRate: 'Di solito rispondo entro 24 ore',
     },
     footer: {
       tagline: 'Unity Space di Rahila Kareem - Creazione siti web professionali e soluzioni SEO su misura.',

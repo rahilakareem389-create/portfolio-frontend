@@ -26,6 +26,7 @@ import {
 import { personalInfo } from '../data/portfolioData';
 import { defaultReviews } from '../data/defaultReviews';
 import { defaultFaqs } from '../data/defaultFaqs';
+import { getAdminHeaders } from '../utils/adminAuth';
 import { sendWeb3FormsNotification } from '../utils/web3forms';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from './AuthModal';
@@ -565,15 +566,6 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
   };
 
   // Helper: Get admin authentication headers
-  const getAdminHeaders = () => {
-    const adminToken = localStorage.getItem('rahila_admin_token') || localStorage.getItem('rahila_auth_token') || 'admin_token_' + Date.now();
-    return {
-      'Content-Type': 'application/json',
-      'x-admin-email': 'wordpressrahila@gmail.com',
-      Authorization: `Bearer ${adminToken}`
-    };
-  };
-
   // Moderation Handlers (Admin)
   const handleApproveReview = async (id) => {
     const updated = reviews.map((r) =>
@@ -716,7 +708,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
     <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden">
       {/* Background radial glows */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#D57C63]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#ff7a1a]/10 rounded-full blur-[130px] pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#D57C63]/10 rounded-full blur-[130px] pointer-events-none -z-10" />
 
       <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12">
         
@@ -724,24 +716,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
         <div className="reveal-up text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full seo-badge text-xs font-bold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5 text-[#D57C63]" />
-            <span>Real &amp; Verified Client Endorsements</span>
+            <span>Client Feedback</span>
           </div>
           <h2 className="font-heading font-extrabold text-[32px] sm:text-[46px] leading-tight seo-heading mb-4">
             Client Testimonials &amp; Community Q&amp;A
           </h2>
           <p className="text-[16px] sm:text-[18px] leading-relaxed seo-body">
-            Authentic feedback from client deliverables, project engagements, and community Q&amp;A answered directly by Rahila Kareem.
+            What clients say about working together, plus answers to common questions.
           </p>
-          <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 text-xs text-[#bcab9e]">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Strict Anti-Spam Moderation Policy</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D57C63]/10 text-[#D57C63] border border-[#D57C63]/20 font-semibold">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>100% Genuine Client Deliverable Reviews</span>
-            </span>
-          </div>
         </div>
 
         {/* ======================================================== */}
@@ -774,26 +756,12 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                   Google Business Profile (GMB)
                 </h4>
                 <p className="text-xs sm:text-sm text-[#bcab9e]">
-                  Connected Account: <strong className="text-white font-mono">{personalInfo.gmbEmail || "rahilakareem389@gmail.com"}</strong>
+                  Read or leave a review on my Google Business Profile.
                 </p>
               </div>
             </div>
 
-            {/* Center: Live Trust Badges */}
-            <div className="lg:col-span-4 flex flex-wrap gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Verified Business</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-bold">
-                <Award className="w-3.5 h-3.5" />
-                <span>Google Maps Profile</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D57C63]/15 border border-[#D57C63]/30 text-[#D57C63] text-xs font-bold">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>100% Genuine Reviews</span>
-              </span>
-            </div>
+            <div className="lg:col-span-4" />
 
             {/* Right: Actions */}
             <div className="lg:col-span-3 flex flex-col gap-2.5 justify-end">
@@ -931,7 +899,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                       >
                         {/* 1. Pinned Offset Backdrop Shape */}
                         <div 
-                          className="absolute inset-0 top-1.5 -left-1.5 rounded-[22px] bg-gradient-to-r from-[#ff7a1a] via-[#f59e0b] to-[#ea580c] opacity-85 shadow-md -rotate-1 pointer-events-none -z-10" 
+                          className="absolute inset-0 top-1.5 -left-1.5 rounded-[22px] bg-gradient-to-r from-[#D57C63] via-[#f59e0b] to-[#b85c43] opacity-85 shadow-md -rotate-1 pointer-events-none -z-10" 
                         />
 
                         {/* 2. Main Quotation Frame (Compact size with crisp border) */}
@@ -939,14 +907,14 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                           
                           {/* Top Quotation Mark */}
                           <div className="quote-mark-badge quote-mark-top absolute -top-3 left-5 sm:left-6 px-1.5 z-10 flex items-center justify-center rounded-sm">
-                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
+                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#D57C63] leading-none select-none">
                               “
                             </span>
                           </div>
 
                           {/* Bottom Quotation Mark */}
                           <div className="quote-mark-badge quote-mark-bottom absolute -bottom-3.5 right-6 sm:right-7 px-1.5 z-10 flex items-center justify-center rounded-sm">
-                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#ff7a1a] leading-none select-none">
+                            <span className="font-serif text-2xl sm:text-3xl font-black text-[#D57C63] leading-none select-none">
                               ”
                             </span>
                           </div>
@@ -975,7 +943,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                                   className="w-9 h-9 sm:w-10 sm:h-10 object-cover rounded-xs"
                                 />
                               ) : (
-                                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-[#ff7a1a] to-[#ea580c] flex items-center justify-center font-heading font-black text-xs text-white">
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-[#D57C63] to-[#b85c43] flex items-center justify-center font-heading font-black text-xs text-white">
                                   {rev.name?.charAt(0) || 'U'}
                                 </div>
                               )}
@@ -1025,7 +993,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
 
                               {/* Service Tag */}
                               {rev.service && (
-                                <span className="text-[10px] font-bold text-[#ff7a1a] bg-[#ff7a1a]/15 border border-[#ff7a1a]/30 px-2 py-0.5 rounded-full truncate max-w-[125px]">
+                                <span className="text-[10px] font-bold text-[#D57C63] bg-[#D57C63]/15 border border-[#D57C63]/30 px-2 py-0.5 rounded-full truncate max-w-[125px]">
                                   {rev.service}
                                 </span>
                               )}
@@ -1046,7 +1014,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                                       </span>
                                       <span className="admin-reply-trigger-text text-[11px]">Official Reply from Rahila</span>
                                     </div>
-                                    <span className="text-[10.5px] font-bold text-[#ff7a1a] flex items-center gap-0.5">
+                                    <span className="text-[10.5px] font-bold text-[#D57C63] flex items-center gap-0.5">
                                       See more ↓
                                     </span>
                                   </button>
@@ -1062,7 +1030,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                                       <button
                                         type="button"
                                         onClick={() => toggleReply(rev.id)}
-                                        className="text-[10px] font-bold text-[#ff7a1a] hover:underline cursor-pointer ml-1"
+                                        className="text-[10px] font-bold text-[#D57C63] hover:underline cursor-pointer ml-1"
                                       >
                                         Show less ↑
                                       </button>
@@ -1084,7 +1052,7 @@ export default function Testimonials({ setActiveTab, setSelectedPlan }) {
                               onClick={() => handleLikeReview(rev.id)}
                               className="review-helpful-btn inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer text-[10.5px]"
                             >
-                              <ThumbsUp className="w-2.5 h-2.5 text-[#ff7a1a]" />
+                              <ThumbsUp className="w-2.5 h-2.5 text-[#D57C63]" />
                               <span>Helpful ({rev.helpfulCount || 0})</span>
                             </button>
                           </div>

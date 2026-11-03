@@ -817,7 +817,7 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
 
                   {/* Layer 2: Radiant Blazing Orange Backdrop Card (tilted top-right, ~ +5deg, expanded & prominent) */}
                   <div
-                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#b85c43] via-[#D57C63] to-[#ff7a1a] shadow-[0_20px_50px_rgba(213,124,99,0.65),0_0_35px_rgba(255,122,26,0.35)] pointer-events-none"
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#b85c43] via-[#D57C63] to-[#D57C63] shadow-[0_20px_50px_rgba(213,124,99,0.65),0_0_35px_rgba(213, 124, 99,0.35)] pointer-events-none"
                     style={{
                       transform: 'translateZ(-16px) rotate(5.2deg) scale(1.05) translate(22px, -20px)',
                       transformOrigin: 'center center',
@@ -826,7 +826,7 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
 
                   {/* Layer 3: Jet Black & Glowing Amber Charcoal Backdrop Card (tilted bottom-right, ~ +7.5deg) */}
                   <div
-                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#080504] via-[#180e08] to-[#2d160a] border-2 border-[#ff7a1a]/45 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_28px_rgba(255,122,26,0.24)] pointer-events-none"
+                    className="absolute inset-0 rounded-[32px] sm:rounded-[38px] bg-gradient-to-tr from-[#080504] via-[#180e08] to-[#2d160a] border-2 border-[#D57C63]/45 shadow-[0_18px_42px_rgba(0,0,0,0.85),0_0_28px_rgba(213, 124, 99,0.24)] pointer-events-none"
                     style={{
                       transform: 'translateZ(-6px) rotate(7.5deg) scale(0.99) translate(16px, 18px)',
                       transformOrigin: 'center center',

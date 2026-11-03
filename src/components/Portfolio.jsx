@@ -49,18 +49,18 @@ const Portfolio = ({ setActiveTab }) => {
           <div className="flex items-center gap-2 text-sm text-[#bcab9e]">
             <button
               onClick={() => setActiveTab('home')}
-              className="hover:text-[#ff7a1a] flex items-center gap-1 transition-colors cursor-pointer"
+              className="hover:text-[#D57C63] flex items-center gap-1 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
               <span>{t('portfolio.backOverview')}</span>
             </button>
             <span>/</span>
-            <span className="text-[#ff7a1a] font-medium">{t('portfolio.title')}</span>
+            <span className="text-[#D57C63] font-medium">{t('portfolio.title')}</span>
           </div>
 
           <button
             onClick={() => setActiveTab('home')}
-            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#ff7a1a] transition-all flex items-center gap-1 text-xs cursor-pointer"
+            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#D57C63] transition-all flex items-center gap-1 text-xs cursor-pointer"
             title="Close page"
           >
             <X className="w-4 h-4" />
@@ -89,7 +89,7 @@ const Portfolio = ({ setActiveTab }) => {
               <div 
                 className="absolute -inset-3 rounded-[32px] transition-all duration-300 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at center, rgba(255, 122, 26, 0.75) 0%, rgba(255, 106, 0, 0.4) 45%, transparent 75%)',
+                  background: 'radial-gradient(ellipse at center, rgba(213, 124, 99, 0.75) 0%, rgba(213, 124, 99, 0.4) 45%, transparent 75%)',
                   filter: isCardActive ? 'blur(26px)' : isCardHovered ? 'blur(22px)' : 'blur(16px)',
                   opacity: isCardActive ? 0.95 : isCardHovered ? 0.65 : 0.22,
                   transform: isCardActive ? 'scale(1.05)' : isCardHovered ? 'scale(1.02)' : 'scale(0.97)'
@@ -101,12 +101,12 @@ const Portfolio = ({ setActiveTab }) => {
                 className="relative rounded-[26px] bg-gradient-to-b from-[#1c1511] via-[#140e0b] to-[#0d0907] p-4 sm:p-5 transition-all duration-300 overflow-visible select-none"
                 style={{
                   borderWidth: '1.5px',
-                  borderColor: isCardActive ? '#ff7a1a' : isCardHovered ? 'rgba(255, 122, 26, 0.7)' : 'rgba(255, 122, 26, 0.25)',
+                  borderColor: isCardActive ? '#D57C63' : isCardHovered ? 'rgba(213, 124, 99, 0.7)' : 'rgba(213, 124, 99, 0.25)',
                   boxShadow: isCardActive 
-                    ? '0 0 45px rgba(255, 122, 26, 0.75), 0 0 22px rgba(255, 106, 0, 0.5), 0 15px 40px rgba(0, 0, 0, 0.7)' 
+                    ? '0 0 45px rgba(213, 124, 99, 0.75), 0 0 22px rgba(213, 124, 99, 0.5), 0 15px 40px rgba(0, 0, 0, 0.7)' 
                     : isCardHovered
-                      ? '0 0 30px rgba(255, 122, 26, 0.45), 0 15px 35px rgba(0, 0, 0, 0.65)'
-                      : '0 0 14px rgba(255, 122, 26, 0.16), 0 12px 30px rgba(0, 0, 0, 0.6)',
+                      ? '0 0 30px rgba(213, 124, 99, 0.45), 0 15px 35px rgba(0, 0, 0, 0.65)'
+                      : '0 0 14px rgba(213, 124, 99, 0.16), 0 12px 30px rgba(0, 0, 0, 0.6)',
                   transform: isCardActive ? 'scale(1.015)' : 'scale(1)'
                 }}
               >
@@ -127,12 +127,12 @@ const Portfolio = ({ setActiveTab }) => {
                 </div>
 
                 {/* Overlapping Floating Skills Card (Bottom Right - Logo Orange Accents) */}
-                <div className="absolute -bottom-6 -right-3 sm:-right-6 z-20 bg-white text-gray-900 rounded-2xl p-4 sm:p-5 shadow-[0_20px_45px_rgba(0,0,0,0.45)] border border-orange-100 hover:shadow-[0_20px_45px_rgba(255,106,0,0.35)] hover:border-orange-200 min-w-[215px] space-y-3.5 select-none transition-all duration-300 hover:scale-105">
+                <div className="absolute -bottom-6 -right-3 sm:-right-6 z-20 bg-white text-gray-900 rounded-2xl p-4 sm:p-5 shadow-[0_20px_45px_rgba(0,0,0,0.45)] border border-orange-100 hover:shadow-[0_20px_45px_rgba(213, 124, 99,0.35)] hover:border-orange-200 min-w-[215px] space-y-3.5 select-none transition-all duration-300 hover:scale-105">
                   
                   {/* Skill 1: Full Stack / MERN & React.js */}
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#ff6a00] flex items-center justify-center shrink-0 shadow-sm">
-                      <Code2 className="w-4 h-4 text-[#ff6a00]" />
+                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#D57C63] flex items-center justify-center shrink-0 shadow-sm">
+                      <Code2 className="w-4 h-4 text-[#D57C63]" />
                     </div>
                     <div>
                       <div className="font-extrabold text-[15px] text-gray-900 leading-tight">
@@ -146,8 +146,8 @@ const Portfolio = ({ setActiveTab }) => {
 
                   {/* Skill 2: WordPress / Elementor & WooCommerce */}
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#ff6a00] flex items-center justify-center shrink-0 shadow-sm">
-                      <Layout className="w-4 h-4 text-[#ff6a00]" />
+                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#D57C63] flex items-center justify-center shrink-0 shadow-sm">
+                      <Layout className="w-4 h-4 text-[#D57C63]" />
                     </div>
                     <div>
                       <div className="font-extrabold text-[15px] text-gray-900 leading-tight">
@@ -161,8 +161,8 @@ const Portfolio = ({ setActiveTab }) => {
 
                   {/* Skill 3: SEO Expert / Technical & Ranking */}
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#ff6a00] flex items-center justify-center shrink-0 shadow-sm">
-                      <TrendingUp className="w-4 h-4 text-[#ff6a00]" />
+                    <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 text-[#D57C63] flex items-center justify-center shrink-0 shadow-sm">
+                      <TrendingUp className="w-4 h-4 text-[#D57C63]" />
                     </div>
                     <div>
                       <div className="font-extrabold text-[15px] text-gray-900 leading-tight">
@@ -183,7 +183,7 @@ const Portfolio = ({ setActiveTab }) => {
           <div className="lg:col-span-7 flex flex-col justify-center pt-6 lg:pt-0">
             
             {/* Top Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ff7a1a]/10 border border-[#ff7a1a]/30 text-[#ff7a1a] text-xs font-bold uppercase tracking-wider mb-5 w-fit">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D57C63]/10 border border-[#D57C63]/30 text-[#D57C63] text-xs font-bold uppercase tracking-wider mb-5 w-fit">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Production Work &amp; Case Studies</span>
             </div>
@@ -191,7 +191,7 @@ const Portfolio = ({ setActiveTab }) => {
             {/* Main Headline */}
             <h1 className="font-heading font-extrabold text-white text-[clamp(32px,4vw,52px)] leading-[1.12] mb-4">
               Crafting High-Converting <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff7a1a] via-[#e5937d] to-[#ff6a00]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D57C63] via-[#e5937d] to-[#D57C63]">
                 Digital Products &amp; Web Apps
               </span>
             </h1>
@@ -213,7 +213,7 @@ const Portfolio = ({ setActiveTab }) => {
 
               <button
                 onClick={() => setActiveTab('contact')}
-                className="px-6 py-3 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-200 hover:text-white hover:border-[#ff7a1a] text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-200 hover:text-white hover:border-[#D57C63] text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer"
               >
                 <span>Hire for Project</span>
                 <ArrowRight className="w-4 h-4 rtl:rotate-180" />
@@ -245,8 +245,8 @@ const Portfolio = ({ setActiveTab }) => {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                   selectedCategory === cat.id
-                    ? 'bg-[#ff7a1a] text-black shadow-md font-bold'
-                    : 'bg-[#1b1411] text-[#bcab9e] border border-[#33271f] hover:text-white hover:border-[#ff7a1a]/50'
+                    ? 'bg-[#D57C63] text-black shadow-md font-bold'
+                    : 'bg-[#1b1411] text-[#bcab9e] border border-[#33271f] hover:text-white hover:border-[#D57C63]/50'
                 }`}
               >
                 {cat.label}
@@ -262,13 +262,13 @@ const Portfolio = ({ setActiveTab }) => {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="reveal-up glass-card p-6 flex flex-col justify-end min-h-[220px] bg-gradient-to-br from-[#ff6a00]/20 via-transparent to-transparent hover:border-[#ff7a1a] transition-all group"
+              className="reveal-up glass-card p-6 flex flex-col justify-end min-h-[220px] bg-gradient-to-br from-[#D57C63]/20 via-transparent to-transparent hover:border-[#D57C63] transition-all group"
             >
               <div className="mb-auto pb-4">
                 <small className="text-[#eaa487] font-bold text-xs uppercase block mb-1">
                   {project.badge}
                 </small>
-                <h3 className="font-heading font-bold text-[21px] text-white mb-2 group-hover:text-[#ff7a1a] transition-colors">
+                <h3 className="font-heading font-bold text-[21px] text-white mb-2 group-hover:text-[#D57C63] transition-colors">
                   {project.title}
                 </h3>
                 <p className="text-[15.5px] text-[#bcab9e] leading-[1.65]">
@@ -281,7 +281,7 @@ const Portfolio = ({ setActiveTab }) => {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff7a1a] hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D57C63] hover:underline"
                 >
                   <span>{t('portfolio.liveDemo')}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -302,7 +302,7 @@ const Portfolio = ({ setActiveTab }) => {
         {/* Modal for Details */}
         {modalProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-            <div className="glass-card modal-enter w-full max-w-xl p-8 rounded-[18px] border border-[#ff7a1a] relative shadow-2xl bg-[#1b1411]">
+            <div className="glass-card modal-enter w-full max-w-xl p-8 rounded-[18px] border border-[#D57C63] relative shadow-2xl bg-[#1b1411]">
               
               <button
                 onClick={() => setModalProject(null)}
@@ -324,7 +324,7 @@ const Portfolio = ({ setActiveTab }) => {
               </p>
 
               <div className="glass-card p-4 rounded-xl mb-6 border border-[#33271f]">
-                <h4 className="text-xs uppercase text-[#ff7a1a] font-bold mb-1">Highlight</h4>
+                <h4 className="text-xs uppercase text-[#D57C63] font-bold mb-1">Highlight</h4>
                 <p className="text-sm text-gray-200">{modalProject.highlight}</p>
               </div>
 

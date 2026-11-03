@@ -49,7 +49,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
       particleCount: 80,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#ff7a1a', '#ffb347', '#eaa487', '#ffffff'],
+      colors: ['#D57C63', '#ffb347', '#eaa487', '#ffffff'],
     });
   };
 
@@ -237,18 +237,18 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
           <div className="flex items-center gap-2 text-sm text-[#bcab9e]">
             <button
               onClick={() => setActiveTab('home')}
-              className="hover:text-[#ff7a1a] flex items-center gap-1 transition-colors cursor-pointer"
+              className="hover:text-[#D57C63] flex items-center gap-1 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
               <span>{t('contact.backOverview')}</span>
             </button>
             <span>/</span>
-            <span className="text-[#ff7a1a]">{t('contact.title')}</span>
+            <span className="text-[#D57C63]">{t('contact.title')}</span>
           </div>
 
           <button
             onClick={() => setActiveTab('home')}
-            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#ff7a1a] transition-all flex items-center gap-1 text-xs cursor-pointer"
+            className="p-2 rounded-full bg-[#1b1411] border border-[#33271f] text-gray-300 hover:text-white hover:border-[#D57C63] transition-all flex items-center gap-1 text-xs cursor-pointer"
             title="Close page"
           >
             <X className="w-4 h-4" />
@@ -288,7 +288,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     required
                     autoComplete="name"
                     className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
-                      errors.name ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                      errors.name ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#D57C63]'
                     } text-white focus:outline-none transition-colors`}
                   />
                   {errors.name && (
@@ -311,7 +311,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     required
                     autoComplete="email"
                     className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
-                      errors.email ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                      errors.email ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#D57C63]'
                     } text-white focus:outline-none transition-colors`}
                   />
                   {errors.email && (
@@ -335,7 +335,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     value={formData.phone}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
-                      errors.phone ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                      errors.phone ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#D57C63]'
                     } text-white focus:outline-none transition-colors`}
                   />
                   {errors.phone && (
@@ -354,7 +354,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                     name="plan"
                     value={formData.plan}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#ff7a1a] transition-colors"
+                    className="w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] border-[#33271f] text-white focus:outline-none focus:border-[#D57C63] transition-colors"
                   />
                 </div>
               </div>
@@ -372,7 +372,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                   required
                   rows={5}
                   className={`w-full px-4 py-3 rounded-[12px] bg-[#1b1411] border-[1.5px] ${
-                    errors.message ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#ff7a1a]'
+                    errors.message ? 'border-rose-500/80 focus:border-rose-400' : 'border-[#33271f] focus:border-[#D57C63]'
                   } text-white focus:outline-none transition-colors resize-y`}
                 />
                 {errors.message && (
@@ -391,7 +391,7 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
               </button>
 
               {status.message && (
-                <div className="text-[#ff7a1a] font-semibold min-h-[24px] pt-1">
+                <div className="text-[#D57C63] font-semibold min-h-[24px] pt-1">
                   {status.message}
                 </div>
               )}
@@ -406,14 +406,14 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
                 {t('contact.directChannels')}
               </h3>
 
-              <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#241712] border border-[#33271f] text-[#ff7a1a] mb-5">
+              <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#241712] border border-[#33271f] text-[#D57C63] mb-5">
                 🟢 {t('contact.availableBadge')}
               </div>
 
               <div className="text-[16px] text-[#bcab9e] leading-[1.8] space-y-4">
                 <div>
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Official Email:</strong>
-                  <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-[#ff7a1a] transition-colors font-medium">
+                  <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-[#D57C63] transition-colors font-medium">
                     {personalInfo.email}
                   </a>
                   <span className="text-xs text-[#8a7569] block mt-0.5">
@@ -423,14 +423,14 @@ const Contact = ({ setActiveTab, selectedPlan }) => {
 
                 <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">Phone:</strong>
-                  <a href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`} className="text-white hover:text-[#ff7a1a] transition-colors font-medium">
+                  <a href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`} className="text-white hover:text-[#D57C63] transition-colors font-medium">
                     {personalInfo.phone}
                   </a>
                 </div>
 
                 <div className="pt-1">
                   <strong className="text-white block text-xs uppercase text-[#eaa487]">WhatsApp:</strong>
-                  <a href={personalInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#ff7a1a] hover:underline font-semibold flex items-center gap-1.5">
+                  <a href={personalInfo.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#D57C63] hover:underline font-semibold flex items-center gap-1.5">
                     <span>Chat on WhatsApp (+92 321 7812265)</span>
                   </a>
                 </div>

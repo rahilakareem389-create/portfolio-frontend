@@ -155,7 +155,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
 
         {/* Header */}
         <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-neutral-200 dark:border-[#38261e]">
-          <div className="w-12 h-12 rounded-2xl bg-orange-500/15 border border-orange-500/35 flex items-center justify-center text-[#ff7a1a] shadow-inner shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-orange-500/15 border border-orange-500/35 flex items-center justify-center text-[#D57C63] shadow-inner shrink-0">
             <User className="w-6 h-6" />
           </div>
           <div>
@@ -182,7 +182,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
               </span>
             </div>
             <div className="text-xs modal-subtitle flex items-center gap-1.5 font-semibold">
-              <Mail className="w-3.5 h-3.5 text-[#ff7a1a]" />
+              <Mail className="w-3.5 h-3.5 text-[#D57C63]" />
               <span>{user.email}</span>
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
         {/* Section 1: Private Inquiries & Admin Replies */}
         <div className="space-y-3 mb-6">
           <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
-            <FolderOpen className="w-4 h-4 text-[#ff7a1a]" />
+            <FolderOpen className="w-4 h-4 text-[#D57C63]" />
             <span>Your Project Inquiries ({dashboardData.inquiries?.length || 0})</span>
           </h3>
 
@@ -237,7 +237,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
                   {inq.adminNotes ? (
                     <div className="mt-2.5 p-3.5 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/30 text-xs space-y-1">
                       <div className="flex items-center gap-1.5 font-bold text-orange-700 dark:text-orange-400">
-                        <Sparkles className="w-3.5 h-3.5 text-[#ff7a1a]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#D57C63]" />
                         <span>Reply from Rahila Kareem (Admin):</span>
                       </div>
                       <p className="text-neutral-800 dark:text-neutral-100 leading-relaxed font-semibold">
@@ -251,7 +251,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
                   )}
 
                   <div className="text-[10px] modal-subtitle flex items-center gap-1 font-semibold pt-1 border-t border-neutral-100 dark:border-neutral-800">
-                    <Clock className="w-3 h-3 text-[#ff7a1a]" />
+                    <Clock className="w-3 h-3 text-[#D57C63]" />
                     <span>{inq.date ? new Date(inq.date).toLocaleDateString() : 'Recently'}</span>
                   </div>
                 </div>
@@ -259,7 +259,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
             </div>
           ) : (
             <div className="modal-box-card p-6 text-center rounded-2xl">
-              <MessageSquare className="w-8 h-8 mx-auto mb-2 text-[#ff7a1a]" />
+              <MessageSquare className="w-8 h-8 mx-auto mb-2 text-[#D57C63]" />
               <p className="text-xs font-bold modal-title">No active inquiries submitted yet</p>
               <p className="text-xs modal-subtitle mt-1">Submit a project requirement through the contact form to track it here.</p>
             </div>
@@ -286,7 +286,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
                   {rev.adminReply && rev.adminReply.message && (
                     <div className="mt-2.5 p-3 rounded-xl bg-orange-500/10 dark:bg-orange-500/15 border border-orange-500/30 text-xs space-y-1">
                       <div className="flex items-center gap-1.5 font-bold text-orange-700 dark:text-orange-400">
-                        <Sparkles className="w-3.5 h-3.5 text-[#ff7a1a]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#D57C63]" />
                         <span>Rahila Kareem (Owner &amp; Admin) Replied:</span>
                       </div>
                       <p className="text-neutral-800 dark:text-neutral-100 italic leading-relaxed">
@@ -304,7 +304,7 @@ export default function ClientDashboardModal({ isOpen, onClose, user, onLogout }
         {dashboardData.faqs && dashboardData.faqs.length > 0 && (
           <div className="space-y-3 mb-6">
             <h3 className="modal-title font-heading font-bold text-sm flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-[#ff7a1a]" />
+              <HelpCircle className="w-4 h-4 text-[#D57C63]" />
               <span>Your Community Questions ({dashboardData.faqs.length})</span>
             </h3>
             <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
