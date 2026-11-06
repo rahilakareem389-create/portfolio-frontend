@@ -3,7 +3,8 @@ import {
   ArrowRight, 
   BookOpen, 
   Sparkles, 
-  GraduationCap
+  GraduationCap,
+  FileText
 } from 'lucide-react';
 import Islamic3DBackground from './Islamic3DBackground';
 
@@ -140,7 +141,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
               Begin your journey with Quran reading, Tajweed, daily Duas, Namaz and essential Islamic knowledge through regular online classes for learners of all ages.
             </p>
 
-            {/* 4. Action Buttons: Enroll Now (Primary) & Explore Courses (Secondary) */}
+            {/* 4. Action Buttons: Enroll Now (Primary), Explore Courses (Secondary) & Hire Me (Quran Teacher CV) */}
             <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1">
               {/* PRIMARY BUTTON: Enroll Now */}
               <button
@@ -162,6 +163,18 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                 <BookOpen className="w-4 h-4 text-[#6D28D9]" />
                 <span>Explore Courses</span>
               </button>
+
+              {/* HIRE ME BUTTON: Online Quran Teacher CV */}
+              <a
+                href="/rahila-kareem-quran-teacher-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3.5 rounded-xl font-bold text-[#1f1540] bg-[#FFF4B8] hover:bg-[#ffe980] border border-[#F2C94C] shadow-[0_4px_16px_rgba(242,201,76,0.3)] transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 text-sm sm:text-base select-none"
+                title="View & Download Online Quran Teacher CV"
+              >
+                <FileText className="w-4 h-4 text-[#6D28D9]" />
+                <span>Hire Me</span>
+              </a>
             </div>
 
             {/* 5. Authentic Hadith (displayed elegantly below main hero content) */}

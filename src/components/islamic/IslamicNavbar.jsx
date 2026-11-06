@@ -13,7 +13,8 @@ import {
   ArrowLeft,
   MessageCircle,
   Sparkles,
-  GraduationCap
+  GraduationCap,
+  FileText
 } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
 import AuthModal from '../AuthModal';
@@ -232,6 +233,18 @@ export default function IslamicNavbar({
               <span>Enroll Now</span>
             </button>
 
+            {/* Hire Me (Quran Teacher CV) Button */}
+            <a
+              href="/rahila-kareem-quran-teacher-cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-9 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold text-[#4C1D95] bg-[#EDE5FF] hover:bg-[#decbfd] border border-[#C4B5FD] shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+              title="Online Quran Teacher CV"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#6D28D9]" />
+              <span>Hire Me</span>
+            </a>
+
             {/* Optional Back to Portfolio Link */}
             {typeof onBackToPortfolio === 'function' && (
               <button
@@ -354,6 +367,16 @@ export default function IslamicNavbar({
             })}
 
             <div className="pt-3 border-t border-white/10 mt-2 flex flex-col gap-2">
+              <a
+                href="/rahila-kareem-quran-teacher-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 rounded-xl text-xs font-bold bg-[#ffd777] text-[#1c1040] flex items-center justify-center gap-2"
+              >
+                <FileText className="w-4 h-4 text-[#1c1040]" />
+                <span>Hire Me (Quran Teacher CV)</span>
+              </a>
+
               <a
                 href={personalInfo.whatsappUrl || 'https://wa.link/p3yvx3'}
                 target="_blank"

@@ -262,7 +262,19 @@ function About() {
             <Reveal as="p" className="mb-8 text-[15px] sm:text-[16px] text-[#6a6288] opacity-90 leading-relaxed">
               Our academy pairs patient, certified male and female tutors with students worldwide. We focus on authentic Makharij, Tajweed rules, and foundational Sunnah etiquettes with gentle encouragement.
             </Reveal>
-            <Reveal><Btn href="#courses">Explore courses →</Btn></Reveal>
+            <Reveal className="flex flex-wrap items-center gap-3">
+              <Btn href="#courses">Explore courses →</Btn>
+              <a
+                href="/rahila-kareem-quran-teacher-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs sm:text-sm bg-[#ffd777] hover:bg-[#ffe28a] text-[#1c1040] shadow-[0_4px_16px_rgba(224,169,59,0.30)] hover:-translate-y-0.5 transition cursor-pointer"
+                title="View & Download Online Quran Teacher CV"
+              >
+                <span>Hire Me (CV)</span>
+                <span className="text-base">📄</span>
+              </a>
+            </Reveal>
           </div>
         </div>
       </Wrap>
