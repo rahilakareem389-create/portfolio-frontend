@@ -3115,6 +3115,9 @@ p, span, a, input, select, textarea, button, li, small {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-islamic-float-1,
+  .animate-islamic-float-2,
+  .animate-islamic-badge,
   .animate-islamic-drift,
   .animate-islamic-drift-slow,
   .animate-islamic-float,

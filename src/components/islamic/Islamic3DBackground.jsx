@@ -21,11 +21,18 @@ export default function Islamic3DBackground() {
       return; // Fallback smoothly if WebGL not supported
     }
 
+    // Size to the hero box itself (not the window) so the shapes are never stretched
+    const getSize = () => ({
+      w: Math.max(1, container.clientWidth),
+      h: Math.max(1, container.clientHeight),
+    });
+    const { w, h } = getSize();
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 1000);
     camera.position.z = 85;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = '0';
@@ -107,21 +114,29 @@ export default function Islamic3DBackground() {
     };
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    // Window Resize Handler
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let visible = true;
 
-    // Animation Loop
-    let animationFrameId;
+    // Container Resize Handler (hero height changes with screen width)
+    const handleResize = () => {
+      const s = getSize();
+      camera.aspect = s.w / s.h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(s.w, s.h, false);
+      if (reduceMotion || !visible) renderer.render(scene, camera);
+    };
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
+
+    // Animation Loop (paused while the hero is scrolled out of view)
+    let animationFrameId = null;
     const clock = new THREE.Clock();
+    let elapsedTime = 0;
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+      // Clamp the step so resuming after a pause continues smoothly (no jump)
+      elapsedTime += Math.min(clock.getDelta(), 0.1);
 
       // Smooth slow rotation
       starMesh.rotation.y = elapsedTime * 0.08;
@@ -141,12 +156,37 @@ export default function Islamic3DBackground() {
       renderer.render(scene, camera);
     };
 
-    animate();
+    const start = () => {
+      if (animationFrameId === null) {
+        animate();
+      }
+    };
+    const stop = () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    };
+
+    let io = null;
+    if (reduceMotion) {
+      // Still show the geometry, just without movement
+      renderer.render(scene, camera);
+    } else {
+      io = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) start();
+        else stop();
+      });
+      io.observe(container);
+      start();
+    }
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      stop();
+      if (io) io.disconnect();
+      resizeObserver.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }

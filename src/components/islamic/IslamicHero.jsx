@@ -78,7 +78,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
     <section
       id={id}
       aria-label="Online Quran Education Section"
-      className="relative overflow-hidden w-full pt-4 sm:pt-6 lg:pt-8 pb-16 sm:py-20 lg:py-24 bg-[#FAF8FF] text-[#241B35] border-b border-[#E6DCF5] transition-colors"
+      className="relative isolate overflow-hidden w-full pt-4 sm:pt-6 lg:pt-8 pb-16 sm:py-20 lg:py-24 bg-[#FAF8FF] text-[#241B35] border-b border-[#E6DCF5] transition-colors"
     >
       {/* 3D Islamic Constellation Background */}
       <Islamic3DBackground />
@@ -260,7 +260,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                  ==================================================== */}
               <div
                 className="absolute top-2 sm:top-6 right-1 sm:right-3 w-[74%] sm:w-[75%] h-[255px] xs:h-[285px] sm:h-[360px] rounded-[24px] sm:rounded-[32px] overflow-hidden border-3 sm:border-4 border-white shadow-[0_20px_45px_rgba(109,40,217,0.18)] bg-white animate-islamic-float-1 z-10 group"
-                style={{ transform: 'translateZ(20px)' }}
+                style={{ translate: '0 0 20px' }}
               >
                 <img
                   src="/quran-roses-hero.jpg"
@@ -287,7 +287,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
                  ==================================================== */}
               <div
                 className="absolute bottom-0 left-0 sm:left-2 w-[78%] sm:w-[80%] h-[215px] xs:h-[240px] sm:h-[300px] rounded-[24px] sm:rounded-[32px] overflow-hidden border-3 sm:border-4 border-white shadow-[0_25px_50px_rgba(76,29,149,0.28)] bg-white z-20 animate-islamic-float-2 group"
-                style={{ transform: 'translateZ(40px)' }}
+                style={{ translate: '0 0 40px' }}
               >
                 <img
                   src="/noorani-qaida-hero.jpg"
@@ -315,7 +315,7 @@ export default function IslamicHero({ onNavigate, setActiveTab, id = 'quran-educ
               <div
                 className="absolute bottom-1 sm:bottom-4 right-0 sm:-right-3 z-30 w-[105px] h-[105px] xs:w-[120px] xs:h-[120px] sm:w-[150px] sm:h-[150px] animate-islamic-badge select-none pointer-events-none"
                 style={{
-                  transform: 'translateZ(65px)',
+                  translate: '0 0 65px',
                   background: 'transparent',
                   backgroundColor: 'transparent',
                   boxShadow: 'none',

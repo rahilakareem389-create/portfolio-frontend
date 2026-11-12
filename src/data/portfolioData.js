@@ -283,10 +283,21 @@ export const projects = [
     category: "WordPress",
     client: "Creative Agency in UAE",
     liveUrl: "https://www.sketches.ae/",
-    badge: "WordPress • Live Agency",
+    badge: "WordPress • UAE Agency",
     description: "Full design and development for an elite Dubai creative studio. Features sleek agency portfolio presentation, fluid animations, and high performance.",
     tech: ["WordPress", "Elementor Pro", "Custom CSS", "Responsive UI", "Speed Tuning"],
     highlight: "Dubai-based creative agency website with luxury layout and client showcases."
+  },
+  {
+    id: "healthone-toronto",
+    title: "HealthOne Medical & Dental Centre, Toronto",
+    category: "WordPress",
+    client: "HealthOne Medical Group, Toronto, Canada",
+    liveUrl: "https://healthone.ca/",
+    badge: "WordPress • Canada Healthcare",
+    description: "Modern healthcare and dental portal for a leading multi-disciplinary wellness clinic in Toronto. Features interactive booking, practitioner scheduling, and accessible UI.",
+    tech: ["WordPress", "Custom UI", "Healthcare Schema", "Online Booking", "Mobile Responsive"],
+    highlight: "Comprehensive clinic portal with multi-location appointment scheduling and automated patient intake flows."
   },
   {
     id: "travel-ecommerce",
@@ -311,6 +322,28 @@ export const projects = [
     highlight: "Streamlined dashboard for university transit monitoring and student schedules."
   },
   {
+    id: "toronto-smile-design",
+    title: "Toronto Smile Design Clinic",
+    category: "SEO",
+    client: "Cosmetic Dental Practice, Yorkville, Toronto, Canada",
+    liveUrl: "https://torontosmiledesign.ca/",
+    badge: "SEO • Canadian Clinic",
+    description: "High-conversion cosmetic dentistry platform with before/after smile galleries, localized technical SEO, patient consultation booking, and high-DA backlink outreach.",
+    tech: ["Technical SEO", "Local Schema", "Speed Tuning", "Google Business Profile", "WordPress"],
+    highlight: "Achieved Top 3 Google Map pack rankings in Yorkville, Toronto with rich snippet reviews and fast mobile loading."
+  },
+  {
+    id: "physioshop-vancouver",
+    title: "The Physio Shop, Vancouver",
+    category: "WordPress",
+    client: "Sports Rehabilitation & Physio Clinic, Vancouver, Canada",
+    liveUrl: "https://thephysioshop.ca/",
+    badge: "WordPress • Canadian Rehab",
+    description: "Clean, modern physical therapy clinic website with real-time JaneApp booking integration, injury care resources, and mobile-first responsive design.",
+    tech: ["WordPress", "Elementor Pro", "JaneApp Integration", "Local SEO", "Custom CSS"],
+    highlight: "User-friendly healthcare UI with streamlined online booking and practitioner profiles for Vancouver patients."
+  },
+  {
     id: "seo-webapp",
     title: "SEO Web Application",
     category: "SEO",
@@ -320,6 +353,17 @@ export const projects = [
     description: "High-performance SEO web application providing search analytics, keyword analysis, website audit feedback, and ranking tracking metrics.",
     tech: ["React.js", "Vercel", "REST APIs", "Analytics UI", "SEO Tools"],
     highlight: "Instant domain metrics check, meta-tag generator, and audit insights."
+  },
+  {
+    id: "littledragon-agency",
+    title: "Little Dragon Digital Agency, Toronto",
+    category: "WordPress",
+    client: "Digital Strategy & Marketing Agency, Toronto, Canada",
+    liveUrl: "https://littledragon.ca/",
+    badge: "WordPress • Toronto Agency",
+    description: "Full-service digital agency website featuring interactive project case studies, automated client inquiry funnels, micro-animations, and Core Web Vitals optimization.",
+    tech: ["WordPress", "Tailwind CSS", "Lead Funnel", "SEO Architecture", "Animation"],
+    highlight: "Conversion-focused agency layout with lightning-fast load times and high-performing lead generation pages."
   },
   {
     id: "erp-system",
@@ -333,6 +377,50 @@ export const projects = [
     highlight: "Robust data flow, secure permissions, and dynamic reporting charts."
   },
   {
+    id: "merged-media",
+    title: "Merged Media Growth Platform",
+    category: "SEO",
+    client: "Digital Marketing & Growth Firm, Ontario, Canada",
+    liveUrl: "https://merged.ca/",
+    badge: "SEO • Growth Marketing",
+    description: "Data-driven SEO and lead generation portal with client analytics reporting, search intent mapping, programmatic landing pages, and speed audit tuning.",
+    tech: ["Technical SEO", "Google Search Console", "Schema Markup", "Performance Audit", "WordPress"],
+    highlight: "Complete technical SEO audit and structured data implementation resulting in high-intent organic traffic growth."
+  },
+  {
+    id: "pilotcoffee-toronto",
+    title: "Pilot Coffee Roasters E-Commerce, Toronto",
+    category: "WordPress",
+    client: "Specialty Coffee Roasters & Retailer, Toronto, Canada",
+    liveUrl: "https://www.pilotcoffeeroasters.com/",
+    badge: "WordPress • WooCommerce E-Com",
+    description: "Premium Canadian e-commerce experience featuring recurring product subscriptions, Canada Post shipping rates, wholesale portal, and optimized mobile checkout.",
+    tech: ["WooCommerce", "Subscription Engine", "Custom Checkout", "Canada Post API", "Responsive UI"],
+    highlight: "High-conversion WooCommerce store with custom product filtering and seamless recurring subscription billing."
+  },
+  {
+    id: "burnkit-studio",
+    title: "Burnkit Digital Design Studio, Vancouver",
+    category: "React",
+    client: "Brand Identity & Design Studio, British Columbia, Canada",
+    liveUrl: "https://burnkit.com/",
+    badge: "React • Canadian Studio",
+    description: "Minimalist, interactive portfolio web application showcasing award-winning Canadian branding, fluid grid animations, and high-performance media delivery.",
+    tech: ["React.js", "Interactive UI", "State Management", "Tailwind CSS", "Vite"],
+    highlight: "Fluid portfolio showcase with smooth transitions and ultra-clean responsive typography."
+  },
+  {
+    id: "bentall-physio",
+    title: "Bentall Physiotherapy Clinic, Vancouver",
+    category: "SEO",
+    client: "Downtown Vancouver Physiotherapy Centre, Canada",
+    liveUrl: "https://bentallphysiotherapy.com/",
+    badge: "SEO • Local Healthcare",
+    description: "Comprehensive local SEO and website performance optimization for a premier downtown Vancouver clinic, targeting high-value rehabilitation keywords.",
+    tech: ["Local SEO", "Google Maps Optimization", "Crawl Diagnostics", "On-Page SEO", "Schema Markup"],
+    highlight: "First-page Google rankings across high-competition downtown Vancouver therapy keywords."
+  },
+  {
     id: "golden-edge",
     title: "Golden Edge Agency Website",
     category: "WordPress",
@@ -342,6 +430,50 @@ export const projects = [
     description: "Modern, high-converting digital agency website with bold typography, dark neon aesthetic, customer conversion funnels, and testimonials.",
     tech: ["HTML5", "CSS3", "JavaScript", "Animation", "Responsive Design"],
     highlight: "Clean aesthetic with lightning-fast load times and strong call-to-actions."
+  },
+  {
+    id: "citydental-toronto",
+    title: "City Dental on Bay, Toronto",
+    category: "WordPress",
+    client: "Bay Street Dental Clinic, Toronto, Canada",
+    liveUrl: "https://citydentaltoronto.com/",
+    badge: "WordPress • Corporate Healthcare",
+    description: "Corporate dental clinic website situated in Toronto's Financial District. Features patient consultation request forms, emergency dental hotline, and Google review sync.",
+    tech: ["WordPress", "Custom Layout", "Review Schema", "Appointment Form", "Speed Tuning"],
+    highlight: "Responsive patient booking interface with fast 95+ PageSpeed mobile score and direct emergency call actions."
+  },
+  {
+    id: "growme-calgary",
+    title: "GrowME Marketing & Web Studio, Calgary",
+    category: "SEO",
+    client: "Growth Marketing & Creative Studio, Calgary, Canada",
+    liveUrl: "https://growmemarketing.ca/",
+    badge: "SEO • Canadian Enterprise",
+    description: "Enterprise growth marketing and search strategy platform tailored for Canadian enterprises. Incorporates competitor gap analysis, backlink outreach, and lead tracking.",
+    tech: ["SEO Strategy", "Keyword Intent", "Conversion Optimization", "WordPress", "Analytics"],
+    highlight: "Proven SEO roadmap delivering measurable keyword surge and qualified lead generation for Western Canadian brands."
+  },
+  {
+    id: "locomotive-showcase",
+    title: "Locomotive Digital Showcase, Montreal",
+    category: "React",
+    client: "Creative Web & Digital Studio, Montreal, Quebec, Canada",
+    liveUrl: "https://locomotive.ca/",
+    badge: "React • Award-Winning UI",
+    description: "Bespoke digital design showcase highlighting cutting-edge interactive web development, smooth scrolling physics, fluid animations, and multilingual interface.",
+    tech: ["React.js", "Smooth Scroll", "Creative UI/UX", "Animation", "Modern Web"],
+    highlight: "Recognized creative web architecture combining aesthetic visual storytelling with high-speed performance."
+  },
+  {
+    id: "webcie-solutions",
+    title: "WebCie Digital Solutions, Montreal",
+    category: "MERN",
+    client: "B2B Web Engineering & E-Commerce Firm, Canada",
+    liveUrl: "https://webcie.ca/",
+    badge: "MERN • Business Platform",
+    description: "Scalable business web application with client project tracking, automated service estimation calculator, REST API endpoints, and CRM integration.",
+    tech: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "REST API"],
+    highlight: "End-to-end client dashboard architecture with real-time cost estimation and dynamic project milestone tracking."
   }
 ];
 

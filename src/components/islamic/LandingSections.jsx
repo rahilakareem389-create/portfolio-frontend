@@ -521,7 +521,7 @@ function Certificates() {
       {selectedCert && (
         <div
           onClick={() => setSelectedCert(null)}
-          className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn cursor-zoom-out"
+          className="fixed inset-0 z-[99990] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md ql-fade-in cursor-zoom-out"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -2461,7 +2461,7 @@ function SpecialAnnouncements({ onApply }) {
 
       {/* Program Details Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-fadeIn">
+        <div className="fixed inset-0 z-[99990] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto ql-fade-in">
           <div className="relative w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 text-left space-y-5 shadow-2xl border border-[#dec9ff] my-8">
             <button
               type="button"
