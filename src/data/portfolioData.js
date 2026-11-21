@@ -278,48 +278,113 @@ export const services = [
 
 export const projects = [
   {
-    id: "sketches-ae",
-    title: "Sketches Creative Agency, Dubai",
+    id: "greentech-electrics",
+    title: "GreenTech Electrics, Melbourne",
     category: "WordPress",
-    client: "Creative Agency in UAE",
-    liveUrl: "https://www.sketches.ae/",
-    badge: "WordPress • UAE Agency",
-    description: "Full design and development for an elite Dubai creative studio. Features sleek agency portfolio presentation, fluid animations, and high performance.",
-    tech: ["WordPress", "Elementor Pro", "Custom CSS", "Responsive UI", "Speed Tuning"],
-    highlight: "Dubai-based creative agency website with luxury layout and client showcases."
+    client: "Electrical Contractor, Melbourne, Australia",
+    liveUrl: "https://greentechelectrics.com.au/",
+    image: "/projects/greentech.webp",
+    badge: "WordPress • Australia Services",
+    description: "Service business website for a Melbourne electrical contractor offering temporary power pole hire and 24/7 emergency A-Grade electricians, with clear service pages and call-to-action funnels.",
+    tech: ["WordPress", "WooCommerce", "Service Pages", "Lead Forms", "Responsive UI"],
+    highlight: "Conversion-focused layout with emergency call buttons and a dedicated power pole hire booking flow."
   },
   {
-    id: "healthone-toronto",
-    title: "HealthOne Medical & Dental Centre, Toronto",
+    id: "hair-crew-co",
+    title: "Hair Crew & Co. Salon",
     category: "WordPress",
-    client: "HealthOne Medical Group, Toronto, Canada",
-    liveUrl: "https://healthone.ca/",
-    badge: "WordPress • Canada Healthcare",
-    description: "Modern healthcare and dental portal for a leading multi-disciplinary wellness clinic in Toronto. Features interactive booking, practitioner scheduling, and accessible UI.",
-    tech: ["WordPress", "Custom UI", "Healthcare Schema", "Online Booking", "Mobile Responsive"],
-    highlight: "Comprehensive clinic portal with multi-location appointment scheduling and automated patient intake flows."
+    client: "Hair Salon, Australia",
+    liveUrl: "https://www.haircrewandco.com.au/",
+    image: "/projects/haircrew.webp",
+    badge: "WordPress • Beauty & Salon",
+    description: "Premium salon website with services, online shop, news & events and multi-location pages, designed around a luxury black-and-gold brand.",
+    tech: ["WordPress", "WooCommerce Shop", "Custom Design", "Locations Pages", "Mobile Responsive"],
+    highlight: "Elegant salon branding with an integrated product shop and location finder."
   },
   {
-    id: "travel-ecommerce",
-    title: "Travel Agency E-Commerce",
+    id: "concept-sports-academy",
+    title: "Concept Sports Academy",
+    category: "WordPress",
+    client: "Cricket Coaching Academy, Australia",
+    liveUrl: "https://conceptsportsacademy.com.au/",
+    image: "/projects/concept.webp",
+    badge: "WordPress • Sports Academy",
+    description: "Cricket academy website with coaching programs, events, player assessment bookings and an online store, built to turn visitors into enrolments.",
+    tech: ["WordPress", "WooCommerce Store", "Program Pages", "Booking Forms", "Responsive UI"],
+    highlight: "Bold sports-themed hero with direct booking and store calls-to-action."
+  },
+  {
+    id: "luxe-cash-for-gold",
+    title: "LUXE Cash for Gold, Los Angeles",
+    category: "WordPress",
+    client: "Gold & Jewelry Buyer, South Bay, USA",
+    liveUrl: "https://luxecashforgold.com/",
+    image: "/projects/luxe.webp",
+    badge: "WordPress • Local Business USA",
+    description: "Local business website for a South Bay gold, silver and diamond buyer, with service pages, directions and appointment booking built for local search.",
+    tech: ["WordPress", "Elementor", "Appointment Booking", "Local SEO", "Responsive UI"],
+    highlight: "Trust-focused design with prominent Get Directions and Book an Appointment actions."
+  },
+  {
+    id: "saas-ecommerce",
+    title: "SaaSCommerce Fashion E-Commerce Store",
     category: "MERN",
-    client: "Travel & Tours Business",
+    client: "Personal Full Stack Project",
     liveUrl: "https://saasecommerce.vercel.app",
+    image: "/projects/saas.webp",
     badge: "MERN Stack • E-Commerce",
-    description: "End-to-end full stack travel booking and e-commerce platform. Users can browse itineraries, select dates, book packages, and checkout seamlessly.",
+    description: "Full stack fashion e-commerce store with categories, collections, best sellers, wishlist, cart, notifications, light/dark mode and a separate admin area for managing the store.",
     tech: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "Vercel"],
-    highlight: "Interactive tour booking system with customer management and payment flows."
+    highlight: "Complete shopping flow plus an admin dashboard for products and orders."
+  },
+  {
+    id: "erp-system",
+    title: "ERP Business Management System",
+    category: "MERN",
+    client: "Personal Full Stack Project",
+    liveUrl: "https://github.com/rahilakareem389-create/erp-source",
+    linkLabel: "View Source Code",
+    image: "/projects/erp.webp",
+    badge: "Full Stack • Enterprise ERP",
+    description: "Full stack ERP covering sales & POS, inventory, customers & suppliers, employees, attendance, leaves, payroll, expenses, pharmacy and reporting, with real-time notifications.",
+    tech: ["React.js", "Vite", "Node.js", "Express.js", "MySQL", "Sequelize", "Socket.IO", "JWT Auth"],
+    highlight: "15+ REST API modules, JWT role auth, rate-limited login and live Socket.IO updates."
   },
   {
     id: "bus-tracker",
-    title: "University Bus Tracker Application",
-    category: "React",
-    client: "University Transport Service",
+    title: "University Bus Booking & Tracker",
+    category: "MERN",
+    client: "Personal Full Stack Project",
     liveUrl: "https://bus-tracker-frontend-five.vercel.app/",
-    badge: "React • Dashboard",
-    description: "Real-time bus tracking application featuring live status dashboard, route planning, timetable updates, and an intuitive mobile-first interface.",
-    tech: ["React.js", "Interactive UI", "State Management", "Tailwind CSS", "Vercel"],
-    highlight: "Streamlined dashboard for university transit monitoring and student schedules."
+    image: "/projects/bus.webp",
+    badge: "Full Stack • Transport App",
+    description: "Bus ticket booking and tracking app for university students: register and log in, choose seat, timing and route, book trips, and manage everything from an admin panel.",
+    tech: ["React.js", "Node.js", "Express.js", "REST API", "Tailwind CSS", "Vercel"],
+    highlight: "Separate frontend and backend deployments with user login and an admin dashboard."
+  },
+  {
+    id: "seo-webapp",
+    title: "RankBoost SEO Agency Website",
+    category: "SEO",
+    client: "Personal Project",
+    liveUrl: "https://seo-pi-roan.vercel.app",
+    image: "/projects/seo.webp",
+    badge: "React • SEO Agency",
+    description: "Modern SEO agency website built in React with services, traffic growth stats, about and contact sections, designed to generate SEO leads.",
+    tech: ["React.js", "Tailwind CSS", "Vercel", "Responsive UI", "SEO"],
+    highlight: "Dark, data-driven design with animated growth charts and clear calls-to-action."
+  },
+  {
+    id: "golden-edge",
+    title: "Golden Edge Agency Website",
+    category: "WordPress",
+    client: "Agency Template",
+    liveUrl: "https://rahilakareem389-create.github.io/golden-edge-agency/",
+    image: "/projects/golden.webp",
+    badge: "HTML • CSS • Responsive",
+    description: "Modern digital agency website with bold typography, dark gold aesthetic, process, reviews and contact sections.",
+    tech: ["HTML5", "CSS3", "JavaScript", "Animation", "Responsive Design"],
+    highlight: "Clean aesthetic with fast load times and strong call-to-actions."
   },
   {
     id: "toronto-smile-design",
@@ -333,50 +398,6 @@ export const projects = [
     highlight: "Achieved Top 3 Google Map pack rankings in Yorkville, Toronto with rich snippet reviews and fast mobile loading."
   },
   {
-    id: "physioshop-vancouver",
-    title: "The Physio Shop, Vancouver",
-    category: "WordPress",
-    client: "Sports Rehabilitation & Physio Clinic, Vancouver, Canada",
-    liveUrl: "https://thephysioshop.ca/",
-    badge: "WordPress • Canadian Rehab",
-    description: "Clean, modern physical therapy clinic website with real-time JaneApp booking integration, injury care resources, and mobile-first responsive design.",
-    tech: ["WordPress", "Elementor Pro", "JaneApp Integration", "Local SEO", "Custom CSS"],
-    highlight: "User-friendly healthcare UI with streamlined online booking and practitioner profiles for Vancouver patients."
-  },
-  {
-    id: "seo-webapp",
-    title: "SEO Web Application",
-    category: "SEO",
-    client: "Marketing & Analytics Tool",
-    liveUrl: "https://seo-pi-roan.vercel.app",
-    badge: "SEO • Tool App",
-    description: "High-performance SEO web application providing search analytics, keyword analysis, website audit feedback, and ranking tracking metrics.",
-    tech: ["React.js", "Vercel", "REST APIs", "Analytics UI", "SEO Tools"],
-    highlight: "Instant domain metrics check, meta-tag generator, and audit insights."
-  },
-  {
-    id: "littledragon-agency",
-    title: "Little Dragon Digital Agency, Toronto",
-    category: "WordPress",
-    client: "Digital Strategy & Marketing Agency, Toronto, Canada",
-    liveUrl: "https://littledragon.ca/",
-    badge: "WordPress • Toronto Agency",
-    description: "Full-service digital agency website featuring interactive project case studies, automated client inquiry funnels, micro-animations, and Core Web Vitals optimization.",
-    tech: ["WordPress", "Tailwind CSS", "Lead Funnel", "SEO Architecture", "Animation"],
-    highlight: "Conversion-focused agency layout with lightning-fast load times and high-performing lead generation pages."
-  },
-  {
-    id: "erp-system",
-    title: "ERP Business Management System",
-    category: "MERN",
-    client: "Enterprise Resource Operations",
-    liveUrl: "https://rahilakareem.com",
-    badge: "MERN • Enterprise",
-    description: "Enterprise Resource Planning system built for comprehensive business management: employee records, payroll tracking, orders, and sales reporting.",
-    tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Data Tables", "Role Auth"],
-    highlight: "Robust data flow, secure permissions, and dynamic reporting charts."
-  },
-  {
     id: "merged-media",
     title: "Merged Media Growth Platform",
     category: "SEO",
@@ -386,28 +407,6 @@ export const projects = [
     description: "Data-driven SEO and lead generation portal with client analytics reporting, search intent mapping, programmatic landing pages, and speed audit tuning.",
     tech: ["Technical SEO", "Google Search Console", "Schema Markup", "Performance Audit", "WordPress"],
     highlight: "Complete technical SEO audit and structured data implementation resulting in high-intent organic traffic growth."
-  },
-  {
-    id: "pilotcoffee-toronto",
-    title: "Pilot Coffee Roasters E-Commerce, Toronto",
-    category: "WordPress",
-    client: "Specialty Coffee Roasters & Retailer, Toronto, Canada",
-    liveUrl: "https://www.pilotcoffeeroasters.com/",
-    badge: "WordPress • WooCommerce E-Com",
-    description: "Premium Canadian e-commerce experience featuring recurring product subscriptions, Canada Post shipping rates, wholesale portal, and optimized mobile checkout.",
-    tech: ["WooCommerce", "Subscription Engine", "Custom Checkout", "Canada Post API", "Responsive UI"],
-    highlight: "High-conversion WooCommerce store with custom product filtering and seamless recurring subscription billing."
-  },
-  {
-    id: "burnkit-studio",
-    title: "Burnkit Digital Design Studio, Vancouver",
-    category: "React",
-    client: "Brand Identity & Design Studio, British Columbia, Canada",
-    liveUrl: "https://burnkit.com/",
-    badge: "React • Canadian Studio",
-    description: "Minimalist, interactive portfolio web application showcasing award-winning Canadian branding, fluid grid animations, and high-performance media delivery.",
-    tech: ["React.js", "Interactive UI", "State Management", "Tailwind CSS", "Vite"],
-    highlight: "Fluid portfolio showcase with smooth transitions and ultra-clean responsive typography."
   },
   {
     id: "bentall-physio",
@@ -421,28 +420,6 @@ export const projects = [
     highlight: "First-page Google rankings across high-competition downtown Vancouver therapy keywords."
   },
   {
-    id: "golden-edge",
-    title: "Golden Edge Agency Website",
-    category: "WordPress",
-    client: "Corporate Branding Agency",
-    liveUrl: "https://rahilakareem389-create.github.io/golden-edge-agency/",
-    badge: "HTML • CSS • Responsive",
-    description: "Modern, high-converting digital agency website with bold typography, dark neon aesthetic, customer conversion funnels, and testimonials.",
-    tech: ["HTML5", "CSS3", "JavaScript", "Animation", "Responsive Design"],
-    highlight: "Clean aesthetic with lightning-fast load times and strong call-to-actions."
-  },
-  {
-    id: "citydental-toronto",
-    title: "City Dental on Bay, Toronto",
-    category: "WordPress",
-    client: "Bay Street Dental Clinic, Toronto, Canada",
-    liveUrl: "https://citydentaltoronto.com/",
-    badge: "WordPress • Corporate Healthcare",
-    description: "Corporate dental clinic website situated in Toronto's Financial District. Features patient consultation request forms, emergency dental hotline, and Google review sync.",
-    tech: ["WordPress", "Custom Layout", "Review Schema", "Appointment Form", "Speed Tuning"],
-    highlight: "Responsive patient booking interface with fast 95+ PageSpeed mobile score and direct emergency call actions."
-  },
-  {
     id: "growme-calgary",
     title: "GrowME Marketing & Web Studio, Calgary",
     category: "SEO",
@@ -452,28 +429,6 @@ export const projects = [
     description: "Enterprise growth marketing and search strategy platform tailored for Canadian enterprises. Incorporates competitor gap analysis, backlink outreach, and lead tracking.",
     tech: ["SEO Strategy", "Keyword Intent", "Conversion Optimization", "WordPress", "Analytics"],
     highlight: "Proven SEO roadmap delivering measurable keyword surge and qualified lead generation for Western Canadian brands."
-  },
-  {
-    id: "locomotive-showcase",
-    title: "Locomotive Digital Showcase, Montreal",
-    category: "React",
-    client: "Creative Web & Digital Studio, Montreal, Quebec, Canada",
-    liveUrl: "https://locomotive.ca/",
-    badge: "React • Award-Winning UI",
-    description: "Bespoke digital design showcase highlighting cutting-edge interactive web development, smooth scrolling physics, fluid animations, and multilingual interface.",
-    tech: ["React.js", "Smooth Scroll", "Creative UI/UX", "Animation", "Modern Web"],
-    highlight: "Recognized creative web architecture combining aesthetic visual storytelling with high-speed performance."
-  },
-  {
-    id: "webcie-solutions",
-    title: "WebCie Digital Solutions, Montreal",
-    category: "MERN",
-    client: "B2B Web Engineering & E-Commerce Firm, Canada",
-    liveUrl: "https://webcie.ca/",
-    badge: "MERN • Business Platform",
-    description: "Scalable business web application with client project tracking, automated service estimation calculator, REST API endpoints, and CRM integration.",
-    tech: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "REST API"],
-    highlight: "End-to-end client dashboard architecture with real-time cost estimation and dynamic project milestone tracking."
   }
 ];
 

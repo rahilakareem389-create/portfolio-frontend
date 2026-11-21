@@ -264,6 +264,23 @@ const Portfolio = ({ setActiveTab }) => {
               key={project.id}
               className="reveal-up glass-card p-6 flex flex-col justify-end min-h-[220px] bg-gradient-to-br from-[#D57C63]/20 via-transparent to-transparent hover:border-[#D57C63] transition-all group"
             >
+              {project.image && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block -mx-2 -mt-2 mb-4 overflow-hidden rounded-xl border border-[#33271f] aspect-[16/9] bg-[#1b1411]"
+                >
+                  <img
+                    src={project.image}
+                    alt={`${project.title} website screenshot`}
+                    loading="lazy"
+                    width="640"
+                    height="360"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                </a>
+              )}
               <div className="mb-auto pb-4">
                 <small className="text-[#eaa487] font-bold text-xs uppercase block mb-1">
                   {project.badge}
@@ -283,7 +300,7 @@ const Portfolio = ({ setActiveTab }) => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D57C63] hover:underline"
                 >
-                  <span>{t('portfolio.liveDemo')}</span>
+                  <span>{project.linkLabel || t('portfolio.liveDemo')}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
 
@@ -311,6 +328,15 @@ const Portfolio = ({ setActiveTab }) => {
                 <X className="w-5 h-5" />
               </button>
 
+              {modalProject.image && (
+                <img
+                  src={modalProject.image}
+                  alt={`${modalProject.title} website screenshot`}
+                  width="640"
+                  height="360"
+                  className="w-full aspect-[16/9] object-cover object-top rounded-xl border border-[#33271f] mb-5"
+                />
+              )}
               <small className="text-[#eaa487] font-bold text-xs uppercase block mb-1">
                 {modalProject.badge}
               </small>
@@ -341,7 +367,7 @@ const Portfolio = ({ setActiveTab }) => {
                   rel="noopener noreferrer"
                   className="glow-btn px-6 py-2.5 rounded-[40px] text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
                 >
-                  <span>{t('portfolio.liveDemo')}</span>
+                  <span>{modalProject.linkLabel || t('portfolio.liveDemo')}</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>

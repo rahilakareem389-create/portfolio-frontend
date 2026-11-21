@@ -1269,6 +1269,24 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
                 <meta itemProp="operatingSystem" content="All modern web browsers" />
 
                 <div>
+                  {proj.image && (
+                    <a
+                      href={proj.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block mb-6 overflow-hidden rounded-2xl border border-[var(--line)] aspect-[16/9]"
+                    >
+                      <img
+                        itemProp="image"
+                        src={proj.image}
+                        alt={`${proj.title} screenshot`}
+                        loading="lazy"
+                        width="640"
+                        height="360"
+                        className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+                      />
+                    </a>
+                  )}
                   <div className="flex items-center justify-between mb-5">
                     <span className="fs-badge px-3.5 py-1.5 rounded-full text-xs font-bold">
                       {proj.badge}
@@ -1306,12 +1324,12 @@ export default function FullStackPage({ setActiveTab, setSelectedPlan }) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-[#D57C63] hover:underline"
                   >
-                    <span>View Live Application</span>
+                    <span>{proj.linkLabel || 'View Live Application'}</span>
                     <ExternalLink className="w-4 h-4" />
                   </a>
 
                   <span className="text-xs sm:text-sm font-bold fs-subtext">
-                    Verified Deployment
+                    {proj.linkLabel ? 'Open Source on GitHub' : 'Verified Deployment'}
                   </span>
                 </div>
               </div>
